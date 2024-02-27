@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('subscribers', function (Blueprint $table) {
             $table->id();
+            $table->smallinteger('typeid');
+            $table->smallinteger('status');
+            $table->smallinteger('isapproved');
+            $table->string('approvedon');
+            $table->integer('approvedby');
             $table->timestamps();
         });
     }
