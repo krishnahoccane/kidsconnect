@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr"
-    data-theme="theme-default" data-assets-path="{{ asset('ui/assets/') }}" data-template="vertical-menu-template">
+    data-theme="theme-default" data-template="vertical-menu-template">
 
 
 <!-- Mirrored from demos.pixinvent.com/vuexy-html-admin-template/html/vertical-menu-template/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Feb 2024 15:05:30 GMT -->
@@ -60,9 +60,20 @@
     <script src="{{ asset('ui/assets/vendor/js/helpers.js') }}"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
-    <script src="{{ asset('ui/assets/vendor/js/template-customizer.js') }}"></script>
+    {{-- <script src="{{ asset('ui/assets/vendor/js/template-customizer.js') }}"></script> --}}
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('ui/assets/js/config.js') }}"></script>
+
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.bootstrap5.css')}}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/select.bootstrap5.css')}}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/katex.css')}}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/editor.css')}}" />
+
+
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> --}}
 
 </head>
 

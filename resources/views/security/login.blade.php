@@ -48,7 +48,7 @@
                     <p class="mb-4">Please sign-in to your account and establish a healthy connection</p>
 
                     <form id="formAuthentication" class="mb-3"
-                        action="https://demos.pixinvent.com/vuexy-html-admin-template/html/vertical-menu-template/index.html"
+                        action="{{url('/dashboard')}}"
                         method="GET">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email or Username</label>
