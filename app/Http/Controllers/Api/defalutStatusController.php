@@ -4,56 +4,110 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\defaultStatus;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class defalutStatusController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $allStatus = defaultStatus::all();
-        if($allStatus->count()>0){
+        if ($allStatus->count() > 0) {
             return response()->json([
-            'status'=>200,
-            'data'=>$allStatus
-            ],200);
-        }else{
+                'status' => 200,
+                'data' => $allStatus
+            ], 200);
+        } else {
             return response()->json([
-                'status'=>404,
-                'message'=>'No Data Found'
-                ],404);
+                'status' => 404,
+                'message' => 'No Data Found'
+            ], 404);
         }
+
     }
 
-    public function create(Request $request){
-        $validatestatus = Validator::make($request->all(),[
+    public function create(Request $request)
+    {
+        $validatestatus = Validator::make($request->all(), [
             'name' => 'required'
         ]);
 
-        if($validatestatus->fails()){
+        if ($validatestatus->fails()) {
             return response()->json([
                 'status' => 422,
                 'message' => $validatestatus->messages()
-            ],422);
-        }else{
-            $allstatus = defaultStatus::firstOrCreate(['name' =>$request->name]);
+            ], 422);
+        } else {
+            $allstatus = defaultStatus::firstOrCreate(['name' => $request->name]);
 
-            if($allstatus->wasRecentlyCreated)
-            {
+            if ($allstatus->wasRecentlyCreated) {
                 return response()->json([
-                    'status'=>200,
-                    'data'=>'Status is created successfully'
-                    ],200);
-            }else{
+                    'status' => 200,
+                    'data' => 'Status is created successfully'
+                ], 200);
+            } else {
                 return response()->json([
-                    'status'=>500,
-                    'message'=>'Status Already Exist'
-                    ],500);
+                    'status' => 500,
+                    'message' => 'Status Already Exist'
+                ], 500);
             }
         }
     }
 
-    public function show(){
-        
+    public function show($id)
+    {
+
+        $allstatus = defaultStatus::find($id);
+
+        // print_r($allstatus);
+
+        if ($allstatus) {
+            return response()->json([
+                'status' => 200,
+                'data' => $allstatus
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'data' => 'No such record found'
+            ], 404);
+        }
     }
+
+    public function update(Request $request, int $id)
+    {
+        $validate = Validator::make(
+            $request->all(),
+            [
+                // here in unique function we are giving the table name which is created by migrations
+                'name' => ['required', Rule::unique('status')->ignore($id)],
+            ]
+        );
+
+        if ($validate->fails()) {
+            return response()->json([
+                'status' => 422,
+                'message' => $validate->messages()
+            ], 422);
+        } else {
+
+            $allstatus = defaultStatus::find($id);
+
+            if ($allstatus) {
+                $allstatus->update(['name' => $request->name]);
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Record updated successfully'
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'No status found'
+                ], 404);
+            }
+        }
+    }
+
 
 }

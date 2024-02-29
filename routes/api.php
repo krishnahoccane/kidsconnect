@@ -27,6 +27,10 @@ Route::delete('roles', [rolesController::class, 'delete']);
 // For Status
 Route::get('defaultStatus', [defalutStatusController::class, 'index']);
 Route::post('defaultStatus', [defalutStatusController::class, 'create']);
+Route::get('defaultStatus/{id}', [defalutStatusController::class, 'show']);
+Route::put('defaultStatus/{id}/edit', [defalutStatusController::class, 'update']);
+
+
 
 
 
