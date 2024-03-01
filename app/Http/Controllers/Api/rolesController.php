@@ -40,26 +40,30 @@ class rolesController extends Controller
         ]);
 
         if ($validate->fails()) {
-
             return response()->json([
                 'status' => 422,
-                'message' => $validate->messages()
+                'message' => 'Validation error',
+                'data' => $validate->errors()->all()
             ], 422);
         } else {
-            $role = roles::firstOrCreate(['role' => $request->role]);
+            $role = roles::firstOrCreate([
+                'role' => $request->role,
+            ]);
 
             if ($role->wasRecentlyCreated) {
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Role created successfully'
+                    'message' => 'Role created successfully',
+                    'data' => $role
                 ], 200);
             } else {
                 return response()->json([
-                    'status' => 500,
+                    'status' => 409,
                     'message' => 'Role already exists'
-                ], 500);
+                ], 409);
             }
         }
+
 
     }
 

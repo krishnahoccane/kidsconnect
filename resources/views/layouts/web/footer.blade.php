@@ -112,20 +112,20 @@
     });
 
     // Define the API endpoint URL
-    var url = "http://localhost:8000/api/subscriber";
+    // var url = "http://localhost:8000/api/subscriber";
 
-    // Make an AJAX request using jQuery
-    $.ajax({
-        url: url,
-        method: "GET",
-        dataType: "json",
-        success: function(data) {
-            console.log(data);
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching data from the API:', error);
-        }
-    });
+    // // Make an AJAX request using jQuery
+    // $.ajax({
+    //     url: url,
+    //     method: "GET",
+    //     dataType: "json",
+    //     success: function(data) {
+    //         console.log(data);
+    //     },
+    //     error: function(xhr, status, error) {
+    //         console.error('Error fetching data from the API:', error);
+    //     }
+    // });
 </script>
 
 <!-- Mirrored from demos.pixinvent.com/vuexy-html-admin-template/html/vertical-menu-template/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Feb 2024 15:06:10 GMT -->

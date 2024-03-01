@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\defalutStatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -11,7 +12,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Get Methods
 // For Roles
 Route::get('roles', [rolesController::class, 'index']);
 Route::get('roles/{id}', [rolesController::class, 'show']);
@@ -31,6 +31,9 @@ Route::get('defaultStatus/{id}', [defalutStatusController::class, 'show']);
 Route::put('defaultStatus/{id}/edit', [defalutStatusController::class, 'update']);
 
 
+// For Admin users
+Route::get('adminUsers',[adminController::class,'showAdminUsers']);
+Route::get('adminUsers/{id}',[adminController::class,'show']);
 
 
 
