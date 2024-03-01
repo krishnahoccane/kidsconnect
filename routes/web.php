@@ -3,11 +3,16 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminuserRegistrationController;
+use App\Http\Controllers\LoginController;
 
 // authentication & Security
-Route::get('/', function () {
-    return view('security/login');
-});
+// Route::get('/', function () {
+//     return view('security/login');
+// });
+// Authentication Routes...
+// Authentication Routes...
+Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
+Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
 
 Route::get('/forgotPassword', function () {
     return view('security/forgotPassword');

@@ -44,16 +44,30 @@
                         </a>
                     </div> --}}
                     <!-- /Logo -->
-                    <h3 class="mb-1">Welcome to Kids Connect! 👋</h3>
+                    <h3 class="mb-1">Welcome to Kids Connect! 👋
+                    @if(Session::has('status'))
+                        <div class="alert alert-success">
+                            {{ Session::get('status') }}
+                        </div>
+                        @php
+                        Session::forget('status');
+                    @endphp
+                    @endif
+                    </h3>
                     <p class="mb-4">Please sign-in to your account and establish a healthy connection</p>
 
-                    <form id="formAuthentication" class="mb-3"
-                        action="{{url('/dashboard')}}"
-                        method="GET">
+                    <form id="" class="" action="{{ route('authenticate') }}"
+                        method="POST">
+                        @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email or Username</label>
-                            <input type="text" class="form-control" id="email" name="email-username"
+                            <input type="text" class="form-control" id="email" name="email"
                                 placeholder="Enter your email or username" autofocus>
+                                <span class="text-danger">
+                                @error('email')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                         <div class="mb-3 form-password-toggle">
                             <div class="d-flex justify-content-between">
@@ -66,6 +80,11 @@
                                 <input type="password" id="password" class="form-control" name="password"
                                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                     aria-describedby="password" />
+                                    <span class="text-danger">
+                                @error('password')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                                 <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                             </div>
                         </div>
