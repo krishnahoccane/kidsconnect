@@ -81,6 +81,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
     <!-- /Full Editor -->
 </div>

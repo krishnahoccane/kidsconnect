@@ -1,10 +1,3 @@
-<script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/bootstrap.bundle.min.js
-') }}"></script>
-<script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.js
-') }}"></script>
-<script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.bootstrap5.js
-') }}"></script>
-
 </div>
 
 <footer class="content-footer footer bg-footer-theme">
@@ -83,6 +76,11 @@
 <!-- Main JS -->
 <script src="{{ asset('ui/assets/js/main.js') }}"></script>
 
+<script src="{{ asset('ui/assets/vendor/js/dropdown-hover.js') }}"></script>
+
+{{-- Data tables --}}
+<script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.bootstrap5.js') }}"></script>
 
 <!-- Page JS -->
 <script src="{{ asset('ui/assets/js/dashboards-analytics.js') }}"></script>
