@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminuserRegistrationController;
 use App\Http\Controllers\LoginController;
 
+
 // authentication & Security
 // Route::get('/', function () {
 //     return view('security/login');
@@ -24,6 +25,8 @@ Route::get('/changePassword', function () {
 // registration
 Route::get('/registration', [adminuserRegistrationController::class, 'index']);
 Route::post('/registration', [adminuserRegistrationController::class, 'view']);
+Route::get('/export-registrations', [adminuserRegistrationController::class, 'export']);
+
 
 
 // Admin pannel

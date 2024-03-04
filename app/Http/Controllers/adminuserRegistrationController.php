@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Registration;
 use Illuminate\Support\Facades\Hash; // Import the Hash facade
+use App\Exports\RegistrationsExport;
+
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class adminuserRegistrationController extends Controller
 {
@@ -65,4 +69,8 @@ class adminuserRegistrationController extends Controller
             
             return view('dashboard');
         }
+        public function export()
+    {
+        return Excel::download(new RegistrationsExport(), 'registrations.xlsx');
+    }
 }
