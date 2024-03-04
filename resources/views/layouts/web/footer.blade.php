@@ -91,6 +91,8 @@
 <script src="{{ asset('ui/assets/js/dashboards-analytics.js') }}"></script>
 <script src="{{ asset('ui/assets/js/app-logistics-dashboard.js') }}"></script>
 <script src="{{ asset('ui/assets/js/myjs/apiGet.js') }}"></script>
+<script src="{{ asset('ui/assets/js/pages-profile.js') }}"></script>
+
 
 
 

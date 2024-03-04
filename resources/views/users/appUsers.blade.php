@@ -27,18 +27,44 @@
                         <tbody>
                             <tr>
                                 <td>Tulika</td>
-                                <td>Row 2 Data 2</td>
-                                <td>Tulika</td>
-                                <td>Row 2 Data 2</td>
-                                <td>Tulika</td>
-                                <td>Row 2 Data 2</td>
+                                <td>Mother</td>
+                                <td>Deny</td>
+                                <td>24-07-2024</td>
+                                <td>25-07-2024</td>
+                                <td>ADM-0285</td>
                                 <td>
-                                    <button type="button" title="Approve" class="btn btn-icon btn-success">
-                                        <span class="ti ti-discount-check-filled"></span>
-                                    </button>
-                                    <button type="button" title="Deny" class="btn btn-icon btn-danger">
-                                        <span class="ti ti-square-rounded-x-filled"></span>
-                                    </button>
+                                    <a href="{{ url('userProfile') }}"><button type="button" class="btn btn-primary">
+                                        <span class="ti-xs ti ti-eye me-1"></span>View Profile
+                                      </button></a>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Anita</td>
+                                <td>Mother</td>
+                                <td>Deny</td>
+                                <td>28-12-2024</td>
+                                <td>30-12-2024</td>
+                                <td>ADM-02875</td>
+                                <td>
+                                    <a href="{{ url('userProfile') }}"><button type="button" class="btn btn-primary">
+                                        <span class="ti-xs ti ti-eye me-1"></span>View Profile
+                                      </button></a>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Vishal</td>
+                                <td>Father</td>
+                                <td>Approved</td>
+                                <td>24-01-2025</td>
+                                <td>30-01-2025</td>
+                                <td>ADM-12285</td>
+                                <td>
+                                    <a href="{{ url('userProfile') }}"><button type="button" class="btn btn-primary">
+                                        <span class="ti-xs ti ti-eye me-1"></span>View Profile
+                                      </button></a>
+                                    
                                 </td>
                             </tr>
                         </tbody>

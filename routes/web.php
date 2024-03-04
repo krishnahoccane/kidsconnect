@@ -41,6 +41,9 @@ Route::get('/appUsers', function () {
 Route::get('/feedback', function () {
     return view('users/feedback');
 });
+Route::get('/userProfile', function () {
+    return view('users/userProfile');
+});
 
 // Page management
 Route::get('/about', function () {
