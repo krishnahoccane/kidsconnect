@@ -11,7 +11,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="demo-inline-spacing">
-                    <button type="button" class="btn btn-label-success"><i class="ti ti-file-export me-sm-1"></i>Export
+                    <button type="button" class="btn btn-label-success"  id="exportExcelBtn"><i class="ti ti-file-export me-sm-1"></i>Export
                         Excel</button>
                 </div>
             </div>
@@ -89,5 +89,29 @@
         </div>
     </div>
 </div>
-
+<script>
+    document.getElementById('exportExcelBtn').addEventListener('click', function() {
+        fetch('/export-registrations', {
+            method: 'GET'
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            }
+            throw new Error('Network response was not ok.');
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'registrations.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            console.error('Error exporting data:', error);
+        });
+    });
+</script>
 @include('./layouts/web.footer')
