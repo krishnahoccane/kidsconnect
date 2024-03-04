@@ -39,6 +39,9 @@
         class="template-customizer-core-css" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/css/rtl/theme-default.css') }}"
         class="template-customizer-theme-css" />
+    <!-- Page CSS -->
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/css/pages/cards-advance.css') }}" />
+
     <link rel="stylesheet" href="{{ asset('ui/assets/css/demo.css') }}" />
 
     <!-- Vendors CSS -->
@@ -47,30 +50,26 @@
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/typeahead-js/typeahead.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/swiper/swiper.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/flatpickr/flatpickr.css') }}" />
+
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
+
     <link rel="stylesheet"
         href="{{ asset('ui/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
     <link rel="stylesheet"
         href="{{ asset('ui/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}">
 
-    <!-- Page CSS -->
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/css/pages/cards-advance.css') }}" />
-
     <!-- Helpers -->
     <script src="{{ asset('ui/assets/vendor/js/helpers.js') }}"></script>
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
-    {{-- <script src="{{ asset('ui/assets/vendor/js/template-customizer.js') }}"></script> --}}
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('ui/assets/js/config.js') }}"></script>
 
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.bootstrap5.css')}}" />
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/select.bootstrap5.css')}}" />
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/katex.css')}}" />
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/editor.css')}}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.bootstrap5.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/select.bootstrap5.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/katex.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/editor.css') }}" />
 
 
-    
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {{-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> --}}
@@ -81,20 +80,10 @@
     @php
         $urlName = collect(explode('/', request()->url()))->last();
     @endphp
-
-
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar  ">
         <div class="layout-container">
-
-
-
-
-
-
-
             <!-- Menu -->
-
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
 
 
@@ -127,9 +116,6 @@
                 </div>
 
                 <div class="menu-inner-shadow"></div>
-
-
-
                 <ul class="menu-inner py-1">
                     <!-- Dashboards -->
 
@@ -193,29 +179,6 @@
                         </a>
                     </li>
 
-                    {{-- Authenticagtion --}}
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text" data-i18n="security">Security</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons ti ti-lock"></i>
-                            <div data-i18n="Authentications">Authentications</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item {{ request()->is('forgotPassword') ? 'active' : '' }}">
-                                <a href="{{ url('forgotPassword') }}" class="menu-link">
-                                    <div data-i18n="forgotPassword">Forgot Password</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ request()->is('changePassword') ? 'active' : '' }}">
-                                <a href="{{ url('changePassword') }}" class="menu-link">
-                                    <div data-i18n="Property Listing">Change Password</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
                     {{-- Reports --}}
 
                     <li class="menu-header small text-uppercase">
@@ -244,6 +207,32 @@
                             </li>
                         </ul>
                     </li>
+
+
+                    {{-- Authenticagtion --}}
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text" data-i18n="security">Security</span>
+                    </li>
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons ti ti-lock"></i>
+                            <div data-i18n="Authentications">Authentications</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ request()->is('forgotPassword') ? 'active' : '' }}">
+                                <a href="{{ url('forgotPassword') }}" class="menu-link">
+                                    <div data-i18n="forgotPassword">Forgot Password</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{ request()->is('changePassword') ? 'active' : '' }}">
+                                <a href="{{ url('changePassword') }}" class="menu-link">
+                                    <div data-i18n="Property Listing">Change Password</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
 
                 </ul>
 
@@ -748,7 +737,7 @@
                                             <span class="align-middle">Settings</span>
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a class="dropdown-item" href="pages-account-settings-billing.html">
                                             <span class="d-flex align-items-center align-middle">
                                                 <i class="flex-shrink-0 ti ti-credit-card me-2 ti-sm"></i>
@@ -775,9 +764,9 @@
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                    </li>
+                                    </li> --}}
                                     <li>
-                                        <a class="dropdown-item" href="auth-login-cover.html" target="_blank">
+                                        <a class="dropdown-item" href="{{ url('/') }}">
                                             <i class="ti ti-logout me-2 ti-sm"></i>
                                             <span class="align-middle">Log Out</span>
                                         </a>

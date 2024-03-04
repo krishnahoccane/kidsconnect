@@ -75,6 +75,11 @@
 
 <!-- Main JS -->
 <script src="{{ asset('ui/assets/js/main.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/%40form-validation/popular.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/%40form-validation/bootstrap5.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/%40form-validation/auto-focus.js') }}"></script>
+
+
 
 <script src="{{ asset('ui/assets/vendor/js/dropdown-hover.js') }}"></script>
 
@@ -85,6 +90,9 @@
 <!-- Page JS -->
 <script src="{{ asset('ui/assets/js/dashboards-analytics.js') }}"></script>
 <script src="{{ asset('ui/assets/js/app-logistics-dashboard.js') }}"></script>
+<script src="{{ asset('ui/assets/js/myjs/apiGet.js') }}"></script>
+
+
 
 
 <script src="{{ asset('ui/assets/vendor/libs/quill/katex.js') }}"></script>
