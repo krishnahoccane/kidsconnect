@@ -647,6 +647,7 @@ class ComposerStaticInit7b23eabc7d2ef732bb7ef4931132f37b
     public static $classMap = array (
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Exports\\RegistrationsExport' => __DIR__ . '/../..' . '/app/Exports/RegistrationsExport.php',
         'App\\Http\\Controllers\\Api\\adminController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/adminController.php',
         'App\\Http\\Controllers\\Api\\create_test' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/create_test.php',
         'App\\Http\\Controllers\\Api\\defalutStatusController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/defalutStatusController.php',
@@ -5383,6 +5384,7 @@ class ComposerStaticInit7b23eabc7d2ef732bb7ef4931132f37b
         'PharIo\\Manifest\\ManifestLoader' => __DIR__ . '/..' . '/phar-io/manifest/src/ManifestLoader.php',
         'PharIo\\Manifest\\ManifestLoaderException' => __DIR__ . '/..' . '/phar-io/manifest/src/exceptions/ManifestLoaderException.php',
         'PharIo\\Manifest\\ManifestSerializer' => __DIR__ . '/..' . '/phar-io/manifest/src/ManifestSerializer.php',
+        'PharIo\\Manifest\\NoEmailAddressException' => __DIR__ . '/..' . '/phar-io/manifest/src/exceptions/NoEmailAddressException.php',
         'PharIo\\Manifest\\PhpElement' => __DIR__ . '/..' . '/phar-io/manifest/src/xml/PhpElement.php',
         'PharIo\\Manifest\\PhpExtensionRequirement' => __DIR__ . '/..' . '/phar-io/manifest/src/values/PhpExtensionRequirement.php',
         'PharIo\\Manifest\\PhpVersionRequirement' => __DIR__ . '/..' . '/phar-io/manifest/src/values/PhpVersionRequirement.php',
