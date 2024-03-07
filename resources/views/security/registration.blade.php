@@ -34,7 +34,7 @@
                     <h3 class="mb-1">Hey Admin 🚀</h3>
                     <p class="mb-4">Register Your New Account Here</p>
 
-                    <form id="formAuthentication" class="mb-3" action="{{ url('/') }}/registration"
+                    <form id="formAuthentication" class="mb-3" action="{{ url('registration') }}"
                         method="POST">
                         @csrf
 
