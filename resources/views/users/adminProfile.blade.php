@@ -7,7 +7,7 @@
             <!-- Account -->
             <div class="card-body">
                 <div class="d-flex align-items-start align-items-sm-center gap-4">
-                    <img src="{{ asset('ui/assets/img/avatars/14.png') }}" alt="user-avatar"
+                    <img src="{{ asset('ui/assets/img/avatars/cAvatar.png') }}" alt="user-avatar"
                         class="d-block w-px-100 h-px-100 rounded" id="uploadedAvatar" />
                     <div class="button-wrapper">
                         <label for="upload" class="btn btn-primary me-2 mb-3" tabindex="0">
@@ -31,13 +31,13 @@
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label for="username" class="form-label">User Name</label>
-                            <input class="form-control" type="text" id="username" name="username" value="John"
+                            <input class="form-control" type="text" id="username" name="username" value="{{ Auth::user()->username }}"
                                 autofocus />
                         </div>
                         <div class="mb-3 col-md-6">
                             <label for="email" class="form-label">E-mail</label>
                             <input class="form-control" type="text" id="email" name="email"
-                                value="john.doe@example.com" placeholder="john.doe@example.com" />
+                                value="{{ Auth::user()->email }}" placeholder="john.doe@example.com" />
                         </div>
                         {{-- <div class="mb-3 col-md-6">
                             <label for="email" class="form-label">E-mail</label>
