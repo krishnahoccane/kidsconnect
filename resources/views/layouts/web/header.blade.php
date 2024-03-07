@@ -685,9 +685,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
+<<<<<<< HEAD
                                                     <span
                                                         class="fw-medium d-block">{{ Auth::user()->username }}</span>
                                                     <small class="text-muted">Admin</small>
+=======
+                                                    @auth
+                                                        <span class="fw-medium d-block">{{ Auth::user()->username }}</span>
+                                                        <small class="text-muted">Admin</small>
+                                                    @endauth
+>>>>>>> 46664667306fa13e751af28f53d0a32a139a2bf1
                                                 </div>
                                             </div>
                                         </a>

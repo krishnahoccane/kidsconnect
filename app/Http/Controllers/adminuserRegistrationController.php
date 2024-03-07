@@ -14,14 +14,6 @@ use Maatwebsite\Excel\Facades\Excel;
 class adminuserRegistrationController extends Controller
 {
     //
-    public function dashboard_home()
-    {
-        if (Auth::check()) {
-            return view('dashboard'); // Show the dashboard view if the user is authenticated
-        }
-        
-        return redirect()->route('login'); // Redirect to the login page if the user is not authenticated
-    }
    public function index()
     {
         return view('security/registration');

@@ -17,9 +17,9 @@ class AuthenticateMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check()) {
-            // User is not authenticated, redirect to login page
-            return redirect()->route('login')->withErrors(['message' => 'Please login to access this page']);
+            return redirect()->route('login');
         }
+
         return $next($request);
     }
 }
