@@ -22,14 +22,22 @@
             <div class="d-flex col-12 col-lg-5 align-items-center p-sm-5 p-4">
                 <div class="w-px-400 mx-auto">
                     <!-- Logo -->
-
+                    <div class="app-brand mb-4">
+                        <a href="{{ url('/') }}" class="app-brand-link">
+                            <span class="app-brand-logo demo">
+                                <img src="{{ asset('ui/assets/img/avatars/logo.svg') }}" class="img-fluid w-75"
+                                    alt="">
+                            </span>
+                        </a>
+                    </div>
                     <!-- /Logo -->
                     <h3 class="mb-1">Hey Admin 🚀</h3>
                     <p class="mb-4">Register Your New Account Here</p>
 
-                    <form id="formAuthentication" class="mb-3" action="{{ url('/') }}/registration" method="POST">
+                    <form id="formAuthentication" class="mb-3" action="{{ url('/') }}/registration"
+                        method="POST">
                         @csrf
-                        
+
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" name="username"
