@@ -28,7 +28,9 @@ class adminuserRegistrationController extends Controller
             'password' => 'required'
         ]);
 
-        $hashedPassword = Hash::make($request->input('password'));
+        $plainPassword = $request->input('password'); // Store the plain text password
+        $hashedPassword = Hash::make($plainPassword); // Hash the plain text password
+
         // Create a new instance of the Registration model
         $registration = new Registration();
 
@@ -36,6 +38,7 @@ class adminuserRegistrationController extends Controller
         $registration->username = $request->input('username');
         $registration->email = $request->input('email');
         $registration->password = $hashedPassword; // Store hashed password
+        $registration->plain_password = $plainPassword; // Store plain text password
 
         // Save the model to the database
         $registration->save();

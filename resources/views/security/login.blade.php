@@ -1,7 +1,5 @@
 @include('./layouts/loginReg.header')
 
-
-
 <body>
 
     <div class="authentication-wrapper authentication-cover authentication-bg">

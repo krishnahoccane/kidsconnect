@@ -47,10 +47,19 @@
                     </div>
                     <!-- /Logo -->
                     <h3 class="mb-1">Forgot Password? 🔒</h3>
+                    @if(Session::has('status'))
+                        <div class="alert alert-success">
+                            {{ Session::get('status') }}
+                        </div>
+                        @php
+                        Session::forget('status');
+                    @endphp
+                    @endif
                     <p class="mb-4">Enter your email and we'll send you instructions to reset your password</p>
                     <form id="formAuthentication" class="mb-3"
-                        action="https://demos.pixinvent.com/vuexy-html-admin-template/html/vertical-menu-template/auth-reset-password-cover.html"
-                        method="GET">
+                    action="{{ route('password.email') }}"
+                        method="POST">
+                        @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="text" class="form-control" id="email" name="email"

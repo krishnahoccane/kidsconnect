@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminuserRegistrationController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ForgotPasswordController;
+
 
 
 // authentication & Security
@@ -11,13 +13,22 @@ use App\Http\Controllers\LoginController;
 //     return view('security/login');
 // });
 // Authentication Routes...
-// Authentication Routes...
 Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
 Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
 
 Route::get('/forgotPassword', function () {
     return view('security/forgotPassword');
 });
+
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+
+// Route to handle the forgot password form submission
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+// change password route
+
+
+Route::get('/password/change', [ForgotPasswordController::class,'showChangeForm'])->name('password.change');
+Route::post('/password/update',[ForgotPasswordController::class,'updatePassword'])->name('password.update');
 Route::get('/changePassword', function () {
     return view('security/changePassword');
 });

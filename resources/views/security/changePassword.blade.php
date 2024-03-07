@@ -1,6 +1,5 @@
 @include('./layouts/loginReg.header')
 
-
 <body>
 
     <div class="authentication-wrapper authentication-cover authentication-bg">
@@ -47,27 +46,60 @@
                     </div>
                     <!-- /Logo -->
                     <h4 class="mb-1">Reset Password 🔒</h4>
-                    <p class="mb-4">for <span class="fw-medium">john.doe@email.com</span></p>
+                    @if(Session::has('status'))
+                        <div class="alert alert-success">
+                            {{ Session::get('status') }}
+                        </div>
+                        @php
+                        Session::forget('status');
+                    @endphp
+                    @endif
+                    <p class="mb-4">for <span class="fw-medium">{{ Auth::user()->email }}</span></p>
                     <form id="formAuthentication" class="mb-3"
-                        action="https://demos.pixinvent.com/vuexy-html-admin-template/html/vertical-menu-template/auth-login-cover.html"
-                        method="GET">
+                        action="{{ route('password.update') }}"
+                        method="POST">
+                        @csrf
                         <div class="mb-3 form-password-toggle">
-                            <label class="form-label" for="password">New Password</label>
+                            <label class="form-label" for="password">Current Password</label>
                             <div class="input-group input-group-merge">
-                                <input type="password" id="password" class="form-control" name="password"
+                                <input type="password" id="current_password" class="form-control" name="current_password"
                                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                     aria-describedby="password" />
                                 <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                                <span class="text-danger">
+                                @error('current_password')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-password-toggle">
+                            <label class="form-label" for="password">New Password</label>
+                            <div class="input-group input-group-merge">
+                                <input type="password" id="new_password" class="form-control" name="new_password"
+                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                    aria-describedby="password" />
+                                <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                                <span class="text-danger">
+                                @error('new_password')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                             </div>
                         </div>
                         <div class="mb-3 form-password-toggle">
                             <label class="form-label" for="confirm-password">Confirm Password</label>
                             <div class="input-group input-group-merge">
                                 <input type="password" id="confirm-password" class="form-control"
-                                    name="confirm-password"
+                                    name="confirm_password"
                                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                     aria-describedby="password" />
                                 <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                                <span class="text-danger">
+                                @error('confirm_password')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                             </div>
                         </div>
                         <button class="btn btn-primary d-grid w-100 mb-3">
