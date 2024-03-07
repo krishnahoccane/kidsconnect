@@ -16,17 +16,15 @@ Route::middleware(['auth.custom'])->group(function () {
 
 // Login Authentication Routes...
 
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
-Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
+
 
 // Forgot Routes..
 
 
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm']);
+Route::get('/forgotPassword', [ForgotPasswordController::class, 'showLinkRequestForm']);
 
 // Route to handle the forgot password form submission
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::post('/forgotPassword', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 // change password route
 
 
@@ -41,7 +39,9 @@ Route::get('logout', [adminuserRegistrationController::class, 'logout'])->name('
 Route::get('/registration', [adminuserRegistrationController::class, 'index']);
 Route::post('/registration', [adminuserRegistrationController::class, 'view']);
 Route::get('/export-registrations', [adminuserRegistrationController::class, 'export']);
-
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
+Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
 
 
 // Admin pannel
