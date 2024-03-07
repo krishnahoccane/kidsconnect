@@ -8,21 +8,19 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Middleware\AuthenticateMiddleware;
 
 
-
-
-// authentication & Security
-// Route::get('/', function () {
-//     return view('security/login');
-// });
-// Authentication Routes...
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [adminuserRegistrationController::class,'dashboard_home'])->name('dashboard');
-    // Add other protected routes here
+// URL Authentication Routes...
+Route::middleware(['auth.custom'])->group(function () {
+    Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard']) ->name('dashboard');
+    // Other dashboard routes...
 });
+
+// Login Authentication Routes...
+
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
 Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
 
+// Forgot Routes..
 Route::get('/forgotPassword', function () {
     return view('security/forgotPassword');
 });
@@ -48,9 +46,9 @@ Route::get('/export-registrations', [adminuserRegistrationController::class, 'ex
 
 
 // Admin pannel
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// });
 
 // User management
 Route::get('/adminUsers', function () {
