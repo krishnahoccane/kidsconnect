@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Models\Registration;
 use Illuminate\Support\Facades\Hash; // Import the Hash facade
 use App\Exports\RegistrationsExport;
-
 use Maatwebsite\Excel\Facades\Excel;
 
 

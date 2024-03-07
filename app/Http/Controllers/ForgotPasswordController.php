@@ -47,9 +47,6 @@ class ForgotPasswordController extends Controller
             ->subject('Your forgot password Information ' . $user->username)
             ->from(config('mail.from.address'), config('mail.from.name')); // Set the subject and from address
         });
-        
-        
-
             return back()->with('status', 'Password sent to your email.');
         } else {
             $errorMessage = 'User not found.';
@@ -85,6 +82,6 @@ class ForgotPasswordController extends Controller
         $user->plain_password = $request->new_password;
         $user->save();
 
-        return redirect('/')->with('success', 'Password updated successfully');
+        return back()->with('status', 'Password updated successfully.');
     }
 }

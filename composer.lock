@@ -1319,16 +1319,16 @@
         },
         {
             "name": "laravel/breeze",
-            "version": "v1.29.0",
+            "version": "v1.29.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/breeze.git",
-                "reference": "f4c4cb2197cd96a3d8a913c7b8437291d8bde5af"
+                "reference": "22c53b84b7fff91b01a318d71a10dfc251e92849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/breeze/zipball/f4c4cb2197cd96a3d8a913c7b8437291d8bde5af",
-                "reference": "f4c4cb2197cd96a3d8a913c7b8437291d8bde5af",
+                "url": "https://api.github.com/repos/laravel/breeze/zipball/22c53b84b7fff91b01a318d71a10dfc251e92849",
+                "reference": "22c53b84b7fff91b01a318d71a10dfc251e92849",
                 "shasum": ""
             },
             "require": {
@@ -1377,20 +1377,20 @@
                 "issues": "https://github.com/laravel/breeze/issues",
                 "source": "https://github.com/laravel/breeze"
             },
-            "time": "2024-02-21T14:14:23+00:00"
+            "time": "2024-03-04T14:35:21+00:00"
         },
         {
             "name": "laravel/framework",
-            "version": "v10.46.0",
+            "version": "v10.47.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "5e95946a8283a8d5c015035793f9c61c297e937f"
+                "reference": "fce29b8de62733cdecbe12e3bae801f83fff2ea4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/5e95946a8283a8d5c015035793f9c61c297e937f",
-                "reference": "5e95946a8283a8d5c015035793f9c61c297e937f",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/fce29b8de62733cdecbe12e3bae801f83fff2ea4",
+                "reference": "fce29b8de62733cdecbe12e3bae801f83fff2ea4",
                 "shasum": ""
             },
             "require": {
@@ -1583,20 +1583,20 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-02-27T16:46:54+00:00"
+            "time": "2024-03-05T15:18:36+00:00"
         },
         {
             "name": "laravel/passport",
-            "version": "v11.10.5",
+            "version": "v11.10.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/passport.git",
-                "reference": "4d81207941d6efc198857847d9e4c17520f28d75"
+                "reference": "2642f360c51dfde3a6ea60f86ae5d9a8c0caf3cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/passport/zipball/4d81207941d6efc198857847d9e4c17520f28d75",
-                "reference": "4d81207941d6efc198857847d9e4c17520f28d75",
+                "url": "https://api.github.com/repos/laravel/passport/zipball/2642f360c51dfde3a6ea60f86ae5d9a8c0caf3cf",
+                "reference": "2642f360c51dfde3a6ea60f86ae5d9a8c0caf3cf",
                 "shasum": ""
             },
             "require": {
@@ -1661,7 +1661,7 @@
                 "issues": "https://github.com/laravel/passport/issues",
                 "source": "https://github.com/laravel/passport"
             },
-            "time": "2024-02-09T16:27:49+00:00"
+            "time": "2024-03-01T11:11:18+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -3386,16 +3386,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.0.1",
+            "version": "v5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "2218c2252c874a4624ab2f613d86ac32d227bc69"
+                "reference": "139676794dc1e9231bf7bcd123cfc0c99182cb13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/2218c2252c874a4624ab2f613d86ac32d227bc69",
-                "reference": "2218c2252c874a4624ab2f613d86ac32d227bc69",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/139676794dc1e9231bf7bcd123cfc0c99182cb13",
+                "reference": "139676794dc1e9231bf7bcd123cfc0c99182cb13",
                 "shasum": ""
             },
             "require": {
@@ -3438,9 +3438,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.1"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.2"
             },
-            "time": "2024-02-21T19:24:10+00:00"
+            "time": "2024-03-05T20:51:40+00:00"
         },
         {
             "name": "nunomaduro/termwind",
@@ -7833,16 +7833,16 @@
         },
         {
             "name": "laravel/sail",
-            "version": "v1.28.1",
+            "version": "v1.28.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sail.git",
-                "reference": "f84e444a3dbc1811803cd2a050bdd54ff6f5eef8"
+                "reference": "057777403b8ab79222dcc04983beaab10b6de6a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/f84e444a3dbc1811803cd2a050bdd54ff6f5eef8",
-                "reference": "f84e444a3dbc1811803cd2a050bdd54ff6f5eef8",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/057777403b8ab79222dcc04983beaab10b6de6a0",
+                "reference": "057777403b8ab79222dcc04983beaab10b6de6a0",
                 "shasum": ""
             },
             "require": {
@@ -7891,7 +7891,7 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
-            "time": "2024-02-23T00:24:47+00:00"
+            "time": "2024-03-04T14:58:29+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -10621,5 +10621,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.2.0"
 }

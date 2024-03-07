@@ -507,8 +507,8 @@ class ComposerStaticInit7b23eabc7d2ef732bb7ef4931132f37b
         ),
         'League\\Uri\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/uri-interfaces',
-            1 => __DIR__ . '/..' . '/league/uri',
+            0 => __DIR__ . '/..' . '/league/uri',
+            1 => __DIR__ . '/..' . '/league/uri-interfaces',
         ),
         'League\\OAuth2\\Server\\' => 
         array (
@@ -719,6 +719,7 @@ class ComposerStaticInit7b23eabc7d2ef732bb7ef4931132f37b
         'App\\Http\\Controllers\\Api\\create_test' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/create_test.php',
         'App\\Http\\Controllers\\Api\\defalutStatusController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/defalutStatusController.php',
         'App\\Http\\Controllers\\Api\\rolesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/rolesController.php',
+        'App\\Http\\Controllers\\Api\\subscriberController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/subscriberController.php',
         'App\\Http\\Controllers\\Api\\subscribersController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/subscribersController.php',
         'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
         'App\\Http\\Controllers\\Auth\\ConfirmablePasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmablePasswordController.php',
@@ -730,6 +731,7 @@ class ComposerStaticInit7b23eabc7d2ef732bb7ef4931132f37b
         'App\\Http\\Controllers\\Auth\\RegisteredUserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisteredUserController.php',
         'App\\Http\\Controllers\\Auth\\VerifyEmailController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerifyEmailController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/ForgotPasswordController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
         'App\\Http\\Controllers\\adminuserRegistrationController' => __DIR__ . '/../..' . '/app/Http/Controllers/adminuserRegistrationController.php',
         'App\\Http\\Controllers\\create_test' => __DIR__ . '/../..' . '/app/Http/Controllers/create_test.php',

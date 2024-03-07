@@ -219,11 +219,11 @@
                             <div data-i18n="Authentications">Authentications</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item {{ request()->is('forgotPassword') ? 'active' : '' }}">
+                            <!-- <li class="menu-item {{ request()->is('forgotPassword') ? 'active' : '' }}">
                                 <a href="{{ url('forgotPassword') }}" class="menu-link">
                                     <div data-i18n="forgotPassword">Forgot Password</div>
                                 </a>
-                            </li>
+                            </li> -->
                             <li class="menu-item {{ request()->is('changePassword') ? 'active' : '' }}">
                                 <a href="{{ url('changePassword') }}" class="menu-link">
                                     <div data-i18n="Property Listing">Change Password</div>
@@ -716,7 +716,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <span class="fw-medium d-block">John Doe</span>
+                                                    <span class="fw-medium d-block">{{ Auth::user()->username }}</span>
                                                     <small class="text-muted">Admin</small>
                                                 </div>
                                             </div>
