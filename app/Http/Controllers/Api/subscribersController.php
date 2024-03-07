@@ -65,9 +65,9 @@ class subscribersController extends Controller
                 ], 200);
             } else {
                 return response()->json([
-                    'status' => 500,
+                    'status' => 403,
                     'message' => 'Role already exists'
-                ], 500);
+                ], 403);
             }
         }
 

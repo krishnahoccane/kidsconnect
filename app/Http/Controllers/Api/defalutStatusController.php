@@ -48,9 +48,9 @@ class defalutStatusController extends Controller
                 ], 200);
             } else {
                 return response()->json([
-                    'status' => 500,
+                    'status' => 403,
                     'message' => 'Status Already Exist'
-                ], 500);
+                ], 403);
             }
         }
     }
