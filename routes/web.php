@@ -8,23 +8,6 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Middleware\AuthenticateMiddleware;
 
 
-<<<<<<< HEAD
-
-
-// authentication & Security
-// Route::get('/', function () {
-//     return view('security/login');
-// });
-
-
-// Authentication Routes...
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [adminuserRegistrationController::class,'dashboard_home'])->name('dashboard');
-    // Add other protected routes here
-});
-
-=======
 // URL Authentication Routes...
 Route::middleware(['auth.custom'])->group(function () {
     Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard']) ->name('dashboard');
@@ -34,7 +17,6 @@ Route::middleware(['auth.custom'])->group(function () {
 // Login Authentication Routes...
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
->>>>>>> 46664667306fa13e751af28f53d0a32a139a2bf1
 Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
 Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
 

@@ -685,16 +685,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-<<<<<<< HEAD
-                                                    <span
-                                                        class="fw-medium d-block">{{ Auth::user()->username }}</span>
-                                                    <small class="text-muted">Admin</small>
-=======
                                                     @auth
                                                         <span class="fw-medium d-block">{{ Auth::user()->username }}</span>
                                                         <small class="text-muted">Admin</small>
                                                     @endauth
->>>>>>> 46664667306fa13e751af28f53d0a32a139a2bf1
                                                 </div>
                                             </div>
                                         </a>
@@ -702,18 +696,18 @@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
-                                    {{-- <li>
+                                    <li>
                                         <a class="dropdown-item" href="{{url('adminProfile')}}">
                                             <i class="ti ti-user-check me-2 ti-sm"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>
-                                    </li> --}}
-                                    <li>
+                                    </li>
+                                    {{-- <li>
                                         <a class="dropdown-item" href="pages-account-settings-account.html">
                                             <i class="ti ti-settings me-2 ti-sm"></i>
                                             <span class="align-middle">Settings</span>
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     {{-- <li>
                                         <a class="dropdown-item" href="pages-account-settings-billing.html">
                                             <span class="d-flex align-items-center align-middle">
