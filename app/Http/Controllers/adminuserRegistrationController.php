@@ -86,6 +86,7 @@ class adminuserRegistrationController extends Controller
         return Excel::download(new RegistrationsExport(), 'registrations.xlsx');
     }
 
+    // Logout users
     public function logout()
     {
         Auth::logout(); // Logout the user

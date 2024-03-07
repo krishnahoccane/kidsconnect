@@ -19,8 +19,7 @@
 
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon"
-        href="{{ asset('ui/assets/img/avatars/logo.svg') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('ui/assets/img/avatars/logo.svg') }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com/">
@@ -82,6 +81,7 @@
 </head>
 
 <body>
+    
     @php
         $urlName = collect(explode('/', request()->url()))->last();
     @endphp
@@ -93,9 +93,10 @@
 
 
                 <div class="app-brand demo ">
-                    <a href="{{url('/')}}" class="app-brand-link">
+                    <a href="{{ url('/') }}" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="{{ asset('ui/assets/img/avatars/logo.svg') }}" class="img-fluid w-75" alt="">
+                            <img src="{{ asset('ui/assets/img/avatars/logo.svg') }}" class="img-fluid w-75"
+                                alt="">
                         </span>
                         <span class="app-brand-text demo menu-text fw-bold">Kids Connect</span>
                     </a>
@@ -679,12 +680,13 @@
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <img src="{{ asset('ui/assets/img/avatars/cAvatar.png') }}" alt
-                                                            class="h-auto rounded-circle">
+                                                        <img src="{{ asset('ui/assets/img/avatars/cAvatar.png') }}"
+                                                            alt class="h-auto rounded-circle">
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <span class="fw-medium d-block">{{ Auth::user()->username }}</span>
+                                                    <span
+                                                        class="fw-medium d-block">{{ Auth::user()->username }}</span>
                                                     <small class="text-muted">Admin</small>
                                                 </div>
                                             </div>
@@ -734,11 +736,11 @@
                                         <div class="dropdown-divider"></div>
                                     </li> --}}
                                     <li>
-                                <a class="dropdown-item" href="{{ route('logout') }}">
-                                    <i class="ti ti-logout me-2 ti-sm"></i>
-                                    <span class="align-middle">Log Out</span>
-                                </a>
-                            </li>
+                                        <a class="dropdown-item" href="{{ url('logout') }}">
+                                            <i class="ti ti-logout me-2 ti-sm"></i>
+                                            <span class="align-middle">Log Out</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <!--/ User -->

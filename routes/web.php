@@ -14,12 +14,15 @@ use App\Http\Middleware\AuthenticateMiddleware;
 // Route::get('/', function () {
 //     return view('security/login');
 // });
+
+
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [adminuserRegistrationController::class,'dashboard_home'])->name('dashboard');
     // Add other protected routes here
 });
+
 Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
 Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
 
@@ -39,6 +42,7 @@ Route::post('/password/update',[ForgotPasswordController::class,'updatePassword'
 Route::get('/changePassword', function () {
     return view('security/changePassword');
 });
+Route::get('logout', [adminuserRegistrationController::class, 'logout'])->name('logout');
 
 // registration
 Route::get('/registration', [adminuserRegistrationController::class, 'index']);
@@ -94,6 +98,5 @@ Route::get('/appFeedbacks', function () {
     return view('reports/appFeedbacks');
 });
 
-Route::get('logout', [adminuserRegistrationController::class, 'logout'])->name('logout');
 
 
