@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminuserRegistrationController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Middleware\AuthenticateMiddleware;
+
 
 
 
@@ -13,6 +15,11 @@ use App\Http\Controllers\ForgotPasswordController;
 //     return view('security/login');
 // });
 // Authentication Routes...
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [adminuserRegistrationController::class,'dashboard_home'])->name('dashboard');
+    // Add other protected routes here
+});
 Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
 Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
 
@@ -86,4 +93,7 @@ Route::get('/totalCalendarschedules', function () {
 Route::get('/appFeedbacks', function () {
     return view('reports/appFeedbacks');
 });
+
+Route::get('logout', [adminuserRegistrationController::class, 'logout'])->name('logout');
+
 

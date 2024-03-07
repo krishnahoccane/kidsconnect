@@ -14,6 +14,14 @@ use Maatwebsite\Excel\Facades\Excel;
 class adminuserRegistrationController extends Controller
 {
     //
+    public function dashboard_home()
+    {
+        if (Auth::check()) {
+            return view('dashboard'); // Show the dashboard view if the user is authenticated
+        }
+        
+        return redirect()->route('login'); // Redirect to the login page if the user is not authenticated
+    }
    public function index()
     {
         return view('security/registration');
@@ -60,6 +68,8 @@ class adminuserRegistrationController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            session(['username' => $user->username]); // Store username in session
             return redirect()->intended('dashboard'); // Redirect to the intended URL after successful authentication
         }
 
@@ -74,5 +84,11 @@ class adminuserRegistrationController extends Controller
         public function export()
     {
         return Excel::download(new RegistrationsExport(), 'registrations.xlsx');
+    }
+
+    public function logout()
+    {
+        Auth::logout(); // Logout the user
+        return redirect()->route('login'); // Redirect to the login page after logout
     }
 }
