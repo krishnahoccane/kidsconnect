@@ -696,18 +696,18 @@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
-                                    {{-- <li>
+                                    <li>
                                         <a class="dropdown-item" href="{{url('adminProfile')}}">
                                             <i class="ti ti-user-check me-2 ti-sm"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>
-                                    </li> --}}
-                                    <li>
+                                    </li>
+                                    {{-- <li>
                                         <a class="dropdown-item" href="pages-account-settings-account.html">
                                             <i class="ti ti-settings me-2 ti-sm"></i>
                                             <span class="align-middle">Settings</span>
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     {{-- <li>
                                         <a class="dropdown-item" href="pages-account-settings-billing.html">
                                             <span class="d-flex align-items-center align-middle">
