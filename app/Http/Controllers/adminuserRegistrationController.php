@@ -61,7 +61,11 @@ class adminuserRegistrationController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            session(['username' => $user->username]); // Store username in session
+            session([
+                    'username'=> $user -> username,
+                    'email' => $user -> email,
+                    'userid' => $user -> id
+            ]); // Store sessions variable with the data
             return redirect()->intended('dashboard'); // Redirect to the intended URL after successful authentication
         }
 
@@ -82,6 +86,7 @@ class adminuserRegistrationController extends Controller
     public function logout()
     {
         Auth::logout(); // Logout the user
+        session()->flush();
         return redirect()->route('login'); // Redirect to the login page after logout
     }
 }

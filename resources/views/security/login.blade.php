@@ -7,10 +7,10 @@
             <!-- /Left Text -->
             <div class="d-none d-lg-flex col-lg-7 p-0">
                 <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
-                    <img src="{{asset('ui/assets/img/illustrations/auth-login-illustration-light.png')}}" alt="auth-login-cover"
-                        class="img-fluid my-5 auth-illustration">
+                    <img src="{{ asset('ui/assets/img/illustrations/auth-login-illustration-light.png') }}"
+                        alt="auth-login-cover" class="img-fluid my-5 auth-illustration">
 
-                    <img src="{{asset('ui/assets/img/illustrations/bg-shape-image-light.png')}}" alt="auth-login-cover"
+                    <img src="{{ asset('ui/assets/img/illustrations/bg-shape-image-light.png') }}" alt="auth-login-cover"
                         class="platform-bg">
                 </div>
             </div>
@@ -21,42 +21,43 @@
                 <div class="w-px-400 mx-auto">
                     <!-- Logo -->
                     <div class="app-brand mb-4">
-                        <a href="{{url('/')}}" class="app-brand-link">
-                        <span class="app-brand-logo demo">
-                            <img src="{{ asset('ui/assets/img/avatars/logo.svg') }}" class="img-fluid w-75" alt="">
-                        </span>
-                    </a>
+                        <a href="{{ url('/') }}" class="app-brand-link">
+                            <span class="app-brand-logo demo">
+                                <img src="{{ asset('ui/assets/img/avatars/logo.svg') }}" class="img-fluid w-75"
+                                    alt="">
+                            </span>
+                        </a>
                     </div>
                     <!-- /Logo -->
                     <h3 class="mb-1">Welcome to Kids Connect! 👋
-                    @if(Session::has('status'))
-                        <div class="alert alert-success">
-                            {{ Session::get('status') }}
-                        </div>
-                        @php
-                        Session::forget('status');
-                    @endphp
-                    @endif
+                        @if (Session::has('status'))
+                            <div class="alert alert-success">
+                                <h6>{{ Session::get('status') }}</h6>
+                            </div>
+                            @php
+                                Session::forget('status');
+                            @endphp
+                        @endif
                     </h3>
                     <p class="mb-4">Please sign-in to your account and establish a healthy connection</p>
 
-                    <form id="" class="" action="{{ route('authenticate') }}"
-                        method="POST">
+                    <form id="" class="" action="{{ route('authenticate') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email or Username</label>
                             <input type="text" class="form-control" id="email" name="email"
                                 placeholder="Enter your email or username" autofocus>
-                                <span class="text-danger">
-                                @error('email')
-                                    {{ $message }}
-                                @enderror
-                            </span>
+
                         </div>
+                        <span class="text-danger">
+                            @error('email')
+                                {{ $message }}
+                            @enderror
+                        </span>
                         <div class="mb-3 form-password-toggle">
                             <div class="d-flex justify-content-between">
                                 <label class="form-label" for="password">Password</label>
-                                <a href="{{url('forgotPassword')}}">
+                                <a href="{{ url('forgotPassword') }}">
                                     <small>Forgot Password?</small>
                                 </a>
                             </div>
@@ -64,22 +65,15 @@
                                 <input type="password" id="password" class="form-control" name="password"
                                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                     aria-describedby="password" />
-                                    <span class="text-danger">
-                                @error('password')
-                                    {{ $message }}
-                                @enderror
-                            </span>
+                                <span class="text-danger">
+                                    @error('password')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
                                 <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="remember-me">
-                                <label class="form-check-label" for="remember-me">
-                                    Remember Me
-                                </label>
-                            </div>
-                        </div>
+
                         <button class="btn btn-primary d-grid w-100">
                             Sign in
                         </button>
@@ -87,7 +81,7 @@
 
                     <p class="text-center">
                         <span>New on our platform?</span>
-                        <a href="{{url('registration')}}">
+                        <a href="{{ url('registration') }}">
                             <span>Create an account</span>
                         </a>
                     </p>
