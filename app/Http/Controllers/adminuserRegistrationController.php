@@ -61,7 +61,7 @@ class adminuserRegistrationController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            session(['username' => $user->username]); // Store username in session
+            // session(['username' => $user->username]); // Store username in session
             return redirect()->intended('dashboard'); // Redirect to the intended URL after successful authentication
         }
 
