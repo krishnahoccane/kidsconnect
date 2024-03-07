@@ -29,8 +29,7 @@
             </div>
             <hr class="my-0">
             <div class="card-body">
-                <form id="formAccountSettings" method="GET" onsubmit="return false">
-                    @crlf
+                <form id="formAccountSettings" method="GET" action="{{url('adminUpdate')}}" onsubmit="return false">
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label for="username" class="form-label">Username</label>
