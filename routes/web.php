@@ -58,6 +58,9 @@ Route::get('/feedback', function () {
 Route::get('/userProfile', function () {
     return view('users/userProfile');
 });
+Route::get('/adminProfile', function () {
+    return view('users/adminProfile');
+});
 
 // Page management
 Route::get('/about', function () {

@@ -50,7 +50,13 @@
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/typeahead-js/typeahead.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/swiper/swiper.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/%40form-validation/form-validation.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/animate-css/animate.css') }}" />
+
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/flatpickr/flatpickr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+
 
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
 
@@ -72,7 +78,6 @@
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> --}}
 
 </head>
 

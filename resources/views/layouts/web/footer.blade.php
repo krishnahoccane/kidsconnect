@@ -8,7 +8,7 @@
                 <script>
                     document.write(new Date().getFullYear())
                 </script>, made with ❤️ by <a href="#" target="_blank"
-                    class="footer-link text-primary fw-medium">Pixinvent</a>
+                    class="footer-link text-primary fw-medium">Glansa</a>
             </div>
             <div class="d-none d-lg-inline-block">
 
@@ -61,6 +61,8 @@
 {{-- <script src="{{ asset('ui/assets/vendor/libs/i18n/i18n.js') }}"></script> --}}
 <script src="{{ asset('ui/assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
 <script src="{{ asset('ui/assets/vendor/js/menu.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+
 
 <!-- endbuild -->
 
@@ -68,6 +70,8 @@
 <script src="{{ asset('ui/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
 <script src="{{ asset('ui/assets/vendor/libs/swiper/swiper.js') }}"></script>
 <script src="{{ asset('ui/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/select2/select2.js') }}"></script>
+
 
 <!-- Flat Picker -->
 <script src="{{ asset('ui/assets/vendor/libs/moment/moment.js') }}"></script>
@@ -78,6 +82,9 @@
 <script src="{{ asset('ui/assets/vendor/libs/%40form-validation/popular.js') }}"></script>
 <script src="{{ asset('ui/assets/vendor/libs/%40form-validation/bootstrap5.js') }}"></script>
 <script src="{{ asset('ui/assets/vendor/libs/%40form-validation/auto-focus.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/cleavejs/cleave.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
+
 
 
 
@@ -87,11 +94,13 @@
 <script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.js') }}"></script>
 <script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.bootstrap5.js') }}"></script>
 
-<!-- Page JS -->
+{{-- Page js --}}
 <script src="{{ asset('ui/assets/js/dashboards-analytics.js') }}"></script>
 <script src="{{ asset('ui/assets/js/app-logistics-dashboard.js') }}"></script>
 <script src="{{ asset('ui/assets/js/myjs/apiGet.js') }}"></script>
 <script src="{{ asset('ui/assets/js/pages-profile.js') }}"></script>
+<script src="{{ asset('ui/assets/js/pages-account-settings-account.js') }}"></script>
+
 
 
 
