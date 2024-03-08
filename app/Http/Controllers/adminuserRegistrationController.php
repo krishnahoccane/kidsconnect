@@ -23,7 +23,7 @@ class adminuserRegistrationController extends Controller
     {
         $request->validate([
             'username' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email  ',
             'password' => 'required'
         ]);
 
@@ -83,10 +83,16 @@ class adminuserRegistrationController extends Controller
     }
 
     // Logout users
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout(); // Logout the user
-        session()->flush();
-        return redirect()->route('login'); // Redirect to the login page after logout
+
+        // If you're using session, you can flush the session data
+        $request->session()->flush();
+
+        // If you're using session, you can regenerate the session ID to prevent session fixation attacks
+        $request->session()->regenerate();
+
+        return redirect()->route('showLoginForm'); // Redirect to the login form
     }
 }

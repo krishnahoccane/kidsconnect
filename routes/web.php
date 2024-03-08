@@ -3,33 +3,37 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminuserRegistrationController;
-use App\Http\Controllers\LoginController;
+// use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Middleware\AuthenticateMiddleware;
+// use App\Http\Middleware\AuthenticateMiddleware;
 
 
 // URL Authentication Routes...
-Route::middleware(['auth.custom'])->group(function () {
-    Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard']) ->name('dashboard');
-    // Other dashboard routes...
-});
+// Route::middleware(['auth.custom'])->group(function () {
+//     Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard']) ->name('dashboard');
+//     // Other dashboard routes...
+// });
 
 // Admin Routes
 Route::get('/registration', [adminuserRegistrationController::class, 'index']);
 Route::post('/registration', [adminuserRegistrationController::class, 'view']);
 Route::get('/export-registrations', [adminuserRegistrationController::class, 'export']);
-Route::get('/login', function () {
-    return view('security.login');
-})->name('login');Route::get('/', [adminuserRegistrationController::class, 'showLoginForm']); // Define the controller method for showing the login form
+
+// Route::get('/login', function () {
+//     return view('security.login');
+// })->name('login');Route::get('/', [adminuserRegistrationController::class, 'showLoginForm']); // Define the controller method for showing the login form
+Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
-Route::get('logout', [adminuserRegistrationController::class, 'logout'])->name('logout');
+Route::get('/logout', [adminuserRegistrationController::class, 'logout'])->name('logout');
 
 
 
 // Forgot Routes..
 
+// Forgot Routes..
 Route::get('/forgotPassword', [ForgotPasswordController::class,'showLinkRequestForm'])->name('password.request');
 Route::post('/forgotPassword', [ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
+
 // change password route
 
 
@@ -43,9 +47,9 @@ Route::get('/changePassword', function () {
 
 
 // Admin pannel
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// });
+Route::get('/dashboard', function () {
+    return view('dashboard');
+});
 
 // User management
 Route::get('/adminUsers', function () {

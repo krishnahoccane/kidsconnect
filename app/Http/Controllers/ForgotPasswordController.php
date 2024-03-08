@@ -10,14 +10,15 @@ use App\Models\Registration;
 
 class ForgotPasswordController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     public function showLinkRequestForm()
     {
         return view('security/forgotPassword');
     }
+    
 
     public function sendResetLinkEmail(Request $request)
     {
