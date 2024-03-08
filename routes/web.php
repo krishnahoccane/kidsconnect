@@ -7,35 +7,36 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Middleware\AuthenticateMiddleware;
 
-Route::get('/registration', [adminuserRegistrationController::class, 'index']);
-Route::post('/registration', [adminuserRegistrationController::class, 'view']);
 
 // URL Authentication Routes...
-// Route::middleware(['auth.custom'])->group(function () {
-//     Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard']) ->name('dashboard');
-//     // Other dashboard routes...
-// });
+Route::middleware(['auth.custom'])->group(function () {
+    Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard']) ->name('dashboard');
+    // Other dashboard routes...
+});
 
-// // Admin Routes
+// Admin Routes
+Route::get('/registration', [adminuserRegistrationController::class, 'index']);
+Route::post('/registration', [adminuserRegistrationController::class, 'view']);
+Route::get('/export-registrations', [adminuserRegistrationController::class, 'export']);
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
+Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
+Route::get('logout', [adminuserRegistrationController::class, 'logout'])->name('logout');
 
-// Route::get('/export-registrations', [adminuserRegistrationController::class, 'export']);
-// Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-// Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
-// Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
-// Route::get('logout', [adminuserRegistrationController::class, 'logout'])->name('logout');
 
 
+// Forgot Routes..
 
-// // Forgot Routes..
-// Route::get('/forgotPassword', [ForgotPasswordController::class,'showLinkRequestForm'])->name('password.request');
-// Route::post('/forgotPassword', [ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
+Route::get('/forgotPassword', [ForgotPasswordController::class,'showLinkRequestForm'])->name('password.request');
+Route::post('/forgotPassword', [ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
+// change password route
 
-// // change password route
-// Route::get('/password/change', [ForgotPasswordController::class,'showChangeForm'])->name('password.change');
-// Route::post('/password/update',[ForgotPasswordController::class,'updatePassword'])->name('password.update');
-// Route::get('/changePassword', function () {
-//     return view('security/changePassword');
-// });
+
+Route::get('/password/change', [ForgotPasswordController::class,'showChangeForm'])->name('password.change');
+Route::post('/password/update',[ForgotPasswordController::class,'updatePassword'])->name('password.update');
+Route::get('/changePassword', function () {
+    return view('security/changePassword');
+});
 
 
 
