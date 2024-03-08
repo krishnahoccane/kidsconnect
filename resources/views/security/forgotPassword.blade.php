@@ -41,7 +41,7 @@
                         @endphp
                     @endif
                     <p class="mb-4">Enter your email and we'll send you instructions to reset your password</p>
-                    <form id="formAuthentication" class="mb-3" action="{{ route('password.email') }}" method="POST">
+                    <form id="formAuthentication" class="mb-3" action="{{ url('/forgotPassword') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
