@@ -23,6 +23,6 @@ class subscriberlogins extends Model
         'About',
         'Address',
         'ProfileImage',
-        'Keywords',
+        // 'Keywords',
     ];
 }

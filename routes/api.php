@@ -18,13 +18,19 @@ Route::get('roles', [rolesController::class, 'index']);
 Route::get('roles/{id}', [rolesController::class, 'show']);
 Route::post('roles', [rolesController::class, 'create']);
 Route::put('roles/{id}/edit', [rolesController::class, 'update']);
+Route::delete('roles/{id}', [rolesController::class, 'delete']);
 
 
 // FOr Subscribers
 Route::get('subscriber', [subscribersController::class, 'index']);
 Route::post('subscriber', [subscribersController::class, 'create']);
-Route::delete('roles', [rolesController::class, 'delete']);
+
+// Subscribers Logins ( Create, View, Update, Delete)
 Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
+Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
+Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
+Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
+Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
 
 
 // For Status
