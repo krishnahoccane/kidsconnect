@@ -41,7 +41,7 @@
                     </h3>
                     <p class="mb-4">Please sign-in to your account and establish a healthy connection</p>
 
-                    <form id="" class="" action="{{ route('authenticate') }}" method="POST">
+                    <form id="" class="" action="{{ url('/') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email or Username</label>

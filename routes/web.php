@@ -18,8 +18,9 @@ Route::middleware(['auth.custom'])->group(function () {
 Route::get('/registration', [adminuserRegistrationController::class, 'index']);
 Route::post('/registration', [adminuserRegistrationController::class, 'view']);
 Route::get('/export-registrations', [adminuserRegistrationController::class, 'export']);
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('login'); // Define the controller method for showing the login form
+Route::get('/login', function () {
+    return view('security.login');
+})->name('login');Route::get('/', [adminuserRegistrationController::class, 'showLoginForm']); // Define the controller method for showing the login form
 Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
 Route::get('logout', [adminuserRegistrationController::class, 'logout'])->name('logout');
 

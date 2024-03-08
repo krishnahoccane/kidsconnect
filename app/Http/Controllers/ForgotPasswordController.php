@@ -29,9 +29,7 @@ class ForgotPasswordController extends Controller
             // Get the original password (plaintext)
             $password = $user->plain_password; // Assuming you have a column named 'plain_password' in your 'registrations' table
             $username = $user->username;
-            // Define the message content
-            // $messageContent = "Dear " . $user->username . ",\n\nYour password is: " . $password . "\n\nPlease keep your password secure.\n\nRegards,\nYour Website Team\n\n";
-
+            
             // Send the password via email
             Mail::html("
             <p>Hi {$username},</p>
