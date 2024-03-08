@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('subscriber_logins', function (Blueprint $table) {
             $table->id();
-            $table ->smallInteger('MainSubscriberId');
-            $table ->smallInteger('RoleId');
+            $table ->smallInteger('MainSubscriberId');//null
+            $table ->smallInteger('RoleId');// fetch from form
             $table ->string('FirstName');
             $table ->string('LastName');
             $table ->string('email')->unique();
@@ -24,13 +24,13 @@ return new class extends Migration
             $table ->string('SSN');
             $table ->smallInteger('IsMain');
             $table ->string('Password');
-            $table ->smallInteger('LoginType');
+            $table ->smallInteger('LoginType');//fetch from form
             $table ->string('About');
             $table ->string('Address');
             $table ->string('ProfileImage');
             $table ->string('Keywords');
-            $table->timestamps();
-            $table ->smallInteger('ProfileStatus');
+            $table->timestamps();//default
+            $table ->smallInteger('ProfileStatus');//enum 0 / 1 ( default 0) from admin
             $table ->smallInteger('IsApproved');
             $table ->date('ApprovedOn');
             $table ->string('ApprovedBy');

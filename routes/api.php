@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\defalutStatusController;
+use App\Http\Controllers\Api\subscriberLoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\rolesController;
@@ -23,6 +24,8 @@ Route::put('roles/{id}/edit', [rolesController::class, 'update']);
 Route::get('subscriber', [subscribersController::class, 'index']);
 Route::post('subscriber', [subscribersController::class, 'create']);
 Route::delete('roles', [rolesController::class, 'delete']);
+Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
+
 
 // For Status
 Route::get('defaultStatus', [defalutStatusController::class, 'index']);
