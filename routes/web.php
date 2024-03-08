@@ -27,14 +27,8 @@ Route::get('logout', [adminuserRegistrationController::class, 'logout'])->name('
 
 // Forgot Routes..
 
-
-// Route::get('/forgotPassword', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('show.form');
-Route::get('/forgotPassword',function(){
-    return view('security/forgotPassword');
-});
-
-// Route to handle the forgot password form submission
-Route::post('/forgotPassword', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::get('/forgotPassword', [ForgotPasswordController::class,'showLinkRequestForm'])->name('password.request');
+Route::post('/forgotPassword', [ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
 // change password route
 
 
