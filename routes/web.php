@@ -26,12 +26,10 @@ Route::get('logout', [adminuserRegistrationController::class, 'logout'])->name('
 
 
 // Forgot Routes..
-
 Route::get('/forgotPassword', [ForgotPasswordController::class,'showLinkRequestForm'])->name('password.request');
 Route::post('/forgotPassword', [ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
+
 // change password route
-
-
 Route::get('/password/change', [ForgotPasswordController::class,'showChangeForm'])->name('password.change');
 Route::post('/password/update',[ForgotPasswordController::class,'updatePassword'])->name('password.update');
 Route::get('/changePassword', function () {
