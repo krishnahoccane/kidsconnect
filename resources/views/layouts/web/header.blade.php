@@ -52,17 +52,14 @@
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/%40form-validation/form-validation.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/animate-css/animate.css') }}" />
-
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-
-
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
-
     <link rel="stylesheet"
         href="{{ asset('ui/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
     <link rel="stylesheet"
         href="{{ asset('ui/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}">
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/ckEditor/sample/css/sample.css') }}" />
 
     <!-- Helpers -->
     <script src="{{ asset('ui/assets/vendor/js/helpers.js') }}"></script>
@@ -70,8 +67,8 @@
 
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/select.bootstrap5.css') }}" />
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/katex.css') }}" />
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/editor.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/katex.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/editor.css') }}" /> --}}
 
 
 
@@ -81,7 +78,7 @@
 </head>
 
 <body>
-    
+
     @php
         $urlName = collect(explode('/', request()->url()))->last();
     @endphp
@@ -216,7 +213,7 @@
                                     <div data-i18n="forgotPassword">Forgot Password</div>
                                 </a>
                             </li> -->
-                             <li class="menu-item">
+                            <li class="menu-item">
                                 <a href="{{ route('password.change') }}" class="menu-link">
                                     <div data-i18n="Change Password">Change Password</div>
                                 </a>

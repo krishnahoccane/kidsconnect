@@ -6,6 +6,8 @@ use App\Http\Controllers\adminuserRegistrationController;
 // use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Middleware\PreventBackHistory;
+use App\Http\Controllers\Api\AllPageController;
+
 
 
 // URL Authentication Routes...
@@ -43,8 +45,12 @@ Route::middleware(['auth'])->group(function () {
 //     return view('security/changePassword');
 // });
 
-
-
+// Pages
+Route::get('allPages',[AllPageController:: class,'index']);
+Route::post('allPages',[AllPageController:: class,'store']);
+Route::get('allPages/{id}',[AllPageController:: class,'show']);
+Route::put('allPages/{id}/edit', [AllPageController::class, 'update']);
+Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
 
 // Admin pannel
 // Route::get('/dashboard', function () {

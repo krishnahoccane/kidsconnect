@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\rolesController;
 use App\Http\Controllers\Api\subscribersController;
+use App\Http\Controllers\Api\AllPageController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -44,6 +45,12 @@ Route::put('defaultStatus/{id}/edit', [defalutStatusController::class, 'update']
 Route::get('adminUsers',[adminController::class,'showAdminUsers']);
 Route::get('adminUsers/{id}',[adminController::class,'show']);
 
+// For Admin about
+Route::get('allPages',[AllPageController:: class,'index']);
+Route::post('allPages',[AllPageController:: class,'store']);
+Route::get('allPages/{id}',[AllPageController:: class,'show']);
+Route::put('allPages/{id}/edit', [AllPageController::class, 'update']);
+Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
 
 
 
