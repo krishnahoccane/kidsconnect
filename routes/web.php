@@ -1,11 +1,14 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\adminuserRegistrationController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\PreventBackHistory;
 // use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Middleware\PreventBackHistory;
+use App\Http\Controllers\adminuserRegistrationController;
+// use App\Http\Controllers\Api\subscriberUserProfileConstroller;
+
+// use App\Http\Middleware\PreventBackHistory;
 use App\Http\Controllers\Api\AllPageController;
 
 
@@ -41,9 +44,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard']) ->name('dashboard');
 });
 
-// Route::get('/changePassword', function () {
-//     return view('security/changePassword');
-// });
+// subscriber-userprofiles Handling
+// Route::get('userProfile/{id}', [subscriberUserProfileConstroller::class, 'show']);
+// Route::put('userProfile/{id}/edit', [subscriberUserProfileConstroller::class, 'update']);
+// Route::delete('userProfile/{id}', [subscriberUserProfileConstroller::class, 'delete']);
 
 // Pages
 Route::get('allPages',[AllPageController:: class,'index']);

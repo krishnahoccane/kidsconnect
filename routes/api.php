@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\defalutStatusController;
 use App\Http\Controllers\Api\subscriberLoginController;
+use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\rolesController;
