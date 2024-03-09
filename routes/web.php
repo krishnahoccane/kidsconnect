@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminuserRegistrationController;
 // use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ForgotPasswordController;
-// use App\Http\Middleware\AuthenticateMiddleware;
+use App\Http\Middleware\PreventBackHistory;
 
 
 // URL Authentication Routes...
@@ -26,30 +26,30 @@ Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name
 Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');
 Route::get('/logout', [adminuserRegistrationController::class, 'logout'])->name('logout');
 
-
-
-// Forgot Routes..
-
 // Forgot Routes..
 Route::get('/forgotPassword', [ForgotPasswordController::class,'showLinkRequestForm'])->name('password.request');
 Route::post('/forgotPassword', [ForgotPasswordController::class,'sendResetLinkEmail'])->name('password.email');
 
 // change password route
 
-
-Route::get('/password/change', [ForgotPasswordController::class,'showChangeForm'])->name('password.change');
-Route::post('/password/update',[ForgotPasswordController::class,'updatePassword'])->name('password.update');
-Route::get('/changePassword', function () {
-    return view('security/changePassword');
+Route::middleware(['auth'])->group(function () {
+    // Define routes that need to prevent back history here
+    Route::get('/password/change', [ForgotPasswordController::class, 'showChangeForm'])->name('password.change');
+    Route::post('/password/update', [ForgotPasswordController::class, 'updatePassword'])->name('password.update');
+    Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard']) ->name('dashboard');
 });
+
+// Route::get('/changePassword', function () {
+//     return view('security/changePassword');
+// });
 
 
 
 
 // Admin pannel
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// });
 
 // User management
 Route::get('/adminUsers', function () {

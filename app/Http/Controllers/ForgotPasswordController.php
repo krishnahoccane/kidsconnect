@@ -58,7 +58,7 @@ class ForgotPasswordController extends Controller
 
     public function showChangeForm()
     {
-        return view('auth.passwords.change');
+        return view('security/changePassword');
     }
 
     public function updatePassword(Request $request)
@@ -80,6 +80,8 @@ class ForgotPasswordController extends Controller
         $user->password = Hash::make($request->new_password);
         $user->plain_password = $request->new_password;
         $user->save();
+
+        
 
         return back()->with('status', 'Password updated successfully.');
     }

@@ -216,9 +216,9 @@
                                     <div data-i18n="forgotPassword">Forgot Password</div>
                                 </a>
                             </li> -->
-                            <li class="menu-item {{ request()->is('changePassword') ? 'active' : '' }}">
-                                <a href="{{ url('changePassword') }}" class="menu-link">
-                                    <div data-i18n="Property Listing">Change Password</div>
+                             <li class="menu-item">
+                                <a href="{{ route('password.change') }}" class="menu-link">
+                                    <div data-i18n="Change Password">Change Password</div>
                                 </a>
                             </li>
                         </ul>
@@ -686,7 +686,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     @auth
-                                                        <span class="fw-medium d-block">{{ Auth::user()->username }}</span>
+                                                        <span class="fw-medium d-block">{{ session('username') }}</span>
                                                         <small class="text-muted">Admin</small>
                                                     @endauth
                                                 </div>
@@ -696,18 +696,18 @@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a class="dropdown-item" href="{{url('adminProfile')}}">
                                             <i class="ti ti-user-check me-2 ti-sm"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>
-                                    </li>
-                                    {{-- <li>
+                                    </li> --}}
+                                    <li>
                                         <a class="dropdown-item" href="pages-account-settings-account.html">
                                             <i class="ti ti-settings me-2 ti-sm"></i>
                                             <span class="align-middle">Settings</span>
                                         </a>
-                                    </li> --}}
+                                    </li>
                                     {{-- <li>
                                         <a class="dropdown-item" href="pages-account-settings-billing.html">
                                             <span class="d-flex align-items-center align-middle">
