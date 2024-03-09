@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\adminuserRegistrationController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\PreventBackHistory;
 // use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Middleware\PreventBackHistory;
+use App\Http\Controllers\adminuserRegistrationController;
+use App\Http\Controllers\web\subscriberUserProfileConstroller;
 
 
 // URL Authentication Routes...
@@ -38,6 +39,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/password/update', [ForgotPasswordController::class, 'updatePassword'])->name('password.update');
     Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard']) ->name('dashboard');
 });
+
+// subscriber-userprofiles Handling
+Route::get('userProfile/{id}', [subscriberUserProfileConstroller::class, 'show']);
+Route::put('userProfile/{id}/edit', [subscriberUserProfileConstroller::class, 'update']);
+Route::delete('userProfile/{id}', [subscriberUserProfileConstroller::class, 'delete']);
 
 
 // User management
