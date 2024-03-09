@@ -14,7 +14,7 @@ class subscriberlogins extends Model
     protected $fillable = [
         'FirstName',
         'LastName',
-        'email',
+        'Email',
         'Dob',
         'Gender',
         'PhoneNumber',
@@ -23,6 +23,7 @@ class subscriberlogins extends Model
         'About',
         'Address',
         'ProfileImage',
+        'SSNimage',
         // 'Keywords',
     ];
 }

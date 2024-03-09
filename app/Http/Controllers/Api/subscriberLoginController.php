@@ -30,33 +30,11 @@ class subscriberLoginController extends Controller
 
     public function create(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'FirstName' => 'required|string',
-            'LastName' => 'required|string',
-            'email' => 'required|email',
-            'Dob' => 'required|date',
-            'Gender' => 'required',
-            'PhoneNumber' => 'required|numeric',
-            'SSN' => 'required',
-            'Password' => 'required|min:8',
-            'About' => 'required',
-            'Address' => 'required',
-            // given size in kilobites - 2048 -2MB
-            'ProfileImage' => 'required',
-            // 'Keywords' => 'string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 403,
-                'message' => 'Validation error occurred',
-                'errors' => $validator->errors()->all()
-            ], 403);
-        } else {
+        
             $sub_login = subscriberlogins::firstOrCreate([
                 'FirstName' => $request->FirstName,
                 'LastName' => $request->LastName,
-                'email' => $request->email,
+                'Email' => $request->Email,
                 'Dob' => $request->Dob,
                 'Gender' => $request->Gender,
                 'PhoneNumber' => $request->PhoneNumber,
@@ -65,6 +43,7 @@ class subscriberLoginController extends Controller
                 'About' => $request->About,
                 'Address' => $request->Address,
                 'ProfileImage' => $request->ProfileImage,
+                'SSNimage'=>$request->SSNimage
                 // 'Keywords' => $request->Keywords,
             ]);
 
@@ -80,7 +59,7 @@ class subscriberLoginController extends Controller
                     'message' => 'Subscriber already exists'
                 ], 409);
             }
-        }
+        
     }
 
 
@@ -118,7 +97,8 @@ class subscriberLoginController extends Controller
             'Password' => ['string'],
             'About' => ['string'],
             'Address' => ['string'],
-            'ProfileImage' => ['string']
+            'ProfileImage' => ['string'],
+            'SSNimage' => ['string']
 
         ]);
 
@@ -146,7 +126,8 @@ class subscriberLoginController extends Controller
                     'Password' => $request->Password,
                     'About' => $request->About,
                     'Address' => $request->Address,
-                    'ProfileImage' => $request->ProfileImage
+                    'ProfileImage' => $request->ProfileImage,
+                    'SSNimage'=>$request->SSNimage
                 ]);
 
                 return response()->json([

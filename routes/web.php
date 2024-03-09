@@ -39,17 +39,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard']) ->name('dashboard');
 });
 
-// Route::get('/changePassword', function () {
-//     return view('security/changePassword');
-// });
-
-
-
-
-// Admin pannel
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// });
 
 // User management
 Route::get('/adminUsers', function () {
