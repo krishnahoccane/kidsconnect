@@ -5,10 +5,11 @@
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2 pb-1">
                     <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-primary"><i class="fa fa-users" aria-hidden="true"></i>
+                        <span class="avatar-initial rounded bg-label-primary"><i class="fa fa-users"
+                                aria-hidden="true"></i>
                         </span>
                     </div>
-                    <h4 class="ms-1 mb-0">42</h4>
+                    <h4 class="ms-1 mb-0" id="subscriber-count">Loading...</h4>
                 </div>
                 <p class="mb-1">Subscriber</p>
                 <p class="mb-0">
@@ -25,7 +26,7 @@
                     <div class="avatar me-2">
                         <span class="avatar-initial rounded bg-label-warning"><i class="fa-solid fa-user"></i></span>
                     </div>
-                    <h4 class="ms-1 mb-0">8</h4>
+                    <h4 class="ms-1 mb-0" id="adminUserCount">Loading...</h4>
                 </div>
                 <p class="mb-1">Admin</p>
                 <p class="mb-0">
@@ -76,7 +77,8 @@
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2 pb-1">
                     <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-primary"><i class="fa fa-check" aria-hidden="true"></i>
+                        <span class="avatar-initial rounded bg-label-primary"><i class="fa fa-check"
+                                aria-hidden="true"></i>
                         </span>
                     </div>
                     <h4 class="ms-1 mb-0">42</h4>
@@ -94,7 +96,8 @@
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2 pb-1">
                     <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-warning"><i class="fas fa-question-circle" style="font-size: 24px; color: orange;"></i>
+                        <span class="avatar-initial rounded bg-label-warning"><i class="fas fa-question-circle"
+                                style="font-size: 24px; color: orange;"></i>
 
                         </span>
                     </div>
@@ -113,7 +116,8 @@
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2 pb-1">
                     <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-danger"><i class="fas fa-times-circle" style="font-size: 24px; color: red;"></i>
+                        <span class="avatar-initial rounded bg-label-danger"><i class="fas fa-times-circle"
+                                style="font-size: 24px; color: red;"></i>
                         </span>
                     </div>
                     <h4 class="ms-1 mb-0">27</h4>
@@ -131,7 +135,8 @@
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2 pb-1">
                     <div class="avatar me-2">
-                        <span class="avatar-initial rounded bg-label-info"><i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span class="avatar-initial rounded bg-label-info"><i class="fa fa-times"
+                                aria-hidden="true"></i></span>
                     </div>
                     <h4 class="ms-1 mb-0">13</h4>
                 </div>
@@ -145,7 +150,7 @@
     </div>
 </div>
 <!--/ Card Border Shadow -->
-<div class="row">
+{{-- <div class="row">
     <!-- Vehicles overview -->
     <div class="col-xxl-6 mb-4 order-5 order-xxl-0">
         <div class="card">
@@ -696,5 +701,44 @@
     </div>
 
     <!--/ On route vehicles Table -->
-</div>
+</div> --}}
+<script>
+    $(document).ready(function() {
+        // Make an AJAX request to fetch subscriber count
+        $.ajax({
+            url: "http://localhost:8000/api/subscriberlogins",
+            method: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.status === 200) {
+                    $('#subscriber-count').text(response.count);
+                } else {
+                    $('#subscriber-count').text('Error fetching count');
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#subscriber-count').text('Error fetching count');
+                console.error("Error fetching count:", error);
+            }
+        });
+
+        $.ajax({
+            url: "http://localhost:8000/api/adminUsers",
+            method: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.status === 200) {
+                    const count = response.data.length;
+                    $('#adminUserCount').text(count);
+                } else {
+                    $('#adminUserCount').text('Error fetching count');
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#subscriber-count').text('Error fetching count');
+                console.error("Error fetching count:", error);
+            }
+        });
+    });
+</script>
 @include('./layouts/web.footer')
