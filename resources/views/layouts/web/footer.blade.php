@@ -131,22 +131,21 @@
         ]
     });
 
-    var editors = [];
+   
+// document.addEventListener('DOMContentLoaded', function() {
+//     console.log('DOMContentLoaded event fired.');
+//     ClassicEditor
+//         .create(document.getElementById('editor'))
+//         .then(editor => {
+//             console.log('Editor initialized successfully:', editor);
+//         })
+//         .catch(error => {
+//             console.error('Error initializing editor:', error);
+//         });
+// });
 
-    function createEditor(elementId, data) {
-        return ClassicEditor
-            .create(document.querySelector('#' + elementId))
-            .then(editor => {
-                editors[elementId] = editor;
-                editor.setData(response.data.pageContent); // You should set editor data here
-            })
-            .catch(err => console.error(err));
-    }
 
-    $(document).ready(function() {
-        createEditor('editor');
-        createEditor('director1');
-    });
+
     // about page get api
 </script>
 

@@ -55,146 +55,94 @@ $.ajax({
     },
 });
 
-$.ajax({
-    url: "http://localhost:8000/api/allPages/1",
-    method: "GET",
-    dataType: "json",
-    success: function (response) {
-        var pageContent = response.data.Pagecontent;
-        if (window.editor) {
-            window.editor.setData(pageContent);
-        } else {
-            console.error("ClassicEditor instance not found.");
-            // Fallback to set value to textarea if ClassicEditor instance not found
-            $("#director1").val(pageContent);
-        }
-    },
-    error: function (xhr, status, error) {
-        console.error("Error fetching data from the API:", error);
-    },
+// Assuming you have already initialized CKEditor with ID 'editor' in your page
 
-});
+// Check if CKEditor is loaded before using it    // Fetch data from the API
+// Fetch data from the API and initialize CKEditor when the DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
 
-// Terms and conditions
+    // Fetch data for 'About Page' and initialize CKEditor for editor #editor
+    $.ajax({
+        url: "http://localhost:8000/api/allPages/1",
+        method: "GET",
+        dataType: "json",
+        success: function (response) {
+            var pageContent = response.data.Pagecontent;
+            ClassicEditor
+                .create(document.querySelector('#editor'))
+                .then(editor => {
+                    editor.setData(pageContent);
+                })
+                .catch(error => {
+                    console.error('Error initializing CKEditor:', error);
+                });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching data from the API:", error);
+        },
+    });
 
-$.ajax({
-    url: "http://localhost:8000/api/allPages/2",
-    method: "GET",
-    dataType: "json",
-    success: function (response) {
-        var pageContent = response.data.Pagecontent;
-        if (window.editor) {
-            window.editor.setData(pageContent);
-        } else {
-            console.error("ClassicEditor instance not found.");
-            // Fallback to set value to textarea if ClassicEditor instance not found
-            $(".editor").val(pageContent);
-        }
-    },
-    error: function (xhr, status, error) {
-        console.error("Error fetching data from the API:", error);
-    },
+    // Fetch data for 'Terms and Conditions' and initialize CKEditor for editor #editor2
+    $.ajax({
+        url: "http://localhost:8000/api/allPages/2",
+        method: "GET",
+        dataType: "json",
+        success: function (response) {
+            var pageContent = response.data.Pagecontent;
+            ClassicEditor
+                .create(document.querySelector('#editor2'))
+                .then(editor => {
+                    editor.setData(pageContent);
+                })
+                .catch(error => {
+                    console.error('Error initializing CKEditor:', error);
+                });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching data from the API:", error);
+        },
+    });
 
-});
+    // Fetch data for 'FAQ' and initialize CKEditor for editor #editor3
+    $.ajax({
+        url: "http://localhost:8000/api/allPages/3",
+        method: "GET",
+        dataType: "json",
+        success: function (response) {
+            var pageContent = response.data.Pagecontent;
+            ClassicEditor
+                .create(document.querySelector('#editor3'))
+                .then(editor => {
+                    editor.setData(pageContent);
+                })
+                .catch(error => {
+                    console.error('Error initializing CKEditor:', error);
+                });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching data from the API:", error);
+        },
+    });
 
-// FAQ
+    // Fetch data for 'Privacy Policy' and initialize CKEditor for editor #editor4
+    $.ajax({
+        url: "http://localhost:8000/api/allPages/4",
+        method: "GET",
+        dataType: "json",
+        success: function (response) {
+            var pageContent = response.data.Pagecontent;
+            ClassicEditor
+                .create(document.querySelector('#editor4'))
+                .then(editor => {
+                    editor.setData(pageContent);
+                })
+                .catch(error => {
+                    console.error('Error initializing CKEditor:', error);
+                });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching data from the API:", error);
+        },
+    });
 
-// $.ajax({
-//     url: "http://localhost:8000/api/allPages/3",
-//     method: "GET",
-//     dataType: "json",
-//     success: function (response) {
-//         var pageContent = response.data.Pagecontent;
-//         if (window.editor) {
-//             window.editor.setData(pageContent);
-//         } else {
-//             console.error("ClassicEditor instance not found.");
-//             // Fallback to set value to textarea if ClassicEditor instance not found
-//             $("#editor").val(pageContent);
-//         }
-//     },
-//     error: function (xhr, status, error) {
-//         console.error("Error fetching data from the API:", error);
-//     },
-
-// });
-
-// //Privacy Policy
-
-$.ajax({
-    url: "http://localhost:8000/api/allPages/2",
-    method: "GET",
-    dataType: "json",
-    success: function (response) {
-        var pageContent = response.data.Pagecontent;
-        console.log(pageContent);
-        $("#full-editor").val(pageContent);
-    },
-    error: function (xhr, status, error) {
-        console.error("Error fetching data from the API:", error);
-    },
-
-});
-
-// subscribers Data
-$.ajax({
-    url: "http://localhost:8000/api/subscriberlogins",
-    method: "GET",
-    dataType: "json",
-    success: function (response) {
-        // Check if the 'data' key exists in the response
-        
-        if (response.data) {
-            // Loop through the data and create table rows
-
-            $.each(response.data, function (index, item) {
-                const createdAtDate = new Date(item.created_at);
-                const approvedAtDate = new Date(item.ApprovedOn);
-                console.log(createdAtDate);
-                // Format the date components
-                const formattedDateOfCreation = `${createdAtDate.getFullYear()}-${(
-                    createdAtDate.getMonth() + 1
-                )
-                    .toString()
-                    .padStart(2, "0")}-${createdAtDate
-                    .getDate()
-                    .toString()
-                    .padStart(2, "0")}`;
-                const formattedDateOfApprove = `${approvedAtDate.getFullYear()}-${(
-                    approvedAtDate.getMonth() + 1
-                )
-                    .toString()
-                    .padStart(2, "0")}-${approvedAtDate
-                    .getDate()
-                    .toString()
-                    .padStart(2, "0")}`;
-
-                const row = `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${item.RoleId}</td>
-                        <td>${item.Email}</td>
-                        <td>${formattedDateOfCreation}</td>
-                        <td>${formattedDateOfApprove}</td>
-                        <td>${item.ApprovedBy}</td>
-                        <td>
-                            <a href="/userProfile/${item.id}"><button type="button" class="btn btn-primary">
-                                    <span class="ti-xs ti ti-eye me-1"></span>View Profile
-                                </button></a>
-
-                        </td>
-                    </tr> `;
-                // Append the row to the table body
-                $("#datatable-subscriberLogin").append(row);
-                
-            });
-        } else {
-            console.error(
-                'Error: Unable to find "data" key in the API response'
-            );
-        }
-    },
-    error: function (xhr, status, error) {
-        console.error("Error fetching data from the API:", error);
-    },
 });

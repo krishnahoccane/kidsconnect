@@ -9,7 +9,7 @@
                     </div>
                     <h4 class="ms-1 mb-0">42</h4>
                 </div>
-                <p class="mb-1">On route vehicles</p>
+                <p class="mb-1">Subscriber</p>
                 <p class="mb-0">
                     <span class="fw-medium me-1">+18.2%</span>
                     <small class="text-muted">than last week</small>
