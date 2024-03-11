@@ -54,7 +54,7 @@
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/animate-css/animate.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}"> --}}
     <link rel="stylesheet"
         href="{{ asset('ui/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
     <link rel="stylesheet"
@@ -80,6 +80,7 @@
 <body>
 
     @php
+        
         $urlName = collect(explode('/', request()->url()))->last();
     @endphp
     <!-- Layout wrapper -->
@@ -693,18 +694,18 @@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
-                                    {{-- <li>
+                                    <li>
                                         <a class="dropdown-item" href="{{url('adminProfile')}}">
                                             <i class="ti ti-user-check me-2 ti-sm"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>
-                                    </li> --}}
-                                    <li>
+                                    </li>
+                                    {{-- <li>
                                         <a class="dropdown-item" href="pages-account-settings-account.html">
                                             <i class="ti ti-settings me-2 ti-sm"></i>
                                             <span class="align-middle">Settings</span>
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     {{-- <li>
                                         <a class="dropdown-item" href="pages-account-settings-billing.html">
                                             <span class="d-flex align-items-center align-middle">
