@@ -18,6 +18,7 @@ class subscriberLoginController extends Controller
         if ($sub_login->count() > 0) {
             return response()->json([
                 'status' => 200,
+                'count'=>count($sub_login),
                 'data' => $sub_login
             ], 200);
         } else {
