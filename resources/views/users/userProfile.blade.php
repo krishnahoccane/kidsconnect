@@ -1,5 +1,26 @@
 @include('./layouts/web.header')
+@php
+    if ($sub_login['RoleId'] === null) {
+        $role = 'Father';
+    } else {
+        $role = 'Mother';
+    }
 
+    if ($sub_login['IsApproved'] = 0) {
+        $pStatus = 'Not Approved';
+    } elseif ($sub_login['IsApproved'] = 1) {
+        $pStatus = 'Approved';
+    } else {
+        $pStatus = 'Pending';
+    }
+
+    if ($sub_login['LoginType'] = 1) {
+        $loginType = 'Google Login';
+    } else {
+        $loginType = 'Manual';
+    } 
+
+@endphp
 <!-- Header -->
 <div class="row">
     <div class="col-12">
@@ -16,17 +37,23 @@
                     <div
                         class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-4 flex-md-row flex-column gap-4">
                         <div class="user-profile-info">
-                            <h4>John Doe</h4>
+                            <h4 id="sub_name">
+                                {{ $sub_login['FirstName'] . ' ' . $sub_login['LastName'] }}
+                            </h4>
                             <ul
                                 class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
                                 <li class="list-inline-item d-flex gap-1">
-                                    <i class='ti ti-color-swatch'></i> UX Designer
+                                    <i class='ti ti-user-question'></i>
+
+                                    {{ $role }}
+
                                 </li>
                                 <li class="list-inline-item d-flex gap-1">
-                                    <i class='ti ti-map-pin'></i> Vatican City
+                                    <i class='ti ti-map-pin'></i> {{ $sub_login['Address'] }}
                                 </li>
                                 <li class="list-inline-item d-flex gap-1">
-                                    <i class='ti ti-calendar'></i> Joined April 2021
+                                    <i class='ti ti-calendar'></i>
+                                    {{ date('d-m-Y', strtotime($sub_login['created_at'])) }}
                                 </li>
                             </ul>
                         </div>
@@ -79,38 +106,36 @@
                                     <ul class="list-unstyled mb-4 mt-3">
                                         <li class="d-flex align-items-center mb-3"><i
                                                 class="ti ti-user text-heading"></i><span
-                                                class="fw-medium mx-2 text-heading">Full Name:</span> <span>John
-                                                Doe</span></li>
+                                                class="fw-medium mx-2 text-heading">Full Name:</span>
+                                            <span>{{ $sub_login['FirstName'] . ' ' . $sub_login['LastName'] }}</span>
+                                        </li>
                                         <li class="d-flex align-items-center mb-3"><i
                                                 class="ti ti-check text-heading"></i><span
-                                                class="fw-medium mx-2 text-heading">Status:</span> <span>Active</span>
+                                                class="fw-medium mx-2 text-heading">Status:</span>
+                                            <span>{{ $pStatus }}</span>
+                                        </li>
+
+                                        <li class="d-flex align-items-center mb-3"><i
+                                                class="ti ti-credit-card text-heading"></i><span
+                                                class="fw-medium mx-2 text-heading">SSN:</span>
+                                            <span>{{ $sub_login['SSN'] }}</span>
                                         </li>
                                         <li class="d-flex align-items-center mb-3"><i
-                                                class="ti ti-crown text-heading"></i><span
-                                                class="fw-medium mx-2 text-heading">Role:</span> <span>Developer</span>
-                                        </li>
-                                        <li class="d-flex align-items-center mb-3"><i
-                                                class="ti ti-flag text-heading"></i><span
-                                                class="fw-medium mx-2 text-heading">Country:</span> <span>USA</span>
-                                        </li>
-                                        <li class="d-flex align-items-center mb-3"><i
-                                                class="ti ti-file-description text-heading"></i><span
-                                                class="fw-medium mx-2 text-heading">Languages:</span>
-                                            <span>English</span>
+                                                class="ti ti-login text-heading"></i><span
+                                                class="fw-medium mx-2 text-heading">Login type:</span>
+                                            <span>{{ $loginType }}</span>
                                         </li>
                                     </ul>
                                     <small class="card-text text-uppercase">Contacts</small>
                                     <ul class="list-unstyled mb-4 mt-3">
                                         <li class="d-flex align-items-center mb-3"><i class="ti ti-phone-call"></i><span
-                                                class="fw-medium mx-2 text-heading">Contact:</span> <span>(123)
-                                                456-7890</span></li>
-                                        <li class="d-flex align-items-center mb-3"><i
-                                                class="ti ti-brand-skype"></i><span
-                                                class="fw-medium mx-2 text-heading">Skype:</span> <span>john.doe</span>
+                                                class="fw-medium mx-2 text-heading">Contact:</span>
+                                            <span>{{ $sub_login['PhoneNumber'] }}</span>
                                         </li>
+
                                         <li class="d-flex align-items-center mb-3"><i class="ti ti-mail"></i><span
                                                 class="fw-medium mx-2 text-heading">Email:</span>
-                                            <span>john.doe@example.com</span>
+                                            <span>{{ $sub_login['Email'] }}</span>
                                         </li>
                                     </ul>
                                     <small class="card-text text-uppercase">Teams</small>

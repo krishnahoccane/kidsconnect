@@ -24,49 +24,9 @@
                                 <th class="sorting_disabled">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Tulika</td>
-                                <td>Mother</td>
-                                <td>Deny</td>
-                                <td>24-07-2024</td>
-                                <td>25-07-2024</td>
-                                <td>ADM-0285</td>
-                                <td>
-                                    <a href="{{ url('userProfile') }}"><button type="button" class="btn btn-primary">
-                                        <span class="ti-xs ti ti-eye me-1"></span>View Profile
-                                      </button></a>
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Anita</td>
-                                <td>Mother</td>
-                                <td>Deny</td>
-                                <td>28-12-2024</td>
-                                <td>30-12-2024</td>
-                                <td>ADM-02875</td>
-                                <td>
-                                    <a href="{{ url('userProfile') }}"><button type="button" class="btn btn-primary">
-                                        <span class="ti-xs ti ti-eye me-1"></span>View Profile
-                                      </button></a>
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Vishal</td>
-                                <td>Father</td>
-                                <td>Approved</td>
-                                <td>24-01-2025</td>
-                                <td>30-01-2025</td>
-                                <td>ADM-12285</td>
-                                <td>
-                                    <a href="{{ url('userProfile') }}"><button type="button" class="btn btn-primary">
-                                        <span class="ti-xs ti ti-eye me-1"></span>View Profile
-                                      </button></a>
-                                    
-                                </td>
-                            </tr>
+                        <tbody id="datatable-subscriberLogin">
+                           
+
                         </tbody>
                     </table>
                 </div>
@@ -79,3 +39,67 @@
 
 
 @include('./layouts/web.footer')
+<script>
+    // subscribers Data
+$.ajax({
+    url: "http://localhost:8000/api/subscriberlogins",
+    method: "GET",
+    dataType: "json",
+    success: function (response) {
+        // Check if the 'data' key exists in the response
+        
+        if (response.data) {
+            // Loop through the data and create table rows
+
+            $.each(response.data, function (index, item) {
+                const createdAtDate = new Date(item.created_at);
+                const approvedAtDate = new Date(item.ApprovedOn);
+                // console.log(createdAtDate);
+                // Format the date components
+                const formattedDateOfCreation = `${createdAtDate.getFullYear()}-${(
+                    createdAtDate.getMonth() + 1
+                )
+                    .toString()
+                    .padStart(2, "0")}-${createdAtDate
+                    .getDate()
+                    .toString()
+                    .padStart(2, "0")}`;
+                const formattedDateOfApprove = `${approvedAtDate.getFullYear()}-${(
+                    approvedAtDate.getMonth() + 1
+                )
+                    .toString()
+                    .padStart(2, "0")}-${approvedAtDate
+                    .getDate()
+                    .toString()
+                    .padStart(2, "0")}`;
+
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.RoleId}</td>
+                        <td>${item.Email}</td>
+                        <td>${formattedDateOfCreation}</td>
+                        <td>${formattedDateOfApprove}</td>
+                        <td>${item.ApprovedBy}</td>
+                        <td>
+                            <a href="/userProfile/${item.id}"><button type="button" class="btn btn-primary">
+                                    <span class="ti-xs ti ti-eye me-1"></span>View Profile
+                                </button></a>
+
+                        </td>
+                    </tr> `;
+                // Append the row to the table body
+                $("#datatable-subscriberLogin").append(row);
+                
+            });
+        } else {
+            console.error(
+                'Error: Unable to find "data" key in the API response'
+            );
+        }
+    },
+    error: function (xhr, status, error) {
+        console.error("Error fetching data from the API:", error);
+    },
+});
+</script>

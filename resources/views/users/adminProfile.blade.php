@@ -3,7 +3,9 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card mb-4">
-            <h5 class="card-header">Profile Details</h5>
+            <h5 class="card-header">
+               Profile Details
+            </h5>
             <!-- Account -->
             <div class="card-body">
                 <div class="d-flex align-items-start align-items-sm-center gap-4">
@@ -27,17 +29,17 @@
             </div>
             <hr class="my-0">
             <div class="card-body">
-                <form id="formAccountSettings" method="GET" onsubmit="return false">
+                <form id="formAccountSettings" method="GET" action="{{url('adminUpdate')}}" onsubmit="return false">
                     <div class="row">
                         <div class="mb-3 col-md-6">
-                            <label for="username" class="form-label">User Name</label>
-                            <input class="form-control" type="text" id="username" name="username" value="{{ Auth::user()->username }}"
-                                autofocus />
+                            <label for="username" class="form-label">Username</label>
+                            <input class="form-control" type="text" id="username" name="username"
+                                value="{{ session('username') }}" autofocus />
                         </div>
                         <div class="mb-3 col-md-6">
                             <label for="email" class="form-label">E-mail</label>
                             <input class="form-control" type="text" id="email" name="email"
-                                value="{{ Auth::user()->email }}" placeholder="john.doe@example.com" />
+                                value="{{ session('email') }}" placeholder="john.doe@example.com" />
                         </div>
                         {{-- <div class="mb-3 col-md-6">
                             <label for="email" class="form-label">E-mail</label>

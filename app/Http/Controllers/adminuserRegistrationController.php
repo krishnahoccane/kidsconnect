@@ -23,7 +23,7 @@ class adminuserRegistrationController extends Controller
     {
         $request->validate([
             'username' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email  ',
             'password' => 'required'
         ]);
 
@@ -60,6 +60,12 @@ class adminuserRegistrationController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            session([
+                    'username'=> $user -> username,
+                    'email' => $user -> email,
+                    'userid' => $user -> id
+            ]); // Store sessions variable with the data
             return redirect()->intended('dashboard'); // Redirect to the intended URL after successful authentication
         }
 
@@ -74,5 +80,19 @@ class adminuserRegistrationController extends Controller
         public function export()
     {
         return Excel::download(new RegistrationsExport(), 'registrations.xlsx');
+    }
+
+    // Logout users
+    public function logout(Request $request)
+    {
+        Auth::logout(); // Logout the user
+
+        // If you're using session, you can flush the session data
+        $request->session()->flush();
+
+        // If you're using session, you can regenerate the session ID to prevent session fixation attacks
+        $request->session()->regenerate();
+
+        return redirect()->route('showLoginForm'); // Redirect to the login form
     }
 }

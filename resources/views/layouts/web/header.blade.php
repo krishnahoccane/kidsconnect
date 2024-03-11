@@ -19,8 +19,7 @@
 
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon"
-        href="{{ asset('ui/assets/img/avatars/logo.svg') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('ui/assets/img/avatars/logo.svg') }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com/">
@@ -53,17 +52,14 @@
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/%40form-validation/form-validation.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/animate-css/animate.css') }}" />
-
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-
-
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
-
+    {{-- <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}"> --}}
     <link rel="stylesheet"
         href="{{ asset('ui/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
     <link rel="stylesheet"
         href="{{ asset('ui/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}">
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/ckEditor/sample/css/sample.css') }}" />
 
     <!-- Helpers -->
     <script src="{{ asset('ui/assets/vendor/js/helpers.js') }}"></script>
@@ -71,8 +67,8 @@
 
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/select.bootstrap5.css') }}" />
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/katex.css') }}" />
-    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/editor.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/katex.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/editor.css') }}" /> --}}
 
 
 
@@ -82,6 +78,7 @@
 </head>
 
 <body>
+
     @php
         $urlName = collect(explode('/', request()->url()))->last();
     @endphp
@@ -93,9 +90,10 @@
 
 
                 <div class="app-brand demo ">
-                    <a href="{{url('/')}}" class="app-brand-link">
+                    <a href="{{ url('/') }}" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="{{ asset('ui/assets/img/avatars/logo.svg') }}" class="img-fluid w-75" alt="">
+                            <img src="{{ asset('ui/assets/img/avatars/logo.svg') }}" class="img-fluid w-75"
+                                alt="">
                         </span>
                         <span class="app-brand-text demo menu-text fw-bold">Kids Connect</span>
                     </a>
@@ -215,9 +213,9 @@
                                     <div data-i18n="forgotPassword">Forgot Password</div>
                                 </a>
                             </li> -->
-                            <li class="menu-item {{ request()->is('changePassword') ? 'active' : '' }}">
-                                <a href="{{ url('changePassword') }}" class="menu-link">
-                                    <div data-i18n="Property Listing">Change Password</div>
+                            <li class="menu-item">
+                                <a href="{{ route('password.change') }}" class="menu-link">
+                                    <div data-i18n="Change Password">Change Password</div>
                                 </a>
                             </li>
                         </ul>
@@ -679,13 +677,15 @@
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <img src="{{ asset('ui/assets/img/avatars/cAvatar.png') }}" alt
-                                                            class="h-auto rounded-circle">
+                                                        <img src="{{ asset('ui/assets/img/avatars/cAvatar.png') }}"
+                                                            alt class="h-auto rounded-circle">
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <span class="fw-medium d-block">{{ Auth::user()->username }}</span>
-                                                    <small class="text-muted">Admin</small>
+                                                    @auth
+                                                        <span class="fw-medium d-block">{{ session('username') }}</span>
+                                                        <small class="text-muted">Admin</small>
+                                                    @endauth
                                                 </div>
                                             </div>
                                         </a>
@@ -693,18 +693,18 @@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
-                                    {{-- <li>
+                                    <li>
                                         <a class="dropdown-item" href="{{url('adminProfile')}}">
                                             <i class="ti ti-user-check me-2 ti-sm"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>
-                                    </li> --}}
-                                    <li>
+                                    </li>
+                                    {{-- <li>
                                         <a class="dropdown-item" href="pages-account-settings-account.html">
                                             <i class="ti ti-settings me-2 ti-sm"></i>
                                             <span class="align-middle">Settings</span>
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     {{-- <li>
                                         <a class="dropdown-item" href="pages-account-settings-billing.html">
                                             <span class="d-flex align-items-center align-middle">
@@ -734,7 +734,7 @@
                                         <div class="dropdown-divider"></div>
                                     </li> --}}
                                     <li>
-                                        <a class="dropdown-item" href="{{ url('/') }}">
+                                        <a class="dropdown-item" href="{{ url('logout') }}">
                                             <i class="ti ti-logout me-2 ti-sm"></i>
                                             <span class="align-middle">Log Out</span>
                                         </a>

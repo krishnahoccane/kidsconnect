@@ -41,7 +41,8 @@
                             Session::forget('status');
                         @endphp
                     @endif
-                    <p class="mb-4">for <span class="fw-medium">{{ Auth::user()->email }}</span></p>
+                    
+                    <p class="mb-4">for <span class="fw-medium">{{ session('email') }}</span></p>
                     <form id="formAuthentication" class="mb-3" action="{{ route('password.update') }}" method="POST">
                         @csrf
                         <div class="mb-3 form-password-toggle">

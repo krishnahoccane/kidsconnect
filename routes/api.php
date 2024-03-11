@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\defalutStatusController;
+use App\Http\Controllers\Api\subscriberLoginController;
+use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\rolesController;
 use App\Http\Controllers\Api\subscribersController;
+use App\Http\Controllers\Api\AllPageController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -17,12 +20,20 @@ Route::get('roles', [rolesController::class, 'index']);
 Route::get('roles/{id}', [rolesController::class, 'show']);
 Route::post('roles', [rolesController::class, 'create']);
 Route::put('roles/{id}/edit', [rolesController::class, 'update']);
+Route::delete('roles/{id}', [rolesController::class, 'delete']);
 
 
 // FOr Subscribers
 Route::get('subscriber', [subscribersController::class, 'index']);
 Route::post('subscriber', [subscribersController::class, 'create']);
-Route::delete('roles', [rolesController::class, 'delete']);
+
+// Subscribers Logins ( Create, View, Update, Delete)
+Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
+Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
+Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
+Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
+Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
+
 
 // For Status
 Route::get('defaultStatus', [defalutStatusController::class, 'index']);
@@ -35,6 +46,12 @@ Route::put('defaultStatus/{id}/edit', [defalutStatusController::class, 'update']
 Route::get('adminUsers',[adminController::class,'showAdminUsers']);
 Route::get('adminUsers/{id}',[adminController::class,'show']);
 
+// For Admin about
+Route::get('allPages',[AllPageController:: class,'index']);
+Route::post('allPages',[AllPageController:: class,'store']);
+Route::get('allPages/{id}',[AllPageController:: class,'show']);
+Route::put('allPages/{id}/edit', [AllPageController::class, 'update']);
+Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
 
 
 

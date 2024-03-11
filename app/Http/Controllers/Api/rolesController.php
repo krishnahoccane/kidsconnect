@@ -129,4 +129,17 @@ class rolesController extends Controller
 
     }
 
+    public function delete(Request $request, int $id)
+    {
+        $role = roles::find($id);
+
+        if(!$role){
+            return response()->json(['status'=>404,'message'=>"Given role for delete is not found"],404);
+        }
+
+        $role -> delete();
+
+        return response()->json(['status'=>200,'message'=>"Given role is deleted Successfully"],200);
+    }
+
 }

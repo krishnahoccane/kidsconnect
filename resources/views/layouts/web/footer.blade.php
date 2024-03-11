@@ -71,6 +71,9 @@
 <script src="{{ asset('ui/assets/vendor/libs/swiper/swiper.js') }}"></script>
 <script src="{{ asset('ui/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
 <script src="{{ asset('ui/assets/vendor/libs/select2/select2.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/ckEditor/ckeditor.js') }}"></script>
+
+
 
 
 <!-- Flat Picker -->
@@ -106,8 +109,8 @@
 
 
 
-<script src="{{ asset('ui/assets/vendor/libs/quill/katex.js') }}"></script>
-<script src="{{ asset('ui/assets/vendor/libs/quill/quill.js') }}"></script>
+{{-- <script src="{{ asset('ui/assets/vendor/libs/quill/katex.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/quill/quill.js') }}"></script> --}}
 
 <script src="{{ asset('ui/assets/js/forms-editors.js') }}"></script>
 {{-- <script src="{{ asset('ui/assets/js/tables-datatables-advanced.js') }}"></script> --}}
@@ -128,21 +131,23 @@
         ]
     });
 
-    // Define the API endpoint URL
-    // var url = "http://localhost:8000/api/subscriber";
+    var editors = [];
 
-    // // Make an AJAX request using jQuery
-    // $.ajax({
-    //     url: url,
-    //     method: "GET",
-    //     dataType: "json",
-    //     success: function(data) {
-    //         console.log(data);
-    //     },
-    //     error: function(xhr, status, error) {
-    //         console.error('Error fetching data from the API:', error);
-    //     }
-    // });
+    function createEditor(elementId, data) {
+        return ClassicEditor
+            .create(document.querySelector('#' + elementId))
+            .then(editor => {
+                editors[elementId] = editor;
+                editor.setData(response.data.pageContent); // You should set editor data here
+            })
+            .catch(err => console.error(err));
+    }
+
+    $(document).ready(function() {
+        createEditor('editor');
+        createEditor('director1');
+    });
+    // about page get api
 </script>
 
 <!-- Mirrored from demos.pixinvent.com/vuexy-html-admin-template/html/vertical-menu-template/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 13 Feb 2024 15:06:10 GMT -->

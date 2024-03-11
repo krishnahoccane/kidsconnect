@@ -10,14 +10,15 @@ use App\Models\Registration;
 
 class ForgotPasswordController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     public function showLinkRequestForm()
     {
-        return view('auth.passwords.email');
+        return view('security/forgotPassword');
     }
+    
 
     public function sendResetLinkEmail(Request $request)
     {
@@ -29,12 +30,10 @@ class ForgotPasswordController extends Controller
             // Get the original password (plaintext)
             $password = $user->plain_password; // Assuming you have a column named 'plain_password' in your 'registrations' table
             $username = $user->username;
-            // Define the message content
-            // $messageContent = "Dear " . $user->username . ",\n\nYour password is: " . $password . "\n\nPlease keep your password secure.\n\nRegards,\nYour Website Team\n\n";
-
+            
             // Send the password via email
             Mail::html("
-            <p>Hi {$user->username},</p>
+            <p>Hi {$username},</p>
             <p>Your current username and password are given below:</p>
             <p>Username: {$user->email}</p>
             <p>Password: {$password}</p>
@@ -59,7 +58,7 @@ class ForgotPasswordController extends Controller
 
     public function showChangeForm()
     {
-        return view('auth.passwords.change');
+        return view('security/changePassword');
     }
 
     public function updatePassword(Request $request)
@@ -81,6 +80,8 @@ class ForgotPasswordController extends Controller
         $user->password = Hash::make($request->new_password);
         $user->plain_password = $request->new_password;
         $user->save();
+
+        
 
         return back()->with('status', 'Password updated successfully.');
     }

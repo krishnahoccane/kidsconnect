@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('subscriber_logins', function (Blueprint $table) {
             $table->id();
-            $table ->smallInteger('MainSubscriberId');
-            $table ->smallInteger('RoleId');
+            $table ->smallInteger('MainSubscriberId');//null
+            $table ->smallInteger('RoleId');// fetch from form // null
             $table ->string('FirstName');
             $table ->string('LastName');
             $table ->string('email')->unique();
@@ -22,18 +22,18 @@ return new class extends Migration
             $table ->smallInteger('Gender');
             $table ->string('PhoneNumber');
             $table ->string('SSN');
-            $table ->smallInteger('IsMain');
+            $table ->smallInteger('IsMain');//filled by subscriber table use as FK //null
             $table ->string('Password');
-            $table ->smallInteger('LoginType');
+            $table ->smallInteger('LoginType');//fetch from form //null
             $table ->string('About');
             $table ->string('Address');
             $table ->string('ProfileImage');
             $table ->string('Keywords');
-            $table->timestamps();
-            $table ->smallInteger('ProfileStatus');
-            $table ->smallInteger('IsApproved');
+            $table->timestamps();//default
+            $table ->smallInteger('ProfileStatus');//enum 0 / 1 ( default 0) from admin
+            $table ->smallInteger('IsApproved');//enum 0 / 1 ( default 0) default
             $table ->date('ApprovedOn');
-            $table ->string('ApprovedBy');
+            $table ->string('ApprovedBy');//from admin Table FK
         });
     }
 
