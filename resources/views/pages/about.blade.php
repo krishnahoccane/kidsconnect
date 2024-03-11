@@ -20,7 +20,32 @@ $id = 1;
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
 
+// Fetch data for 'About Page' and initialize CKEditor for editor #editor
+$.ajax({
+    url: "http://localhost:8000/api/allPages/1",
+    method: "GET",
+    dataType: "json",
+    success: function (response) {
+        var pageContent = response.data.Pagecontent;
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .then(editor => {
+                editor.setData(pageContent);
+            })
+            .catch(error => {
+                console.error('Error initializing CKEditor:', error);
+            });
+    },
+    error: function (xhr, status, error) {
+        console.error("Error fetching data from the API:", error);
+    },
+});
+    });
+
+    </script>
 @include('./layouts/web.footer')
 
 
