@@ -80,7 +80,7 @@
 <body>
 
     @php
-        
+        $appUrl = config();
         $urlName = collect(explode('/', request()->url()))->last();
     @endphp
     <!-- Layout wrapper -->

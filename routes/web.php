@@ -59,7 +59,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin Subscriber - Approval Access API
 Route::get('userProfile/{id}', [subscriberUserProfileConstroller::class, 'show']);
-Route::put('userProfile/{id}/approve', [subscriberUserProfileConstroller::class, 'approve']);
+Route::get('userProfile/{id}/approve', [subscriberUserProfileConstroller::class, 'approve']);
 Route::put('userProfile/{id}/deny', [subscriberUserProfileConstroller::class, 'deny']);
 Route::delete('userProfile/{id}', [subscriberUserProfileConstroller::class, 'delete']);
 

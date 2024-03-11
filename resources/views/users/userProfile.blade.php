@@ -58,43 +58,20 @@
                             </ul>
                         </div>
                         <div>
-                            <a href="/userProfile/{{ $sub_login['id'] }}/approve" class="btn btn-success">
+                            <button class="btn btn-success" id="approveBtn">
                                 <i class='ti ti-check me-1'></i>Approve
-                            </a>
+                            </button>
                             <a href="javascript:void(0)" class="btn btn-danger">
                                 <i class='ti ti-x me-1'></i>Deny
                             </a>
                         </div>
-                        {{-- <div class="card">
-                            <h5 class="card-header">Delete Account</h5>
-                            <div class="card-body">
-                                <div class="mb-3 col-12 mb-0">
-                                    <div class="alert alert-warning">
-                                        <h5 class="alert-heading mb-1">Are you sure you want to delete your account?
-                                        </h5>
-                                        <p class="mb-0">Once you delete your account, there is no going back. Please
-                                            be certain.</p>
-                                    </div>
-                                </div>
-                                <form id="formAccountDeactivation" onsubmit="return false">
-                                    <div class="form-check mb-4">
-                                        <input class="form-check-input" type="checkbox" name="accountActivation"
-                                            id="accountActivation" />
-                                        <label class="form-check-label" for="accountActivation">I confirm my account
-                                            deactivation</label>
-                                    </div>
-                                    <button type="submit" class="btn btn-danger deactivate-account">Deactivate
-                                        Account</button>
-                                </form>
-                            </div>
-                        </div> --}}
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!--/ Header -->
 
 <div class="row">
     <div class="col-xl-12">
@@ -548,5 +525,93 @@
     </div>
 </div>
 
+<script>
+    //   document.getElementById('approveBtn').addEventListener('click', function(event) {
+    //         even.preventDefault();
+    //         var a = "Hey";
+    //         alert(a);
+    //     });
+    // document.addEventListener("DOMContentLoaded", function(e) {
 
+    //     const a = document.querySelector("#formAccountDeactivation"),
+    //         i = a.querySelector(".deactivate-account");
+
+    //     i && (i.onclick = function() {
+    //             1 == s.checked &&
+    // Swal.fire({
+    //     text: "Are you sure you would like to Approve this account?",
+    //     icon: "warning",
+    //     showCancelButton: !0,
+    //     confirmButtonText: "Yes",
+    //     customClass: {
+    //         confirmButton: "btn btn-primary me-2 waves-effect waves-light",
+    //         cancelButton: "btn btn-label-secondary waves-effect waves-light",
+    //     },
+    //     buttonsStyling: !1,
+    // }).then(function(e) {
+    //     e.value ?
+    //         Swal.fire({
+    //             icon: "success",
+    //             title: "Approved!",
+    //             text: "Your file has been Approved.",
+    //             customClass: {
+    //                 confirmButton: "btn btn-success waves-effect waves-light",
+    //             },
+    //         }) :
+    //         e.dismiss === Swal.DismissReason.cancel &&
+    //         Swal.fire({
+    //             title: "Cancelled",
+    //             text: "Approve Cancelled!!",
+    //             icon: "error",
+    //             customClass: {
+    //                 confirmButton: "btn btn-success waves-effect waves-light",
+    //             },
+    //         });
+    // });
+    //         });
+
+    // });
+</script>
 @include('./layouts/web.footer')
+<script>
+    document.getElementById('approveBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default behavior of the link
+        const a = "hey";
+        alert(a);
+        Swal.fire({
+            text: "Are you sure you would like to Approve this account?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            customClass: {
+                confirmButton: "btn btn-primary me-2 waves-effect waves-light",
+                cancelButton: "btn btn-label-secondary waves-effect waves-light",
+            },
+            buttonsStyling: false,
+        }).then(function(result) {
+            if (result.value) {
+                // If user clicks Yes, show success message
+                Swal.fire({
+                    icon: "success",
+                    title: "Approved!",
+                    text: "Your file has been Approved.",
+                    customClass: {
+                        confirmButton: "btn btn-success waves-effect waves-light",
+                    },
+                });
+                // Then navigate to the approve link
+                // window.location.href = event.target.href;
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // If user cancels, show cancelled message
+                Swal.fire({
+                    title: "Cancelled",
+                    text: "Approve Cancelled!!",
+                    icon: "error",
+                    customClass: {
+                        confirmButton: "btn btn-success waves-effect waves-light",
+                    },
+                });
+            }
+        });
+    });
+</script>
