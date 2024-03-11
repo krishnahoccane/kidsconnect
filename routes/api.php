@@ -53,6 +53,10 @@ Route::get('allPages/{id}',[AllPageController:: class,'show']);
 Route::put('allPages/{id}/edit', [AllPageController::class, 'update']);
 Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
 
+// Mail Verification
+Route::post('otpVerification',[subscriberMailOtpVerification:: class,'getInfoFromApp']);
+
+
 
 
 
