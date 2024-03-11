@@ -13,7 +13,7 @@ $id = 1;
                 <form action="{{ url('/allPages/1/edit') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="_method" value="PUT">
-                    <textarea id="director1" name="Pagecontent" class="form-control text"></textarea>
+                    <textarea id="editor" name="Pagecontent" class="form-control"></textarea>
                     <button type="submit" class="btn btn-primary mt-5">Update</button>
                 </form>
             </div>
@@ -22,6 +22,7 @@ $id = 1;
 </div>
 
 @include('./layouts/web.footer')
+
 
 {{-- <script>
     $(document).ready(function() {

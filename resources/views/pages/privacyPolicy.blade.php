@@ -14,7 +14,7 @@
                 <form action="{{ url('/allPages/4/edit') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="_method" value="PUT">
-                    <textarea id="editor" name="Pagecontent" class="form-control text"></textarea>
+                    <textarea id="editor4" name="Pagecontent" class="form-control text"></textarea>
                     <button type="submit" class="btn btn-primary mt-5">Update</button>
                 </form>
             </div>
