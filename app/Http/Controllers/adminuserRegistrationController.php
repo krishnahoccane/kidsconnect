@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class adminuserRegistrationController extends Controller
 {
     //
-   public function index()
+    public function index()
     {
         return view('security/registration');
     }
@@ -62,9 +62,9 @@ class adminuserRegistrationController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             session([
-                    'username'=> $user -> username,
-                    'email' => $user -> email,
-                    'userid' => $user -> id
+                'username' => $user->username,
+                'email' => $user->email,
+                'userid' => $user->id
             ]); // Store sessions variable with the data
             return redirect()->intended('dashboard'); // Redirect to the intended URL after successful authentication
         }
@@ -72,12 +72,13 @@ class adminuserRegistrationController extends Controller
         // Authentication failed...
         return redirect()->back()->withErrors(['email' => 'Invalid email or password']);
     }
-        
-        public function dashboard(){
-            
-            return view('dashboard');
-        }
-        public function export()
+
+    public function dashboard()
+    {
+
+        return view('dashboard');
+    }
+    public function export()
     {
         return Excel::download(new RegistrationsExport(), 'registrations.xlsx');
     }

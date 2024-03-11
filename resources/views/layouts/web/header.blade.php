@@ -12,7 +12,7 @@
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <title>Kids Connect | Get your kids connect with each other</title>
-    
+
 
     <!-- <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
     <meta name="keywords" content="dashboard, bootstrap 5 dashboard, bootstrap 5 design, bootstrap 5"> -->
@@ -80,6 +80,7 @@
 <body>
 
     @php
+        
         $urlName = collect(explode('/', request()->url()))->last();
     @endphp
     <!-- Layout wrapper -->
