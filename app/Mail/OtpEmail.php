@@ -20,16 +20,18 @@ class OtpEmail extends Mailable
     }
 
     public function build()
-    {
-        $address = $this->email;
+    {   
+        $email = $this->email;
+        $fromEmail = config('mail.from.address');
         $subject = 'OTP For Registration';
-        $name = 'Jane Doe';
+        $name = 'Kids Connect';
         
         return $this->view('mailsBody.otpVerification')
-            ->from($address, $name)
-            ->cc($address, $name)
-            ->bcc($address, $name)
-            ->replyTo($address, $name)
+            ->to($email)
+            ->from($fromEmail, $name)
+            // ->cc($address, $name)
+            // ->bcc($address, $name)
+            ->replyTo($fromEmail, $name)
             ->subject($subject)
             ->with(['otp' => $this->otp]); // Pass $this->otp directly
     }
