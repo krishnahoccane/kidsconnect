@@ -1,5 +1,5 @@
 @include('./layouts/web.header')
-
+<script></script>
 
 <h3>{{ 'Admin Users' }}</h3>
 
@@ -38,10 +38,16 @@
                                 if (response.data) {
                                     // Loop through the data and create table rows
                                     $.each(response.data, function(index, item) {
-                                        const createdAtDate  = new Date(item.created_at);
+                                        const createdAtDate = new Date(item.created_at);
                                         // Format the date components
-                                        const formattedDate =
-                                            `${createdAtDate.getFullYear()}-${(createdAtDate.getMonth() + 1).toString().padStart(2, '0')}-${createdAtDate.getDate().toString().padStart(2, '0')}`;
+                                        const formattedDate = `${createdAtDate.getFullYear()}-${(
+                    createdAtDate.getMonth() + 1
+                )
+                    .toString()
+                    .padStart(2, "0")}-${createdAtDate
+                    .getDate()
+                    .toString()
+                    .padStart(2, "0")}`;
                                         // const formattedTime =
                                         //     `${createdAtDate.getHours().toString().padStart(2, '0')}:${createdAtDate.getMinutes().toString().padStart(2, '0')}:${createdAtDate.getSeconds().toString().padStart(2, '0')}`;
 
@@ -49,7 +55,7 @@
                                         const formattedDateTime = `${formattedDate}`;
                                         const row = `
                                     <tr>
-                                        <td>${index+1}</td>
+                                        <td>${index + 1}</td>
                                         <td>${item.username}</td>
                                         <td>${item.email}</td>
                                         <td>${formattedDateTime}</td>
@@ -66,22 +72,24 @@
                                     </tr>
                                     `;
                                         // Append the row to the table body
-                                        $('#datatable-body').append(row);
+                                        $("#datatable-body").append(row);
                                     });
                                 } else {
-                                    console.error('Error: Unable to find "data" key in the API response');
+                                    console.error(
+                                        'Error: Unable to find "data" key in the API response'
+                                    );
                                 }
                             },
                             error: function(xhr, status, error) {
-                                console.error('Error fetching data from the API:', error);
-                            }
+                                console.error("Error fetching data from the API:", error);
+                            },
                         });
                     </script>
 
                 </div>
             </div>
         </div>
-        
+
     </div>
     <!-- /Full Editor -->
 </div>

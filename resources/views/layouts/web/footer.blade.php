@@ -12,14 +12,7 @@
             </div>
             <div class="d-none d-lg-inline-block">
 
-                <a href="#" class="footer-link me-4" target="_blank">License</a>
-                <a href="#" target="_blank" class="footer-link me-4">More
-                    Themes</a>
-
-                <a href="#" target="_blank" class="footer-link me-4">Documentation</a>
-
-
-                <a href="#" target="_blank" class="footer-link d-none d-sm-inline-block">Support</a>
+                <p>Current Version: 1.1.1 - Working Version: 1.1.2</p>
 
             </div>
         </div>

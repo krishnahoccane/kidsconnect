@@ -23,67 +23,32 @@ class subscriberUserProfileConstroller extends Controller
 
     }
 
-    // public function update(Request $request, int $id)
-    // {
+    public function approve(Request $request, int $id)
+    {
 
-    //     $validate = Validator::make($request->all(), [
+        return session('username');
 
-    //         'FirstName' => ['string'],
-    //         'LastName' => ['string'],
-    //         'email' => ['email', Rule::unique('subscriber_logins')->ignore($id)],
-    //         'Dob' => ['date'],
-    //         'Gender' => ['numeric'],
-    //         'PhoneNumber' => ['numeric'],
-    //         'SSN' => ['string', Rule::unique('subscriber_logins')->ignore($id)],
-    //         'Password' => ['string'],
-    //         'About' => ['string'],
-    //         'Address' => ['string'],
-    //         'ProfileImage' => ['string'],
-    //         'SSNimage' => ['string']
+        // $role = subscriberlogins::find($id);
 
-    //     ]);
+        // if ($role) {
 
-    //     if ($validate->fails()) {
+        //     $role->update([
+        //         ''
+        //     ]);
 
-    //         return response()->json([
-    //             'status' => 422,
-    //             'message' => $validate->messages()
-    //         ], 422);
+        //     return response()->json([
+        //         'status' => 200,
+        //         'message' => 'Subscriber Approved Successfully'
+        //     ], 200);
+        // } else {
+        //     return response()->json([
+        //         'status' => 404,
+        //         'message' => 'Somthing suspecious happend'
+        //     ], 404);
 
-    //     } else {
+        // }
 
-    //         $role = subscriberlogins::find($id);
-
-    //         if ($role) {
-
-    //             $role->update([
-    //                 'FirstName' => $request->FirstName,
-    //                 'LastName' => $request->LastName,
-    //                 'email' => $request->email,
-    //                 'Dob' => $request->Dob,
-    //                 'Gender' => $request->Gender,
-    //                 'PhoneNumber' => $request->PhoneNumber,
-    //                 'SSN' => $request->SSN,
-    //                 'Password' => $request->Password,
-    //                 'About' => $request->About,
-    //                 'Address' => $request->Address,
-    //                 'ProfileImage' => $request->ProfileImage,
-    //                 'SSNimage' => $request->SSNimage
-    //             ]);
-
-    //             return response()->json([
-    //                 'status' => 200,
-    //                 'message' => 'Subscriber is Updated successfully'
-    //             ], 200);
-    //         } else {
-    //             return response()->json([
-    //                 'status' => 404,
-    //                 'message' => 'No Subscriber found'
-    //             ], 404);
-    //         }
-    //     }
-
-    // }
+    }
 
     // public function delete(Request $request, int $id)
     // {

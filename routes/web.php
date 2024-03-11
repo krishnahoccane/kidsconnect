@@ -47,7 +47,8 @@ Route::middleware(['auth'])->group(function () {
 
 // subscriber-userprofiles Handling
 Route::get('userProfile/{id}', [subscriberUserProfileConstroller::class, 'show']);
-Route::put('userProfile/{id}/edit', [subscriberUserProfileConstroller::class, 'update']);
+Route::put('userProfile/{id}/approve', [subscriberUserProfileConstroller::class, 'approve']);
+Route::put('userProfile/{id}/deny', [subscriberUserProfileConstroller::class, 'deny']);
 Route::delete('userProfile/{id}', [subscriberUserProfileConstroller::class, 'delete']);
 
 // Pages
