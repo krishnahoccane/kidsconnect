@@ -122,7 +122,7 @@
                     </div>
                     <h4 class="ms-1 mb-0">27</h4>
                 </div>
-                <p class="mb-1">Requested Rejectes</p>
+                <p class="mb-1">Requested Rejects</p>
                 <p class="mb-0">
                     {{-- <span class="fw-medium me-1">+4.3%</span>
                     <small class="text-muted">than last week</small> --}}
@@ -140,7 +140,7 @@
                     </div>
                     <h4 class="ms-1 mb-0">13</h4>
                 </div>
-                <p class="mb-1">Requested Cancelleds</p>
+                <p class="mb-1">Requested Cancels</p>
                 <p class="mb-0">
                     {{-- <span class="fw-medium me-1">-2.5%</span>
                     <small class="text-muted">than last week</small> --}}
