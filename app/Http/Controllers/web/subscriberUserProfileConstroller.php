@@ -26,27 +26,27 @@ class subscriberUserProfileConstroller extends Controller
     public function approve(Request $request, int $id)
     {
 
-        return session('username');
+        // return session('username');
 
-        // $role = subscriberlogins::find($id);
+        $role = subscriberlogins::find($id);
 
-        // if ($role) {
+        if ($role) {
 
-        //     $role->update([
-        //         ''
-        //     ]);
+            $role->update([
+                ''
+            ]);
 
-        //     return response()->json([
-        //         'status' => 200,
-        //         'message' => 'Subscriber Approved Successfully'
-        //     ], 200);
-        // } else {
-        //     return response()->json([
-        //         'status' => 404,
-        //         'message' => 'Somthing suspecious happend'
-        //     ], 404);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Subscriber Approved Successfully'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Somthing suspecious happend'
+            ], 404);
 
-        // }
+        }
 
     }
 

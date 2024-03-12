@@ -576,8 +576,6 @@
 <script>
     document.getElementById('approveBtn').addEventListener('click', function(event) {
         event.preventDefault(); // Prevent the default behavior of the link
-        const a = "hey";
-        alert(a);
         Swal.fire({
             text: "Are you sure you would like to Approve this account?",
             icon: "warning",
