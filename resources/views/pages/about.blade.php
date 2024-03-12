@@ -22,7 +22,6 @@ $id = 1;
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-
 // Fetch data for 'About Page' and initialize CKEditor for editor #editor
 $.ajax({
     url: "http://localhost:8000/api/allPages/1",

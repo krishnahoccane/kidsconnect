@@ -43,7 +43,7 @@
                     <div class="avatar me-2">
                         <span class="avatar-initial rounded bg-label-danger"><i class="fa-solid fa-child"></i></span>
                     </div>
-                    <h4 class="ms-1 mb-0">27</h4>
+                    <h4 class="ms-1 mb-0" id="kidsCounts">27</h4>
                 </div>
                 <p class="mb-1">Kids</p>
                 <p class="mb-0">
@@ -60,7 +60,7 @@
                     <div class="avatar me-2">
                         <span class="avatar-initial rounded bg-label-info"><i class="fa-solid fa-hand"></i></span>
                     </div>
-                    <h4 class="ms-1 mb-0">13</h4>
+                    <h4 class="ms-1 mb-0" id="requestCount">13</h4>
                 </div>
                 <p class="mb-1">Request</p>
                 <p class="mb-0">
@@ -81,7 +81,7 @@
                                 aria-hidden="true"></i>
                         </span>
                     </div>
-                    <h4 class="ms-1 mb-0">42</h4>
+                    <h4 class="ms-1 mb-0" id="requestApprovalCount">42</h4>
                 </div>
                 <p class="mb-1">Requested Approvals</p>
                 <p class="mb-0">
@@ -101,7 +101,7 @@
 
                         </span>
                     </div>
-                    <h4 class="ms-1 mb-0">8</h4>
+                    <h4 class="ms-1 mb-0" id="pendingRequestCount">8</h4>
                 </div>
                 <p class="mb-1">Requested Pendings</p>
                 <p class="mb-0">
@@ -120,7 +120,7 @@
                                 style="font-size: 24px; color: red;"></i>
                         </span>
                     </div>
-                    <h4 class="ms-1 mb-0">27</h4>
+                    <h4 class="ms-1 mb-0" id="RejectRequestCount">27</h4>
                 </div>
                 <p class="mb-1">Requested Rejects</p>
                 <p class="mb-0">
@@ -138,9 +138,9 @@
                         <span class="avatar-initial rounded bg-label-info"><i class="fa fa-times"
                                 aria-hidden="true"></i></span>
                     </div>
-                    <h4 class="ms-1 mb-0">13</h4>
+                    <h4 class="ms-1 mb-0" id="requestCancelCount">13</h4>
                 </div>
-                <p class="mb-1">Requested Cancels</p>
+                <p class="mb-1">Requested Cancellation</p>
                 <p class="mb-0">
                     {{-- <span class="fw-medium me-1">-2.5%</span>
                     <small class="text-muted">than last week</small> --}}
