@@ -18,7 +18,7 @@ class subscriberLoginController extends Controller
         if ($sub_login->count() > 0) {
             return response()->json([
                 'status' => 200,
-                'count'=>count($sub_login),
+                'count' => count($sub_login),
                 'data' => $sub_login
             ], 200);
         } else {
@@ -31,36 +31,40 @@ class subscriberLoginController extends Controller
 
     public function create(Request $request)
     {
-        
-            $sub_login = subscriberlogins::firstOrCreate([
-                'FirstName' => $request->FirstName,
-                'LastName' => $request->LastName,
-                'Email' => $request->Email,
-                'Dob' => $request->Dob,
-                'Gender' => $request->Gender,
-                'PhoneNumber' => $request->PhoneNumber,
-                'SSN' => $request->SSN,
-                'Password' => $request->Password,
-                'About' => $request->About,
-                'Address' => $request->Address,
-                'ProfileImage' => $request->ProfileImage,
-                'SSNimage'=>$request->SSNimage
-                // 'Keywords' => $request->Keywords,
-            ]);
 
-            if ($sub_login->wasRecentlyCreated) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Subscriber Registered successfully',
-                    'data' => $sub_login
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 409,
-                    'message' => 'Subscriber already exists'
-                ], 409);
-            }
-        
+        $sub_login = subscriberlogins::firstOrCreate([
+            'FirstName' => $request->FirstName,
+            'LastName' => $request->LastName,
+            'Email' => $request->Email,
+            'Dob' => $request->Dob,
+            'Gender' => $request->Gender,
+            'PhoneNumber' => $request->PhoneNumber,
+            'SSN' => $request->SSN,
+            'Password' => $request->Password,
+            'About' => $request->About,
+            'Address' => $request->Address,
+            'ProfileImage' => $request->ProfileImage,
+            'SSNimage' => $request->SSNimage,
+            'Keywords' => $request->Keywords,
+            'LoginType' => $request->LoginType,
+            'IsMain' => $request->IsMain,
+            'RoleId' => $request->RoleId,
+            'MainSubscriberId' => $request->MainSubscriberId
+        ]);
+
+        if ($sub_login->wasRecentlyCreated) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Subscriber Registered successfully',
+                'data' => $sub_login
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 409,
+                'message' => 'Subscriber already exists'
+            ], 409);
+        }
+
     }
 
 
@@ -83,7 +87,7 @@ class subscriberLoginController extends Controller
 
     }
 
-    
+
 
     public function update(Request $request, int $id)
     {
@@ -101,8 +105,12 @@ class subscriberLoginController extends Controller
             'About' => ['string'],
             'Address' => ['string'],
             'ProfileImage' => ['string'],
-            'SSNimage' => ['string']
-
+            'SSNimage' => ['string'],
+            'Keywords' => ['string'],
+            'LoginType' => ['numeric'],
+            'IsMain' => ['numeric'],
+            'RoleId' => ['numeric'],
+            'MainSubscriberId' => ['numeric']
         ]);
 
         if ($validate->fails()) {
@@ -130,7 +138,13 @@ class subscriberLoginController extends Controller
                     'About' => $request->About,
                     'Address' => $request->Address,
                     'ProfileImage' => $request->ProfileImage,
-                    'SSNimage'=>$request->SSNimage
+                    'SSNimage' => $request->SSNimage,
+                    'Keywords' => $request->Keywords,
+                    'LoginType' => $request->LoginType,
+                    'IsMain' => $request->IsMain,
+                    'RoleId' => $request->RoleId,
+                    'MainSubscriberId' => $request->MainSubscriberId
+
                 ]);
 
                 return response()->json([
@@ -147,7 +161,8 @@ class subscriberLoginController extends Controller
 
     }
 
-    public function delete(Request $request, int $id){
+    public function delete(Request $request, int $id)
+    {
 
         $sub_login = subscriberlogins::find($id);
 
@@ -156,11 +171,11 @@ class subscriberLoginController extends Controller
                 'status' => 403,
                 'message' => "Requested Id Data NotFound"
             ], 403);
-        } 
+        }
 
         $sub_login->delete();
 
-        return response()->json(['message' => 'Subscriber deleted successfully'],200);
+        return response()->json(['message' => 'Subscriber deleted successfully'], 200);
 
     }
 

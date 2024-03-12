@@ -24,6 +24,16 @@ class subscriberlogins extends Model
         'Address',
         'ProfileImage',
         'SSNimage',
+        'IsApproved',
+        'ApprovedOn',
+        'ApprovedBy',
+        'ProfileStatus',
+        'Keywords',
+        'LoginType',
+        'IsMain',
+        'RoleId',
+        'MainSubscriberId',
+
         // 'Keywords',
     ];
 }

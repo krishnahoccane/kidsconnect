@@ -17,15 +17,17 @@
                             <tr>
                                 <th>id</th>
                                 <th>Type</th>
-                                <th>Profile Status</th>
-                                <th>Profile Created On</th>
+                                <th>Subscriber Name</th>
+                                <th>Subscriber Mail</th>
+                                <th>Status</th>
+                                <th>Created On</th>
                                 <th>Approved Date</th>
                                 <th>Approved By</th>
                                 <th class="sorting_disabled">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="datatable-subscriberLogin">
-                           
+
 
                         </tbody>
                     </table>
@@ -41,22 +43,33 @@
 @include('./layouts/web.footer')
 <script>
     // subscribers Data
-$.ajax({
-    url: "http://localhost:8000/api/subscriberlogins",
-    method: "GET",
-    dataType: "json",
-    success: function (response) {
-        // Check if the 'data' key exists in the response
-        
-        if (response.data) {
-            // Loop through the data and create table rows
+    $.ajax({
+        url: "http://localhost:8000/api/subscriberlogins",
+        method: "GET",
+        dataType: "json",
+        success: function(response) {
+            // Check if the 'data' key exists in the response
 
-            $.each(response.data, function (index, item) {
-                const createdAtDate = new Date(item.created_at);
-                const approvedAtDate = new Date(item.ApprovedOn);
-                // console.log(createdAtDate);
-                // Format the date components
-                const formattedDateOfCreation = `${createdAtDate.getFullYear()}-${(
+            if (response.data) {
+                // Loop through the data and create table rows
+
+                $.each(response.data, function(index, item) {
+                    const createdAtDate = new Date(item.created_at);
+                    const approvedAtDate = new Date(item.ApprovedOn);
+                    const profileStatus = item.ProfileStatus;
+                    const fullName = item.FirstName+' '+item.LastName;
+                    let statusName;
+
+                    if (profileStatus == 0) {
+                        statusName = '<span class="badge bg-label-danger">Not Approved</span></a>';
+                    } else if (profileStatus == 1) {
+                        statusName = '<span class="badge bg-label-success">Approved</span></a>';
+                    } else {
+                        statusName = '<span class="badge bg-label-info">Pending</span></a>';
+                    }
+                    // console.log(createdAtDate);
+                    // Format the date components
+                    const formattedDateOfCreation = `${createdAtDate.getFullYear()}-${(
                     createdAtDate.getMonth() + 1
                 )
                     .toString()
@@ -64,7 +77,7 @@ $.ajax({
                     .getDate()
                     .toString()
                     .padStart(2, "0")}`;
-                const formattedDateOfApprove = `${approvedAtDate.getFullYear()}-${(
+                    const formattedDateOfApprove = `${approvedAtDate.getFullYear()}-${(
                     approvedAtDate.getMonth() + 1
                 )
                     .toString()
@@ -73,33 +86,35 @@ $.ajax({
                     .toString()
                     .padStart(2, "0")}`;
 
-                const row = `
+                    const row = `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${item.RoleId}</td>
+                        <td>${fullName}</td>
                         <td>${item.Email}</td>
+                        <td>${statusName}</td>
                         <td>${formattedDateOfCreation}</td>
                         <td>${formattedDateOfApprove}</td>
                         <td>${item.ApprovedBy}</td>
                         <td>
                             <a href="/userProfile/${item.id}"><button type="button" class="btn btn-primary">
-                                    <span class="ti-xs ti ti-eye me-1"></span>View Profile
+                                    <span class="ti-xs ti ti-eye me-1"></span>
                                 </button></a>
 
                         </td>
                     </tr> `;
-                // Append the row to the table body
-                $("#datatable-subscriberLogin").append(row);
-                
-            });
-        } else {
-            console.error(
-                'Error: Unable to find "data" key in the API response'
-            );
-        }
-    },
-    error: function (xhr, status, error) {
-        console.error("Error fetching data from the API:", error);
-    },
-});
+                    // Append the row to the table body
+                    $("#datatable-subscriberLogin").append(row);
+
+                });
+            } else {
+                console.error(
+                    'Error: Unable to find "data" key in the API response'
+                );
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching data from the API:", error);
+        },
+    });
 </script>

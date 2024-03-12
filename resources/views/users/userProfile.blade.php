@@ -6,15 +6,20 @@
         $role = 'Mother';
     }
 
-    if ($sub_login['IsApproved'] = 0) {
-        $pStatus = 'Not Approved';
-    } elseif ($sub_login['IsApproved'] = 1) {
+    if ($sub_login['IsApproved'] == 0) {
+        $pStatus = 'Approve';
+        $pStatus_btn = 'primary';
+        $btn_status = '';
+    } elseif ($sub_login['IsApproved'] == 1) {
         $pStatus = 'Approved';
+        $pStatus_btn = 'success';
+        $btn_status = 'disabled';
     } else {
         $pStatus = 'Pending';
+        $btn_status = '';
     }
 
-    if ($sub_login['LoginType'] = 1) {
+    if ($sub_login['LoginType'] == 1) {
         $loginType = 'Google Login';
     } else {
         $loginType = 'Manual';
@@ -58,12 +63,15 @@
                             </ul>
                         </div>
                         <div>
-                            <button class="btn btn-success" id="approveBtn">
-                                <i class='ti ti-check me-1'></i>Approve
+                            <button class="btn btn-{{ $pStatus_btn }}"
+                                data-approve-url="/userProfile/{{ $sub_login['id'] }}/approve" id="approveBtn"
+                                {{ $btn_status }}>
+                                {{ $pStatus }}
                             </button>
-                            <a href="javascript:void(0)" class="btn btn-danger">
-                                <i class='ti ti-x me-1'></i>Deny
-                            </a>
+                            <button class="btn btn-danger" data-deny-url="/userProfile/{{ $sub_login['id'] }}/deny"
+                                id="denyBtn">
+                                Deny
+                            </button>
                         </div>
 
                     </div>
@@ -524,58 +532,13 @@
         </div>
     </div>
 </div>
-
-<script>
-    //   document.getElementById('approveBtn').addEventListener('click', function(event) {
-    //         even.preventDefault();
-    //         var a = "Hey";
-    //         alert(a);
-    //     });
-    // document.addEventListener("DOMContentLoaded", function(e) {
-
-    //     const a = document.querySelector("#formAccountDeactivation"),
-    //         i = a.querySelector(".deactivate-account");
-
-    //     i && (i.onclick = function() {
-    //             1 == s.checked &&
-    // Swal.fire({
-    //     text: "Are you sure you would like to Approve this account?",
-    //     icon: "warning",
-    //     showCancelButton: !0,
-    //     confirmButtonText: "Yes",
-    //     customClass: {
-    //         confirmButton: "btn btn-primary me-2 waves-effect waves-light",
-    //         cancelButton: "btn btn-label-secondary waves-effect waves-light",
-    //     },
-    //     buttonsStyling: !1,
-    // }).then(function(e) {
-    //     e.value ?
-    //         Swal.fire({
-    //             icon: "success",
-    //             title: "Approved!",
-    //             text: "Your file has been Approved.",
-    //             customClass: {
-    //                 confirmButton: "btn btn-success waves-effect waves-light",
-    //             },
-    //         }) :
-    //         e.dismiss === Swal.DismissReason.cancel &&
-    //         Swal.fire({
-    //             title: "Cancelled",
-    //             text: "Approve Cancelled!!",
-    //             icon: "error",
-    //             customClass: {
-    //                 confirmButton: "btn btn-success waves-effect waves-light",
-    //             },
-    //         });
-    // });
-    //         });
-
-    // });
-</script>
 @include('./layouts/web.footer')
 <script>
     document.getElementById('approveBtn').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default behavior of the link
+        event.preventDefault(); // Prevent the default behavior of the button
+
+        var approveUrl = this.getAttribute('data-approve-url');
+
         Swal.fire({
             text: "Are you sure you would like to Approve this account?",
             icon: "warning",
@@ -588,22 +551,96 @@
             buttonsStyling: false,
         }).then(function(result) {
             if (result.value) {
-                // If user clicks Yes, show success message
-                Swal.fire({
-                    icon: "success",
-                    title: "Approved!",
-                    text: "Your file has been Approved.",
-                    customClass: {
-                        confirmButton: "btn btn-success waves-effect waves-light",
+                $.ajax({
+                    url: approveUrl,
+                    method: 'GET',
+                    success: function(response) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Approved",
+                            text: response.message,
+                            customClass: {
+                                confirmButton: "btn btn-success waves-effect waves-light",
+                            },
+                        }).then(() => {
+                            window.location.reload();
+                        });
                     },
+                    error: function(xhr, status, error) {
+                        // If there's an error, show an error message
+                        Swal.fire({
+                            title: "Error",
+                            text: "An error occurred while approving the account.",
+                            icon: "error",
+                            customClass: {
+                                confirmButton: "btn btn-success waves-effect waves-light",
+                            },
+                        });
+                    }
                 });
-                // Then navigate to the approve link
-                // window.location.href = event.target.href;
+
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 // If user cancels, show cancelled message
                 Swal.fire({
                     title: "Cancelled",
                     text: "Approve Cancelled!!",
+                    icon: "error",
+                    customClass: {
+                        confirmButton: "btn btn-success waves-effect waves-light",
+                    },
+                });
+            }
+        });
+    });
+
+
+    document.getElementById('denyBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default behavior of the link
+        var denyUrl = this.getAttribute('data-deny-url');
+        Swal.fire({
+            text: "Are you sure you would like to Deny this account?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            customClass: {
+                confirmButton: "btn btn-primary me-2 waves-effect waves-light",
+                cancelButton: "btn btn-label-secondary waves-effect waves-light",
+            },
+            buttonsStyling: false,
+        }).then(function(result) {
+            if (result.value) {
+                $.ajax({
+                    url: denyUrl,
+                    method: 'GET',
+                    success: function(response) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Denied",
+                            text: response.message,
+                            customClass: {
+                                confirmButton: "btn btn-success waves-effect waves-light",
+                            },
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        // If there's an error, show an error message
+                        Swal.fire({
+                            title: "Error",
+                            text: "An error occurred while approving the account.",
+                            icon: "error",
+                            customClass: {
+                                confirmButton: "btn btn-success waves-effect waves-light",
+                            },
+                        });
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // If user cancels, show cancelled message
+                Swal.fire({
+                    title: "Cancelled",
+                    text: "Denied Cancelled!!",
                     icon: "error",
                     customClass: {
                         confirmButton: "btn btn-success waves-effect waves-light",
