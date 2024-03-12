@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\subscriberlogins;
 use App\Http\Controllers\Controller;
@@ -23,32 +24,61 @@ class subscriberUserProfileConstroller extends Controller
 
     }
 
+
     public function approve(Request $request, int $id)
     {
+        $subscriber = subscriberlogins::find($id);
 
-        return session('username');
+        if (!$subscriber) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Subscriber not found'
+            ], 404);
+        }
 
-        // $role = subscriberlogins::find($id);
+        $subscriber->update([
+            'ProfileStatus'=>"1",
+            'IsApproved' => "1",
+            'ApprovedOn' => Carbon::now(),
+            'ApprovedBy' => session('username')
+        ]);
 
-        // if ($role) {
+        // return back()->with('success','Subscriber Approved Successfully');
 
-        //     $role->update([
-        //         ''
-        //     ]);
-
-        //     return response()->json([
-        //         'status' => 200,
-        //         'message' => 'Subscriber Approved Successfully'
-        //     ], 200);
-        // } else {
-        //     return response()->json([
-        //         'status' => 404,
-        //         'message' => 'Somthing suspecious happend'
-        //     ], 404);
-
-        // }
-
+        return response()->json([
+            'status' => 200,
+            'message' => 'Subscriber Approved Successfully'
+        ], 200);
     }
+
+    public function deny(Request $request, int $id)
+    {
+        $subscriber = subscriberlogins::find($id);
+
+        if (!$subscriber) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Subscriber not found'
+            ], 404);
+        }
+
+        $subscriber->update([
+            'ProfileStatus'=>"0",
+            'IsApproved' => "0",
+            'ApprovedOn' => Carbon::now(),
+            'ApprovedBy' => session('username')
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Subscriber Denied Successfully'
+        ], 200);
+    }
+
+    //     return back()->with('success','Subscriber Approved Successfully');
+    // } else {
+    //     return back()->with('error','Subscriber Not Approved');
+    // }
 
     // public function delete(Request $request, int $id)
     // {
