@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\defaultStatus;
 use App\Models\subscriberlogins;
+use App\Models\subscribersModel;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
@@ -32,6 +34,13 @@ class subscriberLoginController extends Controller
     public function create(Request $request)
     {
 
+        $subscibers = subscribersModel::firstOrCreate([
+            'RoleId' => $request->RoleId,
+        ]);
+
+
+        $subscriberId = $subscibers->id;
+
         $sub_login = subscriberlogins::firstOrCreate([
             'FirstName' => $request->FirstName,
             'LastName' => $request->LastName,
@@ -49,13 +58,15 @@ class subscriberLoginController extends Controller
             'LoginType' => $request->LoginType,
             'IsMain' => $request->IsMain,
             'RoleId' => $request->RoleId,
-            'MainSubscriberId' => $request->MainSubscriberId
+            'MainSubscriberId' => $subscriberId,
         ]);
+
+
 
         if ($sub_login->wasRecentlyCreated) {
             return response()->json([
                 'status' => 200,
-                'message' => 'Subscriber Registered successfully',
+                'message' => ' Subscriber Registered successfully and mainsubscriber id is' . $subscriberId,
                 'data' => $sub_login
             ], 200);
         } else {

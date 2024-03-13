@@ -57,16 +57,28 @@
                     const createdAtDate = new Date(item.created_at);
                     const approvedAtDate = new Date(item.ApprovedOn);
                     const profileStatus = item.ProfileStatus;
-                    const fullName = item.FirstName+' '+item.LastName;
-                    let statusName;
+                    const rolesType = item.RoleId;
+                    const fullName = item.FirstName + ' ' + item.LastName;
+                    let statusName = callingStatus(profileStatus);
+                    let roleName;
+                    // console.log("hi guys puck you",profileStatus);
 
-                    if (profileStatus == 0) {
-                        statusName = '<span class="badge bg-label-danger">Not Approved</span></a>';
-                    } else if (profileStatus == 1) {
-                        statusName = '<span class="badge bg-label-success">Approved</span></a>';
-                    } else {
-                        statusName = '<span class="badge bg-label-info">Pending</span></a>';
-                    }
+                    
+                    // if (profileStatus == 0) {
+                    //     statusName = '<span class="badge bg-label-danger">Not Approved</span></a>';
+                    // } else if (profileStatus == 1) {
+                    //     statusName = '<span class="badge bg-label-success">Approved</span></a>';
+                    // } else {
+                    //     statusName = '<span class="badge bg-label-info">Pending</span></a>';
+                    // }
+
+                    // if (rolesType == 1) {
+                    //     roleName = '<span class="badge bg-label-danger">Father</span></a>';
+                    // } else if (rolesType == 2) {
+                    //     roleName = '<span class="badge bg-label-success">Mother</span></a>';
+                    // } else {
+                    //     roleName = '<span class="badge bg-label-info">Others</span></a>';
+                    // }
                     // console.log(createdAtDate);
                     // Format the date components
                     const formattedDateOfCreation = `${createdAtDate.getFullYear()}-${(
@@ -89,7 +101,7 @@
                     const row = `
                     <tr>
                         <td>${index + 1}</td>
-                        <td>${item.RoleId}</td>
+                        <td>${roleName}</td>
                         <td>${fullName}</td>
                         <td>${item.Email}</td>
                         <td>${statusName}</td>
@@ -117,4 +129,15 @@
             console.error("Error fetching data from the API:", error);
         },
     });
+
+    function callingStatus(statusId) {
+        $.ajax({
+            url: `http://localhost:8000/api/defaultStatus/${statusId}`,
+            method: "GET",
+            dataType: "json",
+            success: function(response) {
+                console.log(response);
+            }
+        });
+    }
 </script>
