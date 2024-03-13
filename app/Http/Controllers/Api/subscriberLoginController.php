@@ -29,6 +29,7 @@ class subscriberLoginController extends Controller
         }
     }
 
+    
     public function create(Request $request)
     {
 
