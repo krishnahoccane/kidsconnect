@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\rolesController;
-use App\Http\Controllers\Api\subscribersController;
+use App\Http\Controllers\Api\subscriberController;
 use App\Http\Controllers\Api\AllPageController;
 
 
@@ -24,8 +24,8 @@ Route::delete('roles/{id}', [rolesController::class, 'delete']);
 
 
 // FOr Subscribers
-Route::get('subscriber', [subscribersController::class, 'index']);
-Route::post('subscriber', [subscribersController::class, 'create']);
+Route::get('subscriber', [subscriberController::class, 'index']);
+Route::post('subscriber', [subscriberController::class, 'create']);
 
 // Subscribers Logins ( Create, View, Update, Delete)
 Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
