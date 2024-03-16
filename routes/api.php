@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\defalutStatusController;
 use App\Http\Controllers\Api\subscriberLoginController;
 use App\Http\Controllers\Api\subscriberMailOtpVerification;
+use App\Http\Controllers\Api\subscribersKidsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\rolesController;
@@ -34,6 +35,10 @@ Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
 Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
 Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
 
+
+// Subscribers Logins ( Create, View, Update, Delete)
+Route::get('subscribersKids', [subscribersKidsController::class, 'index']);
+Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
 
 // For Status
 Route::get('defaultStatus', [defalutStatusController::class, 'index']);
