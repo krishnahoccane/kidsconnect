@@ -10,7 +10,6 @@ use App\Http\Controllers\Api\rolesController;
 use App\Http\Controllers\Api\subscriberController;
 use App\Http\Controllers\Api\AllPageController;
 
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -33,7 +32,6 @@ Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
 Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
 Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
 Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
-
 
 // For Status
 Route::get('defaultStatus', [defalutStatusController::class, 'index']);
