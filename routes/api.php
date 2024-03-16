@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\defalutStatusController;
+use App\Http\Controllers\API\SubsCirclesController;
 use App\Http\Controllers\Api\subscriberLoginController;
 use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use App\Http\Controllers\Api\subscribersKidsController;
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\rolesController;
 use App\Http\Controllers\Api\subscriberController;
 use App\Http\Controllers\Api\AllPageController;
+use App\Http\Controllers\Api\SubsCirclesMemberController;
+use App\Http\Controllers\Api\SubsChildPermissionsController;
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -39,6 +43,15 @@ Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delet
 Route::get('subscribersKids', [subscribersKidsController::class, 'index']);
 Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
 
+// For Subs Circles
+Route::post('subcircles',[SubsCirclesController:: class,'index']);
+
+// For Subs Circles Members
+Route::post('submembers',[SubsCirclesMemberController:: class,'index']);
+
+// For Subs Circles Permission
+Route::post('subpermission',[SubsChildPermissionsController:: class,'index']);
+
 // For Status
 Route::get('defaultStatus', [defalutStatusController::class, 'index']);
 Route::post('defaultStatus', [defalutStatusController::class, 'create']);
@@ -59,8 +72,6 @@ Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
 
 // Mail Verification
 Route::post('otpVerification',[subscriberMailOtpVerification:: class,'getInfoFromApp']);
-
-
 
 
 
