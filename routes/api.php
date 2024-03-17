@@ -13,7 +13,7 @@ use App\Http\Controllers\Api\subscriberController;
 use App\Http\Controllers\Api\AllPageController;
 use App\Http\Controllers\Api\SubsCirclesMemberController;
 use App\Http\Controllers\Api\SubsChildPermissionsController;
-
+use App\Http\Controllers\Api\RequestSentController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -51,6 +51,10 @@ Route::post('submembers',[SubsCirclesMemberController:: class,'index']);
 
 // For Subs Circles Permission
 Route::post('subpermission',[SubsChildPermissionsController:: class,'index']);
+
+// For Request Sent To
+Route::post('request',[RequestSentController:: class,'index']);
+
 
 // For Status
 Route::get('defaultStatus', [defalutStatusController::class, 'index']);
