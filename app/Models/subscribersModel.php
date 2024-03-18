@@ -13,6 +13,7 @@ class subscribersModel extends Model
 
     protected $fillable = [
         'RoleId',
+        'Email',
         'ProfileStatus',
         'ApprovedOn',
         'ApprovedBy',
