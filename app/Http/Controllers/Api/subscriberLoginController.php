@@ -118,7 +118,7 @@ class subscriberLoginController extends Controller
                 'Keywords' => $request->Keywords,
                 'LoginType' => $request->LoginType,
                 'RoleId' => $request->RoleId,
-                'MainSubscriberId' => $subscriberLoginData->id, // Use the ID of subscriber login data
+                'MainSubscriberId' => $subscriber->id, // Use the ID of subscriber login data
             ]);
 
             // Check if account was created successfully
