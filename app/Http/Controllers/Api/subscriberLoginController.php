@@ -31,12 +31,13 @@ class subscriberLoginController extends Controller
         }
     }
 
-    
+
     public function create(Request $request)
     {
 
         $subscibers = subscribersModel::firstOrCreate([
             'RoleId' => $request->RoleId,
+            'Email' => $request->Email
         ]);
 
 
@@ -57,7 +58,7 @@ class subscriberLoginController extends Controller
             'SSNimage' => $request->SSNimage,
             'Keywords' => $request->Keywords,
             'LoginType' => $request->LoginType,
-            'IsMain' => $request->IsMain,
+            'IsMain' => 1,
             'RoleId' => $request->RoleId,
             'MainSubscriberId' => $subscriberId,
         ]);
@@ -78,6 +79,71 @@ class subscriberLoginController extends Controller
         }
 
     }
+
+
+
+
+    public function createAccounts(Request $request, int $id)
+    {
+        // Find the subscriber
+        $subscriber = subscribersModel::find($id);
+
+        // Check if the subscriber exists
+        if (!$subscriber) {
+            return response()->json([
+                'status' => 404,
+                'message' => "Subscriber not found",
+            ], 404);
+        }
+
+        // Find the subscriber login data based on the subscriber's ID
+        $subscriberLoginData = subscriberlogins::where('MainSubscriberId', $subscriber->id)->first();
+
+        // Check if subscriber login data exists
+        if ($subscriberLoginData) {
+            // Create a new account
+            $sub_loginNewAccount = subscriberlogins::firstOrCreate([
+                'FirstName' => $request->FirstName,
+                'LastName' => $request->LastName,
+                'Email' => $request->Email,
+                'Dob' => $request->Dob,
+                'Gender' => $request->Gender,
+                'PhoneNumber' => $request->PhoneNumber,
+                'SSN' => $request->SSN,
+                'Password' => $request->Password,
+                'About' => $request->About,
+                'Address' => $request->Address,
+                'ProfileImage' => $request->ProfileImage,
+                'SSNimage' => $request->SSNimage,
+                'Keywords' => $request->Keywords,
+                'LoginType' => $request->LoginType,
+                'RoleId' => $request->RoleId,
+                'MainSubscriberId' => $subscriberLoginData->id, // Use the ID of subscriber login data
+            ]);
+
+            // Check if account was created successfully
+            if ($sub_loginNewAccount) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => "A New Account is created by " . $subscriber->Email,
+                    'data' => $sub_loginNewAccount,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 403,
+                    'message' => 'Account not created'
+                ], 403);
+            }
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => "Not a Main Subscriber",
+            ], 404);
+        }
+    }
+
+
+
 
 
     public function show($id)

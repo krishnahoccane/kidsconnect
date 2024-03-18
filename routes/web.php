@@ -55,20 +55,22 @@ Route::middleware(['auth'])->group(function () {
     //Admin Subscriber Feedback - access cotrollers
     Route::get('/appFeedbacks', [urlRestrictionController::class, 'appFeedbacks'])->name('appFeedbacks');
 
+    // Admin Subscriber - Approval Access API
+    Route::get('userProfile/{id}', [subscriberUserProfileConstroller::class, 'show']);
+    Route::get('userProfile/{id}/approve', [subscriberUserProfileConstroller::class, 'approve']);
+    Route::get('userProfile/{id}/deny', [subscriberUserProfileConstroller::class, 'deny']);
+    Route::delete('userProfile/{id}', [subscriberUserProfileConstroller::class, 'delete']);
+
+    // Admin Pages - Access API
+    Route::get('allPages', [AllPageController::class, 'index']);
+    Route::post('allPages', [AllPageController::class, 'store']);
+    Route::get('allPages/{id}', [AllPageController::class, 'show']);
+    Route::put('allPages/{id}/edit', [AllPageController::class, 'update']);
+    Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
+
 });
 
-// Admin Subscriber - Approval Access API
-Route::get('userProfile/{id}', [subscriberUserProfileConstroller::class, 'show']);
-Route::get('userProfile/{id}/approve', [subscriberUserProfileConstroller::class, 'approve']);
-Route::get('userProfile/{id}/deny', [subscriberUserProfileConstroller::class, 'deny']);
-Route::delete('userProfile/{id}', [subscriberUserProfileConstroller::class, 'delete']);
 
-// Admin Pages - Access API
-Route::get('allPages', [AllPageController::class, 'index']);
-Route::post('allPages', [AllPageController::class, 'store']);
-Route::get('allPages/{id}', [AllPageController::class, 'show']);
-Route::put('allPages/{id}/edit', [AllPageController::class, 'update']);
-Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
 
 
 
