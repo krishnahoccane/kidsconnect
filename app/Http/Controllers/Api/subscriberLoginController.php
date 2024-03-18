@@ -85,10 +85,10 @@ class subscriberLoginController extends Controller
 
     public function createAccounts(Request $request, int $id)
     {
-        // Find the subscriber
+        // Find the subscriber data with ID
         $subscriber = subscribersModel::find($id);
 
-        // Check if the subscriber exists
+        // Check if the subscriber exists or not
         if (!$subscriber) {
             return response()->json([
                 'status' => 404,
@@ -96,7 +96,7 @@ class subscriberLoginController extends Controller
             ], 404);
         }
 
-        // Find the subscriber login data based on the subscriber's ID
+        // Find the subscriberLogin data based on the subscriber's ID - here we are comparing the MainsubscriberID
         $subscriberLoginData = subscriberlogins::where('MainSubscriberId', $subscriber->id)->first();
 
         // Check if subscriber login data exists
