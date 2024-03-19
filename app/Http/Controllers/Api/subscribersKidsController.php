@@ -45,6 +45,7 @@ class subscribersKidsController extends Controller
             'ProfileImage' => $request->ProfileImage,
             'Keywords' => $request->Keywords,
             'LoginType' => $request->LoginType,
+            'MainSubscriberId'=>$request->MainSubscriberId
         ]);
 
         if ($subKids->wasRecentlyCreated) {

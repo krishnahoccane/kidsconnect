@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
 
     //Admin Subscriber - access cotrollers
     Route::get('/appUsers', [urlRestrictionController::class, 'appUsers'])->name('appUsers');
+    Route::get('/createdUsers', [urlRestrictionController::class, 'createdUsers'])->name('createdUsers');
     Route::get('/feedback', [urlRestrictionController::class, 'feedback'])->name('feedback');
     Route::get('/userProfile', [urlRestrictionController::class, 'userProfile'])->name('userProfile');
 

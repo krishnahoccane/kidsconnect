@@ -21,6 +21,10 @@ class urlRestrictionController extends Controller
     {
         return view('users/appUsers');
     }
+    public function createdUsers()
+    {
+        return view('users/createdUsers');
+    }
     public function feedback()
     {
         return view('users/feedback');

@@ -81,7 +81,22 @@ class subscriberLoginController extends Controller
     }
 
 
+    public function showcreateAccounts()
+    {
+        $subscriberLoginData = subscriberlogins::where('IsMain', 0)->get();
 
+        if ($subscriberLoginData) {
+            return response()->json([
+                'status' => 200,
+                'data' => $subscriberLoginData
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 403,
+                'message' => 'No Data Found'
+            ], 403);
+        }
+    }
 
     public function createAccounts(Request $request, int $id)
     {
@@ -141,6 +156,8 @@ class subscriberLoginController extends Controller
             ], 404);
         }
     }
+
+
 
 
 

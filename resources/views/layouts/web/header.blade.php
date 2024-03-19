@@ -129,7 +129,13 @@
                     <li class="menu-item {{ request()->is('appUsers') ? 'active' : '' }}">
                         <a href="{{ url('appUsers') }}" class="menu-link">
                             <i class="menu-icon tf-icons ti ti-users"></i>
-                            <div data-i18n="users">Manage App Users</div>
+                            <div data-i18n="users">Main App Users</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ request()->is('createdUsers') ? 'active' : '' }}">
+                        <a href="{{ url('createdUsers') }}" class="menu-link">
+                            <i class="menu-icon tf-icons ti ti-users"></i>
+                            <div data-i18n="users">Created App Users</div>
                         </a>
                     </li>
                     <li class="menu-item {{ request()->is('feedback') ? 'active' : '' }}">

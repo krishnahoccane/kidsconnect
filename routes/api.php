@@ -36,6 +36,7 @@ Route::post('subscriber', [subscriberController::class, 'create']);
 // Subscribers Logins ( Create, View, Update, Delete)
 Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
+Route::get('subscriberloginsCreateAccount', [subscriberLoginController::class, 'showcreateAccounts']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
 Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
 Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
