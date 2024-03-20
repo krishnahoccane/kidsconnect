@@ -33,6 +33,7 @@ Route::delete('roles/{id}', [rolesController::class, 'delete']);
 Route::get('subscriber', [subscriberController::class, 'index']);
 Route::post('subscriber', [subscriberController::class, 'create']);
 
+
 // Subscribers Logins ( Create, View, Update, Delete)
 Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
@@ -41,6 +42,7 @@ Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::cl
 Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
 Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
 Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
+Route::get('/subscriberlogins/{subscriberId}/family-members', [subscriberLoginController::class, 'showcreateAccount']);
 
 
 // Subscribers Logins ( Create, View, Update, Delete)

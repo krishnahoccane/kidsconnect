@@ -25,6 +25,8 @@
         $loginType = 'Manual';
     }
 
+    $userId = $sub_login['id'];
+
 @endphp
 <!-- Header -->
 <div class="row">
@@ -207,9 +209,9 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <ul class="list-unstyled mb-0">
+                                            <ul id="familyMembers" class="list-unstyled mb-0">
 
-                                                <li class="mb-3">
+                                                {{-- <li class="mb-3">
                                                     <div class="d-flex align-items-center">
                                                         <div class="d-flex align-items-start">
                                                             <div class="avatar me-2">
@@ -262,7 +264,7 @@
                                                                     class="badge bg-label-secondary">Kid</span></a>
                                                         </div>
                                                     </div>
-                                                </li>
+                                                </li> --}}
                                             </ul>
                                         </div>
                                     </div>
@@ -649,4 +651,63 @@
             }
         });
     });
+
+    // @php $userId = 1; @endphp
+   // Function to generate role badge based on roleId
+function callRoles(roleId) {
+    if (roleId === 1) {
+        return '<span class="badge bg-label-danger">Father</span>';
+    } else if (roleId === 2) {
+        return '<span class="badge bg-label-success">Mother</span>';
+    } else {
+        return '<span class="badge bg-label-info">Others</span>';
+    }
+}
+
+
+    // Fetch family members based on userId
+    var userId = "{{ $userId }}"; // Make sure $userId is properly assigned in your Blade template
+
+    $.ajax({
+        url: `/api/subscriberlogins/${userId}/family-members`,
+        method: "GET",
+        dataType: "json",
+        success: function(response) {
+            // Check if data is available
+            if (response.data && response.data.length > 0) {
+                // Iterate through family members and dynamically populate the list
+                response.data.forEach(member => {
+                    // Create HTML for each family member
+                    const memberHTML = `
+                    <li class="mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-start">
+                                <div class="avatar me-2">
+                                    <img src="${member.ProfileImage}" alt="Avatar" class="rounded-circle" />
+                                </div>
+                                <div class="me-2 ms-1">
+                                    <h6 class="mb-0">${member.FirstName} ${member.LastName}</h6>
+                                </div>
+                            </div>
+                            <div class="ms-auto">
+                                ${callRoles(member.RoleId)} <!-- Use callRoles function here -->
+                            </div>
+                        </div>
+                    </li>
+                    `;
+                    // Append the member HTML to the family members list
+                    $('#familyMembers').append(memberHTML);
+                });
+            } else {
+                // Handle case when no family members are available
+                $('#familyMembers').append('<li>No family members found.</li>');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching family members:", error);
+            // Handle error case
+            $('#familyMembers').append('<li>Error fetching family members.</li>');
+        }
+    });
+
 </script>

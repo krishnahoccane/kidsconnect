@@ -98,6 +98,37 @@ class subscriberLoginController extends Controller
         }
     }
 
+    public function showcreateAccount($subscriberId)
+{
+    // Find the subscriber
+    $subscriber = subscribersModel::find($subscriberId);
+
+    // Check if the subscriber exists
+    if (!$subscriber) {
+        return response()->json([
+            'status' => 404,
+            'message' => "Subscriber not found",
+        ], 404);
+    }
+
+    // Retrieve family members associated with the subscriber
+    $familyMembers = subscriberlogins::where('MainSubscriberId', $subscriber->id)->get();
+
+    // Check if family members exist
+    if ($familyMembers->isEmpty()) {
+        return response()->json([
+            'status' => 403,
+            'message' => 'No family members found for the subscriber',
+        ], 403);
+    }
+
+    return response()->json([
+        'status' => 200,
+        'data' => $familyMembers,
+    ], 200);
+}
+
+
     public function createAccounts(Request $request, int $id)
     {
         // Find the subscriber data with ID
@@ -181,6 +212,9 @@ class subscriberLoginController extends Controller
         }
 
     }
+
+
+    
 
 
 
