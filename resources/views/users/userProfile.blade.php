@@ -692,7 +692,7 @@ function callRoles(roleId) {
                                     <img src="${member.ProfileImage}" alt="Avatar" class="rounded-circle" />
                                 </div>
                                 <div class="me-2 ms-1">
-                                    <h6 class="mb-0">${member.FirstName} ${member.LastName}</h6>
+                                    <a href="/userProfile/${member.id}"><h6 class="mb-0">${member.FirstName} ${member.LastName}</h6></a>
                                 </div>
                             </div>
                             <div class="ms-auto">
