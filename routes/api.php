@@ -33,9 +33,12 @@ Route::delete('roles/{id}', [rolesController::class, 'delete']);
 Route::get('subscriber', [subscriberController::class, 'index']);
 Route::post('subscriber', [subscriberController::class, 'create']);
 
-Route::middleware('auth:api')->group(function () {
-    // Subscribers Logins ( Create, View, Update, Delete)
-    Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
+// Route::middleware('auth:api')->group(function () {
+//     // Subscribers Logins ( Create, View, Update, Delete)
+    
+// });
+
+Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
     Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
     Route::get('subscriberloginsCreateAccount', [subscriberLoginController::class, 'showcreateAccounts']);
     Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
@@ -86,9 +89,6 @@ Route::middleware('auth:api')->group(function () {
 
     // Mail Verification
     Route::post('otpVerification', [subscriberMailOtpVerification::class, 'getInfoFromApp']);
-});
-
-
 
 
 
