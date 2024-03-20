@@ -666,8 +666,14 @@ function callRoles(roleId) {
 
 
     // Fetch family members based on userId
-    var userId = "{{ $userId }}"; // Make sure $userId is properly assigned in your Blade template
+    // var userId = "{{ $userId }}"; // Make sure $userId is properly assigned in your Blade template
+    var url = window.location.href;
 
+// Split the URL by '/'
+    var parts = url.split('/');
+
+    // Get the last part of the URL, which is the ID
+    var userId = parts[parts.length - 1];
     $.ajax({
         url: `/api/subscriberlogins/${userId}/family-members`,
         method: "GET",

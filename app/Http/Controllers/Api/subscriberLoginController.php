@@ -99,7 +99,7 @@ class subscriberLoginController extends Controller
     }
 
     public function showcreateAccount($subscriberId)
-{
+    {
     // Find the subscriber
     $subscriber = subscribersModel::find($subscriberId);
 
@@ -112,7 +112,9 @@ class subscriberLoginController extends Controller
     }
 
     // Retrieve family members associated with the subscriber
-    $familyMembers = subscriberlogins::where('MainSubscriberId', $subscriber->id)->get();
+    $familyMembers = subscriberlogins::where('MainSubscriberId', $subscriber->id)
+        ->where('IsMain', 0) // Filter out records where IsMain is 0
+        ->get();
 
     // Check if family members exist
     if ($familyMembers->isEmpty()) {
