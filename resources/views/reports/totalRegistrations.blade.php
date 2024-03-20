@@ -27,7 +27,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Profile Created On</th>
-                                <th class="sorting_disabled">Actions</th>
+                                {{-- <th class="sorting_disabled">Actions</th> --}}
                             </tr>
                         </thead>
                         <tbody id="datatable-body">
@@ -89,7 +89,10 @@
         </div>
     </div>
 </div>
+
 <script>
+
+
     document.getElementById('exportExcelBtn').addEventListener('click', function() {
         fetch('/export-registrations', {
             method: 'GET'
@@ -112,6 +115,28 @@
         .catch(error => {
             console.error('Error exporting data:', error);
         });
+    });
+
+    $.ajax({
+        url: `http://localhost:8000/api/subscriberlogins/`,
+        method: "GET",
+        dataType: "json",
+        success: function (response) {  
+            console.log(response) 
+            var tableData = [];
+            for (var i in response){ 
+                var item = response[i];
+                var row = [item.id, item.FirstName, item.Email, item.created_at];
+                tableData.push(row);    
+            };        
+            $('#datatable-body').DataTable({
+                    data: tableData
+                });  
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching data:", error);
+            alert("An error has occurred");
+        }
     });
 </script>
 @include('./layouts/web.footer')
