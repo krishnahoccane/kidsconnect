@@ -74,6 +74,7 @@
 
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
 
+    <link rel="stylesheet" type="text/css" href="{{ asset('ui/assets/vendor/libs/dropzone/dropzone.css') }}">
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -180,7 +181,7 @@
                     <li class="menu-item {{ request()->is('banner') ? 'active' : '' }}">
                         <a href="{{ url('banner') }}" class="menu-link">
                             <i class="menu-icon tf-icons ti ti-files"></i>
-                            <div data-i18n="faq">Banner</div>
+                            <div data-i18n="banner">Banner</div>
                         </a>
                     </li>
 

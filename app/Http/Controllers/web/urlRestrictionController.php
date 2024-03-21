@@ -51,6 +51,12 @@ class urlRestrictionController extends Controller
         return view('pages/faq');
 
     }
+
+    public function banner()
+    {
+        return view('pages/banner');
+
+    }
     public function totalRegistrations()
     {
         return view('reports/totalRegistrations');
