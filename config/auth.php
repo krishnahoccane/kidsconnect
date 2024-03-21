@@ -70,7 +70,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\subscriberlogins::class,
+            'model' => App\Models\Registration::class,
         ],
 
         'appUsers' => [
