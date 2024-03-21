@@ -5,14 +5,14 @@
     <!-- Full Editor -->
     <div class="col-12">
         <div class="card">
-            <h5 class="card-header">Enter your content here</h5>
+            <h5 class="card-header"></h5>
             <div class="card-body">
                 <div class="table-responsive">
                     <table id="datatable" class="display table table-responsive">
                         <thead>
                             <tr>
                                 <th>S.No</th>
-                                <th>Role</th>
+                                <th>RoleType</th>
                                 <th>Sub Name</th>
                                 <th>Sub Mail</th>
                                 {{-- <th>Status</th> --}}
@@ -21,7 +21,6 @@
                             </tr>
                         </thead>
                         <tbody id="datatable-subscriberLogin">
-
 
                         </tbody>
                     </table>
@@ -76,11 +75,12 @@
                         const createdAtDate = new Date(item.created_at);
                         const formattedDateOfCreation = `${createdAtDate.getFullYear()}-${(createdAtDate.getMonth() + 1).toString().padStart(2, '0')}-${createdAtDate.getDate().toString().padStart(2, '0')}`;
                         
+                        const roleBadge = await callRoles(roleName);
                         // Construct the table row
                         const row = `
                             <tr>
                                 <td>${serialNo++}</td> <!-- Serial number -->
-                                <td>${roleName}</td>
+                                <td>${roleBadge}</td>
                                 <td>${fullName}</td>
                                 <td>${item.Email}</td>
                                 <td>${formattedDateOfCreation}</td>

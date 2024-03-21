@@ -12,7 +12,7 @@ class RegistrationsExport implements FromCollection, WithHeadings
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function collection()
+   public function collection()
     {
         return subscriberlogins::select('id', 'FirstName', 'Email', 'created_at')->get();
     }

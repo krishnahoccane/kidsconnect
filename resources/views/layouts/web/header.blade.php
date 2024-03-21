@@ -177,6 +177,12 @@
                             <div data-i18n="faq">FAQ</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ request()->is('banner') ? 'active' : '' }}">
+                        <a href="{{ url('banner') }}" class="menu-link">
+                            <i class="menu-icon tf-icons ti ti-files"></i>
+                            <div data-i18n="faq">Banner</div>
+                        </a>
+                    </li>
 
                     {{-- Reports --}}
 

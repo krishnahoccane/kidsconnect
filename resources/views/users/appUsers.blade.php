@@ -11,7 +11,7 @@
                         <thead>
                             <tr>
                                 <th>id</th>
-                                <th>Type</th>
+                                <th>RoleType</th>
                                 <th>Subscriber Name</th>
                                 <th>Subscriber Mail</th>
                                 {{-- <th>Status</th> --}}
