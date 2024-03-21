@@ -54,7 +54,7 @@ class subscriberController extends Controller
         } else {
             return response()->json([
                 'status' => 403,
-                'message' => 'Subscriber allready existed'
+                'message' => 'Subscriber already existed'
             ], 403);
         }
     }

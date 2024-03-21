@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Registration;
+use App\Models\subscriberlogins;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -13,7 +14,7 @@ class RegistrationsExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return Registration::all();
+        return subscriberlogins::select('id', 'FirstName', 'Email', 'created_at')->get();
     }
     public function headings(): array
     {

@@ -70,6 +70,9 @@
     {{-- <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/katex.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/quill/editor.css') }}" /> --}}
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
 
 
 

@@ -1,9 +1,5 @@
 @include('./layouts/web.header')
-
-
 <h3>{{ 'App User Management' }}</h3>
-
-
 <div class="row">
 
     <!-- Full Editor -->
@@ -36,11 +32,8 @@
     <!-- /Full Editor -->
 </div>
 
-
-
-@include('./layouts/web.footer')
 <script>
-    $(document).ready(function() {
+    // $(document).ready(function() {
         
         function callRoles(roleName) {
             if (roleName === 'Father') {
@@ -100,7 +93,9 @@
                                 </td>
                             </tr>`;
                         $("#datatable-subscriberLogin").append(row);
+                       
                     }
+                    // $('#datatable').DataTable();
                 } else {
                     console.error('No data found.');
                 }
@@ -110,8 +105,11 @@
         }
     
         populateTable(); // Call the function to populate the table
-    });
+    // });
     </script>
+
+@include('./layouts/web.footer')
+
     
     
    

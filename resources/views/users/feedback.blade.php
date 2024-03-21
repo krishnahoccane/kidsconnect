@@ -9,7 +9,7 @@
     <!-- Full Editor -->
     <div class="col-12">
         <div class="card">
-            <h5 class="card-header">Enter your content here</h5>
+            <h5 class="card-header"></h5>
             <div class="card-body">
                 <div class="table-responsive">
                     <table id="datatable" class="display table table-responsive">
@@ -25,6 +25,402 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Anita</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>Tulika</td>
+                                <td>Row 2 Data 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalView">
+                                        View
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
                             <tr>
                                 <td>Tulika</td>
                                 <td>Row 2 Data 2</td>

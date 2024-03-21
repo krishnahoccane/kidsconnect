@@ -33,10 +33,7 @@
     <!-- /Full Editor -->
 </div>
 
-
-
-@include('./layouts/web.footer')
-<<script>
+<script>
     // Function to get status name based on profileStatus
     function callingStatus(profileStatus) {
         if (profileStatus === 0) {
@@ -107,3 +104,6 @@
         },
     });
 </script>
+
+@include('./layouts/web.footer')
+

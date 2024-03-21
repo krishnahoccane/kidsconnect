@@ -87,8 +87,8 @@
 <script src="{{ asset('ui/assets/vendor/js/dropdown-hover.js') }}"></script>
 
 {{-- Data tables --}}
-<script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.js') }}"></script>
-<script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.bootstrap5.js') }}"></script>
+{{-- <script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.js') }}"></script>
+<script src="{{ asset('ui/assets/vendor/libs/bootstrap5.3.0/dataTables.bootstrap5.js') }}"></script> --}}
 
 {{-- Page js --}}
 <script src="{{ asset('ui/assets/js/dashboards-analytics.js') }}"></script>
@@ -97,6 +97,10 @@
 <script src="{{ asset('ui/assets/js/pages-profile.js') }}"></script>
 <script src="{{ asset('ui/assets/js/pages-account-settings-account.js') }}"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<!-- Bootstrap JavaScript (if you're using Bootstrap) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 
 

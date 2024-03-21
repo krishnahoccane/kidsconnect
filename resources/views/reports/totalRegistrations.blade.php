@@ -1,17 +1,14 @@
 @include('./layouts/web.header')
-
-
-
 <h3>{{ 'Total Registrations' }}</h3>
 
 <div class="row">
-
     <!-- Full Editor -->
     <div class="col-12">
         <div class="card">
             <div class="card-header">
                 <div class="demo-inline-spacing">
-                    <button type="button" class="btn btn-label-success"  id="exportExcelBtn"><i class="ti ti-file-export me-sm-1"></i>Export
+                    <button type="button" class="btn btn-label-success" id="exportExcelBtn"><i
+                            class="ti ti-file-export me-sm-1"></i>Export
                         Excel</button>
                 </div>
             </div>
@@ -27,10 +24,10 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Profile Created On</th>
-                                {{-- <th class="sorting_disabled">Actions</th> --}}
                             </tr>
                         </thead>
                         <tbody id="datatable-body">
+
                         </tbody>
                     </table>
                 </div>
@@ -90,53 +87,65 @@
     </div>
 </div>
 
+
 <script>
-
-
-    document.getElementById('exportExcelBtn').addEventListener('click', function() {
-        fetch('/export-registrations', {
-            method: 'GET'
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.blob();
+    // $(document).ready(function() {
+        // Initialize DataTable
+        
+        $.ajax({
+            url: `http://localhost:8000/api/subscriberlogins/`,
+            method: "GET",
+            dataType: "json",
+            success: function(response) {
+                console.log(response);
+                var tableBody = $('#datatable-body'); // Select the tbody element
+                tableBody.empty(); // Clear previous data
+                if (response.data.length > 0) {
+                    $.each(response.data, function(index, row) {
+                        var newRow = $('<tr>');
+                        newRow.append('<td>' + row.id + '</td>');
+                        newRow.append('<td>' + row.FirstName + '</td>');
+                        newRow.append('<td>' + row.Email + '</td>');
+                        newRow.append('<td>' + row.created_at + '</td>');
+                        tableBody.append(newRow);
+                    });
+                } else {
+                    // If no data found, display a message in a new row
+                    var newRow = $('<tr>').html('<td colspan="4">No data available.</td>');
+                    tableBody.append(newRow);
+                }
+                $('#datatable').DataTable();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching data:", error);
+                alert("An error has occurred");
             }
-            throw new Error('Network response was not ok.');
-        })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'registrations.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => {
-            console.error('Error exporting data:', error);
         });
-    });
 
-    $.ajax({
-        url: `http://localhost:8000/api/subscriberlogins/`,
-        method: "GET",
-        dataType: "json",
-        success: function (response) {  
-            console.log(response) 
-            var tableData = [];
-            for (var i in response){ 
-                var item = response[i];
-                var row = [item.id, item.FirstName, item.Email, item.created_at];
-                tableData.push(row);    
-            };        
-            $('#datatable-body').DataTable({
-                    data: tableData
-                });  
-        },
-        error: function(xhr, status, error) {
-            console.error("Error fetching data:", error);
-            alert("An error has occurred");
-        }
-    });
+
+        document.getElementById('exportExcelBtn').addEventListener('click', function() {
+            fetch('/export-registrations', {
+                    method: 'GET'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'registrations.xlsx';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.error('Error exporting data:', error);
+                });
+        });
+    // });
 </script>
 @include('./layouts/web.footer')
