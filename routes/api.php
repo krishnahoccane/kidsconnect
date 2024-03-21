@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\SubsChildPermissionsController;
 use App\Http\Controllers\Api\RequestSentController;
 use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\RequestChatController;
+use App\Http\Controllers\Api\BannerController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -29,6 +30,8 @@ Route::post('roles', [rolesController::class, 'create']);
 Route::put('roles/{id}/edit', [rolesController::class, 'update']);
 Route::delete('roles/{id}', [rolesController::class, 'delete']);
 
+// For Banner
+Route::post('banners', [BannerController::class, 'store']);
 
 // FOr Subscribers
 Route::get('subscriber', [subscriberController::class, 'index']);

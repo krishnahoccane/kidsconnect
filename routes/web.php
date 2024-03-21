@@ -53,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/faq', [urlRestrictionController::class, 'faq'])->name('faq');
     Route::get('/totalRegistrations', [urlRestrictionController::class, 'totalRegistrations'])->name('totalRegistrations');
     Route::get('/totalCalendarschedules', [urlRestrictionController::class, 'totalCalendarschedules'])->name('totalCalendarschedules');
+    Route::get('/banner', [urlRestrictionController::class, 'banner'])->name('banner');
 
     //Admin Subscriber Feedback - access cotrollers
     Route::get('/appFeedbacks', [urlRestrictionController::class, 'appFeedbacks'])->name('appFeedbacks');

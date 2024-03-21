@@ -41,6 +41,11 @@
 <!-- / Layout wrapper -->
 <!-- Core JS -->
 
+{{-- multiple file upload --}}
+<script src="{{ asset('ui/assets/js/forms-file-upload.js') }}"></script>
+{{-- <script src="{{ asset('ui/assets/vendor/libs/dropzone/dropzone.js') }}"></script> --}}
+
+
 
 <!-- build:js assets/vendor/js/core.js -->
 
@@ -96,6 +101,8 @@
 <script src="{{ asset('ui/assets/js/myjs/apiGet.js') }}"></script>
 <script src="{{ asset('ui/assets/js/pages-profile.js') }}"></script>
 <script src="{{ asset('ui/assets/js/pages-account-settings-account.js') }}"></script>
+
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
