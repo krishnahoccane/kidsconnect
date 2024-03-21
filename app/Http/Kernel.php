@@ -77,6 +77,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         // Add your custom middleware here
-        'PreventBackHistory' => \App\Http\Middleware\PreventBackHistory::class
+        'PreventBackHistory' => \App\Http\Middleware\PreventBackHistory::class,
+        'auth.api' => \App\Http\Middleware\CheckAuthToken::class,
     ];
 }

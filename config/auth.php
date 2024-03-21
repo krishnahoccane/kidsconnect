@@ -44,6 +44,10 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
         ],
+        'apiAppUsers' => [
+            'driver' => 'passport',
+            'provider' => 'appUsers',
+        ],
     ],
 
     /*
@@ -66,13 +70,13 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Registration::class,
+            'model' => App\Models\subscriberlogins::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'appUsers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\subscriberlogins::class,
+        ],
     ],
 
     /*

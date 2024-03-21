@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
 use App\Models\defaultStatus;
+use Illuminate\Validation\Rule;
 use App\Models\subscriberlogins;
 use App\Models\subscribersModel;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class subscriberLoginController extends Controller
@@ -16,7 +17,7 @@ class subscriberLoginController extends Controller
     public function index()
     {
         $sub_login = subscriberlogins::all();
-
+        
         if ($sub_login->count() > 0) {
             return response()->json([
                 'status' => 200,
@@ -43,6 +44,8 @@ class subscriberLoginController extends Controller
 
         $subscriberId = $subscibers->id;
 
+        $hashPassword = Hash::make($request->Password);
+
         $sub_login = subscriberlogins::firstOrCreate([
             'FirstName' => $request->FirstName,
             'LastName' => $request->LastName,
@@ -51,7 +54,7 @@ class subscriberLoginController extends Controller
             'Gender' => $request->Gender,
             'PhoneNumber' => $request->PhoneNumber,
             'SSN' => $request->SSN,
-            'Password' => $request->Password,
+            'Password' => $hashPassword,
             'About' => $request->About,
             'Address' => $request->Address,
             'ProfileImage' => $request->ProfileImage,
