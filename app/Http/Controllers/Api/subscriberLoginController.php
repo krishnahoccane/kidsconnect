@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use App\Models\subscriberlogins;
 use App\Models\subscribersModel;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,18 +17,17 @@ class subscriberLoginController extends Controller
     //
     public function index()
     {
-        $sub_login = subscriberlogins::all();
-        
-        if ($sub_login->count() > 0) {
+        $authenticatedUser = Auth::user();
+        $subscriber = subscriberlogins::where('Email', $authenticatedUser->Email)->first();
+        if ($subscriber) {
             return response()->json([
                 'status' => 200,
-                'count' => count($sub_login),
-                'data' => $sub_login
+                'data' => $authenticatedUser
             ], 200);
         } else {
             return response()->json([
                 'status' => 404,
-                'message' => "No Data Found"
+                'message' => "Subscriber not found"
             ], 404);
         }
     }
@@ -103,35 +103,35 @@ class subscriberLoginController extends Controller
 
     public function showcreateAccount($subscriberId)
     {
-    // Find the subscriber
-    $subscriber = subscribersModel::find($subscriberId);
+        // Find the subscriber
+        $subscriber = subscribersModel::find($subscriberId);
 
-    // Check if the subscriber exists
-    if (!$subscriber) {
+        // Check if the subscriber exists
+        if (!$subscriber) {
+            return response()->json([
+                'status' => 404,
+                'message' => "Subscriber not found",
+            ], 404);
+        }
+
+        // Retrieve family members associated with the subscriber
+        $familyMembers = subscriberlogins::where('MainSubscriberId', $subscriber->id)
+            ->where('IsMain', 0) // Filter out records where IsMain is 0
+            ->get();
+
+        // Check if family members exist
+        if ($familyMembers->isEmpty()) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'No family members found for the subscriber',
+            ], 403);
+        }
+
         return response()->json([
-            'status' => 404,
-            'message' => "Subscriber not found",
-        ], 404);
+            'status' => 200,
+            'data' => $familyMembers,
+        ], 200);
     }
-
-    // Retrieve family members associated with the subscriber
-    $familyMembers = subscriberlogins::where('MainSubscriberId', $subscriber->id)
-        ->where('IsMain', 0) // Filter out records where IsMain is 0
-        ->get();
-
-    // Check if family members exist
-    if ($familyMembers->isEmpty()) {
-        return response()->json([
-            'status' => 403,
-            'message' => 'No family members found for the subscriber',
-        ], 403);
-    }
-
-    return response()->json([
-        'status' => 200,
-        'data' => $familyMembers,
-    ], 200);
-}
 
 
     public function createAccounts(Request $request, int $id)
@@ -219,7 +219,7 @@ class subscriberLoginController extends Controller
     }
 
 
-    
+
 
 
 
