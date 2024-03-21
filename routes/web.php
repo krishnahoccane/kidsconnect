@@ -20,6 +20,7 @@ Route::get('/registration', [adminuserRegistrationController::class, 'index']);
 Route::post('/registration', [adminuserRegistrationController::class, 'view']);
 Route::get('/export-registrations', [adminuserRegistrationController::class, 'export']);
 
+
 // Admin Login Logout Controllers
 Route::get('/', [adminuserRegistrationController::class, 'showLoginForm'])->name('showLoginForm');
 Route::post('/', [adminuserRegistrationController::class, 'authenticate'])->name('authenticate');

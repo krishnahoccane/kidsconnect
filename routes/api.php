@@ -41,7 +41,7 @@ Route::post('subscriber', [subscriberController::class, 'create']);
 Route::post('login', [Authcontroller::class, 'login']);
 Route::middleware('auth.api')->get('/subscriberlogins', [SubscriberLoginController::class, 'index']);
 
-// Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
+Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
 Route::get('subscriberloginsCreateAccount', [subscriberLoginController::class, 'showcreateAccounts']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
