@@ -6,7 +6,6 @@ use Validator;
 use App\Mail\OtpEmail;
 use App\Models\subscriberlogins;
 use Illuminate\Http\Request;
-use App\Models\subscriberlogins;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgotPasswordEmail;
