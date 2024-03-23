@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\Authenticatable;
+// use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Foundation\Auth\User as AuthenticatableUser;
 
-class subscriberlogins extends AuthenticatableUser implements Authenticatable
+class subscriberlogins extends AuthenticatableUser
 {
     use HasFactory, HasApiTokens;
-    
+
     protected $table = "subscriber_logins";
+    protected $primaryKey = "id";
 
     protected $fillable = [
         'FirstName',

@@ -1,57 +1,77 @@
 @include('./layouts/web.header')
 
 <h3>{{ 'Banner Page' }}</h3>
-<div class="row">
 
-    <!-- Multi  -->
-    <div class="col-12">
-      <div class="card">
-        <h5 class="card-header">Multiple</h5>
-        <div class="card-body">
-            <form action="{{ url('banners') }}" enctype="multipart/form-data" class="dropzone needsclick" id="dropzone-multi">
-                <div class="dz-message needsclick">
-                    Drop files here or click to upload
-                    <span class="note needsclick">(This is just a demo dropzone. Selected files are <span class="fw-medium">not</span> actually uploaded.)</span>
-                </div>
-                <div class="fallback">
-                    <input name="file" type="file" />
-                </div>
-                <!-- Submit button -->
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-            
+<!-- Multi  -->
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="m-0">Upload Baner images</h5>
+                <ul class="alert alert-warning">
+                    @error('image')
+                        {{ $message }}
+                    @enderror
+                </ul>
+            </div>
         </div>
-      </div>
-    </div>
-    <!-- Multi  -->
-  </div>
-  
-  <script src="{{ asset('ui/assets/vendor/libs/dropzone/dropzone.js') }}"></script>
-  <script>
-    // Send image data to server using AJAX when the form is submitted
-    $('#dropzone-multi').on('submit', function (e) {
-        e.preventDefault(); // Prevent default form submission
 
-        // Get form data
-        var formData = new FormData($(this)[0]);
-        console.log(formData)
-        // Make AJAX call
-        $.ajax({
-            url: 'http://localhost:8000/api/banners', // Replace with your API URL
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                // Handle success
-                console.log(response);
-            },
-            error: function (xhr, status, error) {
-                // Handle error
-                console.error(error);
+
+        <div class="card-body">
+            <form id="imageUploadForm" action="{{ url('api/allBanners') }}" method="POST" enctype="multipart/form-data">
+                <div class="mb-3" class="dropzone needsclick">
+                    @csrf
+                    <label for="imageUpload" class="form-label">Select Images:</label>
+                    <input type="file" class="form-control" id="imageUpload" name="images[]" multiple>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+            <div id="preview"></div>
+        </div>
+    </div>
+</div>
+<!-- Multi  -->
+
+@include('./layouts/web.footer')
+<script>
+    $(document).ready(function() {
+        // Preview images before upload
+        $('#imageUpload').change(function() {
+            $('#preview').html('');
+            var files = $(this)[0].files;
+            a = document.querySelector("#dropzone-basic");
+            if (files.length > 0) {
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var reader = new FileReader();
+
+                    reader.onload = (function(file) {
+                        return function(e) {
+                            $('#preview').append(
+                                '<div class="dz-preview dz-file-preview">' +
+                                '<div class="dz-details">' +
+                                '<div class="dz-thumbnail">' +
+                                '<img data-dz-thumbnail class="img-thumbnail m-2 align-items-center" src="' +
+                                e.target.result + '">' +
+                                '<div class="dz-success-mark"></div>' +
+                                '<div class="dz-error-mark"></div>' +
+                                '<div class="dz-error-message"><span data-dz-errormessage></span></div>' +
+                                '<div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="dz-filename" data-dz-name>' + file.name +
+                                '</div>' +
+                                '<div class="dz-size" data-dz-size>' + file.size +
+                                ' bytes</div>' +
+                                '</div>' +
+                                '</div>');
+                        };
+                    })(file);
+
+                    reader.readAsDataURL(file);
+                }
             }
         });
     });
 </script>
-
-@include('./layouts/web.footer')

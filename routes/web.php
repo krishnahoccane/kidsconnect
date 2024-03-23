@@ -6,6 +6,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\web\urlRestrictionController;
 use App\Http\Controllers\adminuserRegistrationController;
 use App\Http\Controllers\web\subscriberUserProfileConstroller;
+// use App\Http\Controllers\Api\bannerController;
 
 
 
@@ -71,6 +72,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('allPages/{id}/edit', [AllPageController::class, 'update']);
     Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
 
+    // Banner Upload
+    // Route::get('allBanners', [bannerController::class, 'index']);
+    // Route::post('allBanners', [bannerController::class, 'store']);
+    // Route::get('allBanners/{id}', [bannerController::class, 'show']);
+    // Route::delete('allBanners/{id}', [bannerController::class, 'destroy']);
 });
 
 

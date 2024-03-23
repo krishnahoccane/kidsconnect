@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Banner extends Model
 {
     use HasFactory;
-    protected $table = "Banner";
+    protected $table = "banner";
 
     protected $fillable = [
-        'name',
+        'image',
+        'created_at',
     ];
 }

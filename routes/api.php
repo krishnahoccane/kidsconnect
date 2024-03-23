@@ -1,23 +1,23 @@
 <?php
 
-use App\Http\Controllers\Api\adminController;
-use App\Http\Controllers\Api\Authcontroller;
-use App\Http\Controllers\Api\defalutStatusController;
-use App\Http\Controllers\API\SubsCirclesController;
-use App\Http\Controllers\Api\subscriberLoginController;
-use App\Http\Controllers\Api\subscriberMailOtpVerification;
-use App\Http\Controllers\Api\subscribersKidsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Authcontroller;
+use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\rolesController;
-use App\Http\Controllers\Api\subscriberController;
+use App\Http\Controllers\API\bannerController;
 use App\Http\Controllers\Api\AllPageController;
-use App\Http\Controllers\Api\SubsCirclesMemberController;
-use App\Http\Controllers\Api\SubsChildPermissionsController;
-use App\Http\Controllers\Api\RequestSentController;
 use App\Http\Controllers\Api\RequestController;
+use App\Http\Controllers\Api\subscriberController;
 use App\Http\Controllers\Api\RequestChatController;
-use App\Http\Controllers\Api\BannerController;
+use App\Http\Controllers\Api\RequestSentController;
+use App\Http\Controllers\API\SubsCirclesController;
+use App\Http\Controllers\Api\defalutStatusController;
+use App\Http\Controllers\Api\subscriberLoginController;
+use App\Http\Controllers\Api\subscribersKidsController;
+use App\Http\Controllers\Api\SubsCirclesMemberController;
+use App\Http\Controllers\Api\subscriberMailOtpVerification;
+use App\Http\Controllers\Api\SubsChildPermissionsController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -30,21 +30,17 @@ Route::post('roles', [rolesController::class, 'create']);
 Route::put('roles/{id}/edit', [rolesController::class, 'update']);
 Route::delete('roles/{id}', [rolesController::class, 'delete']);
 
-// For Banner
-Route::post('banners', [BannerController::class, 'store']);
-
 // FOr Subscribers
 Route::get('subscriber', [subscriberController::class, 'index']);
 Route::post('subscriber', [subscriberController::class, 'create']);
 
 Route::middleware('auth:api')->group(function () {
-    // Subscribers Logins ( Create, View, Update, Delete)
-    Route::get('/subscriberlogins', [SubscriberLoginController::class, 'index']);
+    Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
 });
 Route::post('login', [Authcontroller::class, 'login']);
 // Route::middleware('auth.api')->get('/subscriberlogins', [SubscriberLoginController::class, 'index']);
 
-Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
+// Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
 Route::get('subscriberloginsCreateAccount', [subscriberLoginController::class, 'showcreateAccounts']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
@@ -101,7 +97,11 @@ Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
 Route::post('otpVerification', [subscriberMailOtpVerification::class, 'getInfoFromApp']);
 Route::post('forgotPassword', [SubscriberMailOtpVerification::class, 'forgotpassword']);
 
-
+// Banner Upload
+Route::get('allBanners', [bannerController::class, 'index']);
+Route::post('allBanners', [bannerController::class, 'store']);
+Route::get('allBanners/{id}', [bannerController::class, 'show']);
+Route::delete('allBanners/{id}', [bannerController::class, 'destroy']);
 
 
 

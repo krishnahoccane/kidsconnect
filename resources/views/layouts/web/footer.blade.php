@@ -42,8 +42,8 @@
 <!-- Core JS -->
 
 {{-- multiple file upload --}}
-<script src="{{ asset('ui/assets/js/forms-file-upload.js') }}"></script>
-{{-- <script src="{{ asset('ui/assets/vendor/libs/dropzone/dropzone.js') }}"></script> --}}
+
+<script src="{{ asset('ui/assets/vendor/libs/dropzone/dropzone.js') }}"></script>
 
 
 
@@ -101,7 +101,7 @@
 <script src="{{ asset('ui/assets/js/myjs/apiGet.js') }}"></script>
 <script src="{{ asset('ui/assets/js/pages-profile.js') }}"></script>
 <script src="{{ asset('ui/assets/js/pages-account-settings-account.js') }}"></script>
-
+<script src="{{ asset('ui/assets/js/forms-file-upload.js') }}"></script>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
