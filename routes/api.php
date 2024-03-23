@@ -70,7 +70,11 @@ Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
 Route::post('requestsent', [RequestSentController::class, 'index']);
 
 // For Request
-Route::post('request', [RequestController::class, 'index']);
+Route::get('request', [RequestController::class, 'index']);
+Route::post('/requests', [RequestController::class, 'create']);
+Route::get('/requests/{id}', [RequestController::class,'show']);
+Route::put('/requests/{id}', [RequestController::class,'update']);
+
 
 // For Request Chat
 Route::post('requestchat', [RequestChatController::class, 'index']);
@@ -95,6 +99,7 @@ Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
 
 // Mail Verification
 Route::post('otpVerification', [subscriberMailOtpVerification::class, 'getInfoFromApp']);
+Route::post('forgotPassword', [SubscriberMailOtpVerification::class, 'forgotpassword']);
 
 
 
