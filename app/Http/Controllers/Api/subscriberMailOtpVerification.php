@@ -26,7 +26,7 @@ class SubscriberMailOtpVerification extends Controller
         // Checking the conditions if it matched says-- "Account exist"
         // Else OTP will sent
         if ($subLoginEmailMatch) {
-            return response()->json(['status' => 400, 'message' => 'Account Already Existing'], 400);
+            return response()->json(['status' => 400, 'message' => 'Your Email Already Exist'], 400);
         } else {
             $email = $request->input('email');
             $otp = $request->input('otp');

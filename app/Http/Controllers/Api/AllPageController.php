@@ -38,19 +38,7 @@ class AllPageController extends Controller
      */
     public function store(Request $request)
     {
-        // $validator=validator::make($request->all(),[
-        //     'Pagetitle'=>'required',
-        //     'Pagecontent'=>'required'
-        // ]);
-        
-    //   if ($validator->fails()) {
-    //         return response()->json([
-    //             'status' => 403,
-    //             'message' => 'Validation error occurred',
-    //             'errors' => $validator->errors()->all()
-    //         ], 403);
-    //     } 
-          
+      
             $pages = pages::firstOrCreate([
                 
                 'Pagetitle' => $request->Pagetitle,

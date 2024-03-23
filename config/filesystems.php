@@ -56,6 +56,13 @@ return [
             'throw' => false,
         ],
 
+        // 'public_uploads' => [
+        //     'driver' => 'local',
+        //     'root' => public_path('uploads/banners'),
+        //     'url' => env('APP_URL').'/uploads/banners',
+        //     'visibility' => 'public',
+        // ],
+
     ],
 
     /*
