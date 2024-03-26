@@ -208,65 +208,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card-body">
-                                            <ul id="familyMembers" class="list-unstyled mb-0">
-
-                                                {{-- <li class="mb-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="avatar me-2">
-                                                                <img src="{{ asset('ui/assets/img/avatars/2.png') }}"
-                                                                    alt="Avatar" class="rounded-circle" />
-                                                            </div>
-                                                            <div class="me-2 ms-1">
-                                                                <h6 class="mb-0">Madission Arora</h6>
-                                                                <small class="text-muted">7 Members</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-auto">
-                                                            <a href="javascript:;"><span
-                                                                    class="badge bg-label-info">Spouse</span></a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="mb-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="avatar me-2">
-                                                                <img src="{{ asset('ui/assets/img/avatars/1.png') }}"
-                                                                    alt="Avatar" class="rounded-circle" />
-                                                            </div>
-                                                            <div class="me-2 ms-1">
-                                                                <h6 class="mb-0">Jay Ronaldo</h6>
-                                                                <small class="text-muted">Boy</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-auto">
-                                                            <a href="javascript:;"><span
-                                                                    class="badge bg-label-danger">Kid</span></a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="mb-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="avatar me-2">
-                                                                <img src="{{ asset('ui/assets/img/avatars/3.png') }}"
-                                                                    alt="Avatar" class="rounded-circle" />
-                                                            </div>
-                                                            <div class="me-2 ms-1">
-                                                                <h6 class="mb-0">Samnantha</h6>
-                                                                <small class="text-muted">Girl</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-auto">
-                                                            <a href="javascript:;"><span
-                                                                    class="badge bg-label-secondary">Kid</span></a>
-                                                        </div>
-                                                    </div>
-                                                </li> --}}
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
                                 <!--/ Teams -->
@@ -653,23 +594,23 @@
     });
 
     // @php $userId = 1; @endphp
-   // Function to generate role badge based on roleId
-function callRoles(roleId) {
-    if (roleId === 1) {
-        return '<span class="badge bg-label-danger">Father</span>';
-    } else if (roleId === 2) {
-        return '<span class="badge bg-label-success">Mother</span>';
-    } else {
-        return '<span class="badge bg-label-info">Others</span>';
+    // Function to generate role badge based on roleId
+    function callRoles(roleId) {
+        if (roleId === 1) {
+            return '<span class="badge bg-label-danger">Father</span>';
+        } else if (roleId === 2) {
+            return '<span class="badge bg-label-success">Mother</span>';
+        } else {
+            return '<span class="badge bg-label-info">Others</span>';
+        }
     }
-}
 
 
     // Fetch family members based on userId
     // var userId = "{{ $userId }}"; // Make sure $userId is properly assigned in your Blade template
     var url = window.location.href;
 
-// Split the URL by '/'
+    // Split the URL by '/'
     var parts = url.split('/');
 
     // Get the last part of the URL, which is the ID
@@ -715,5 +656,4 @@ function callRoles(roleId) {
             $('#familyMembers').append('<li>Error fetching family members.</li>');
         }
     });
-
 </script>

@@ -67,16 +67,13 @@
                     </table>
                     <script>
                         var baseUrl = "{{ config('app.url') }}/api/allBanners";
-                        // var url = "http://localhost:8000/api/allBanners";
 
                         $.ajax({
                             url: baseUrl,
                             method: "GET",
                             dataType: "json",
                             success: function(response) {
-                                // Check if the 'data' key exists in the response
                                 if (response.data) {
-                                    // Loop through the data and create table rows
                                     $.each(response.data, function(index, item) {
                                         const createdAtDate = new Date(item.created_at);
                                         const formattedDate = `${createdAtDate.getFullYear()}-${(
@@ -89,11 +86,18 @@
                                             .padStart(2, "0")}`;
                                         const bannerStatus = item.status;
                                         if (bannerStatus != 0) {
-                                            var status = "Active";
-                                            var buttonName = "Inactive";
+                                            var status = "Visible";
+                                            var buttonName = "Off Visibility";
+                                            var statusId = 0;
+                                            var buttonColor = "primary";
+                                            var buttonBadgeColor = "success";
                                         } else {
-                                            var status = "In Active";
-                                            var buttonName = "Active";
+                                            var status = "Not Visible";
+                                            var statusId = 1;
+                                            var buttonName = "On Visibility";
+                                            var buttonColor = "success";
+                                            var buttonBadgeColor = "primary";
+
                                         }
                                         // Combine the date and time components
                                         const formattedDateTime = `${formattedDate}`;
@@ -102,19 +106,17 @@
                                         <td>${index + 1}</td>
                                         <td><img src="{{ config('app.url') }}/${item.image}" class="img-fluid w-50 rounded" data-bs-toggle="modal" data-bs-target="#modals-transparent" id="bannerImage"/></td>
                                         <td>${formattedDateTime}</td>
-                                        <td>${status}</td>
+                                        <td data-sid="${statusId}"><span class="badge bg-label-${buttonBadgeColor}">${status}</span></a></td>
                                         <td>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="modalView" id="confirm-text">
+                                            <button type="button" class="btn btn-${buttonColor}" data-id="${item.id}"  id="statusChangeButton">
                                                 ${buttonName}
                                             </button>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#modalDelete">
+                                            <button type="button" class="btn btn-danger" data-did="${item.id}"  id="bannerDelete">
                                                 Delete
                                             </button>
                                         </td>   
                                     </tr>
                                     `;
-                                        // Append the row to the table body
                                         $("#datatable-body").append(row);
                                     });
                                 } else {
@@ -127,67 +129,129 @@
                                 console.error("Error fetching data from the API:", error);
                             },
                         });
-                        // B = document.querySelector("#confirm-text");
-                        // B.onclick = function() {
-                        //     Swal.fire({
-                        //         title: "Are you sure?",
-                        //         text: "You won't be able to revert this!",
-                        //         icon: "warning",
-                        //         showCancelButton: !0,
-                        //         confirmButtonText: "Yes, delete it!",
-                        //         customClass: {
-                        //             confirmButton: "btn btn-primary me-3 waves-effect waves-light",
-                        //             cancelButton: "btn btn-label-secondary waves-effect waves-light",
-                        //         },
-                        //         buttonsStyling: !1,
-                        //     }).then(function(t) {
-                        //         t.value &&
-                        //             Swal.fire({
-                        //                 icon: "success",
-                        //                 title: "Deleted!",
-                        //                 text: "Your file has been deleted.",
-                        //                 customClass: {
-                        //                     confirmButton: "btn btn-success waves-effect waves-light",
-                        //                 },
-                        //             });
-                        //     });
-                        // }
-                        $(document).on("click", "#confirm-text", function() {
-                            var bannerId = $(this).data('bannerImage');
-                            console.log(bannerId);
-                            // Show SweetAlert confirmation dialog
+                        $(document).on("click", "#statusChangeButton", function() {
+                            var itemId = $(this).data('id');
+                            var tE = $(this).closest('tr');
+                            var status = tE.find('td:nth-child(4)').data('sid');
+                            if (status != 0) {
+                                var titleName = "Now its visible";
+                            } else {
+                                var titleName = "Now its not visible";
+                            }
                             Swal.fire({
-                                title: "Confirmation",
-                                text: "Are you sure you want to activate this banner?",
+                                text: "would you like to make this banner visible on App?",
                                 icon: "warning",
                                 showCancelButton: true,
-                                confirmButtonColor: "#3085d6",
-                                cancelButtonColor: "#d33",
-                                confirmButtonText: "Yes, activate it!"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // Call API to activate the banner using the PUT method
+                                confirmButtonText: "Yes",
+                                customClass: {
+                                    confirmButton: "btn btn-primary me-2 waves-effect waves-light",
+                                    cancelButton: "btn btn-label-secondary waves-effect waves-light",
+                                },
+                                buttonsStyling: false,
+                            }).then(function(result) {
+                                if (result.value) {
                                     $.ajax({
-                                        url: "{{ url('http://localhost:8000/api/allBanners') }}/" + bannerId + "/edit",
-                                        method: "PUT",
+                                        url: baseUrl + "/" + itemId + "/edit",
+                                        method: 'PUT',
                                         data: {
-                                            // If you need to send any data along with the request, include it here
-                                        },
+                                            status: status
+                                        }, // Include the status in the data payload
                                         success: function(response) {
-                                            // Handle success response
-                                            console.log("Banner activated:", response);
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: titleName,
+                                                text: response.message,
+                                                customClass: {
+                                                    confirmButton: "btn btn-success waves-effect waves-light",
+                                                },
+                                            }).then(() => {
+                                                window.location.reload();
+                                            });
                                         },
                                         error: function(xhr, status, error) {
-                                            // Handle error response
-                                            console.error("Error activating banner:", error);
+                                            // If there's an error, show an error message
+                                            Swal.fire({
+                                                title: "Error",
+                                                text: "An error occurred while approving the account.",
+                                                icon: "error",
+                                                customClass: {
+                                                    confirmButton: "btn btn-success waves-effect waves-light",
+                                                },
+                                            });
                                         }
+                                    });
+
+                                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                    // If user cancels, show cancelled message
+                                    Swal.fire({
+                                        title: "Cancelled",
+                                        text: "Approve Cancelled!!",
+                                        icon: "error",
+                                        customClass: {
+                                            confirmButton: "btn btn-success waves-effect waves-light",
+                                        },
                                     });
                                 }
                             });
                         });
 
+                        $(document).on("click", "#bannerDelete", function() {
+                            var bannerIdForDelete = $(this).data('did');
 
 
+                            Swal.fire({
+                                text: "Would like to delete this banner?",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Yes",
+                                customClass: {
+                                    confirmButton: "btn btn-primary me-2 waves-effect waves-light",
+                                    cancelButton: "btn btn-label-secondary waves-effect waves-light",
+                                },
+                                buttonsStyling: false,
+                            }).then(function(result) {
+                                if (result.value) {
+                                    $.ajax({
+                                        url: baseUrl + "/" + bannerIdForDelete,
+                                        method: 'DELETE',
+                                        success: function(response) {
+                                            Swal.fire({
+                                                icon: "success",
+                                                title: "DELETE",
+                                                text: response.message,
+                                                customClass: {
+                                                    confirmButton: "btn btn-success waves-effect waves-light",
+                                                },
+                                            }).then(() => {
+                                                window.location.reload();
+                                            });
+                                        },
+                                        error: function(xhr, status, error) {
+                                            // If there's an error, show an error message
+                                            Swal.fire({
+                                                title: "Error",
+                                                text: "An error occurred while approving the account.",
+                                                icon: "error",
+                                                customClass: {
+                                                    confirmButton: "btn btn-success waves-effect waves-light",
+                                                },
+                                            });
+                                        }
+                                    });
+
+                                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                    // If user cancels, show cancelled message
+                                    Swal.fire({
+                                        title: "Cancelled",
+                                        text: "Approve Cancelled!!",
+                                        icon: "error",
+                                        customClass: {
+                                            confirmButton: "btn btn-success waves-effect waves-light",
+                                        },
+                                    });
+                                }
+                            });
+                        });
                         $(document).on("click", "#bannerImage", function() {
                             var imageSrc = $(this).attr('src');
 
@@ -196,7 +260,7 @@
 
                         });
                     </script>
-                    <!-- slider modal -->
+                    <!-- Image modal -->
                     <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content text-center">
@@ -208,8 +272,7 @@
                                     <div class="carousel-item active">
                                         <div class="onboarding-media">
                                             <div class="mx-2">
-                                                <img src="" alt=""
-                                                    class="img-fluid w-100">
+                                                <img src="" alt="" class="img-fluid w-100">
                                             </div>
                                         </div>
                                     </div>

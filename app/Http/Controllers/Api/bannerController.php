@@ -112,13 +112,15 @@ class bannerController extends Controller
                 'message' => "Requested Id Data NotFound"
             ], 403);
         }
-        foreach ($banner->image as $image) {
-            Storage::delete($image);
+
+        if ($banner->delete()) {
+            return response()->json(['message' => 'Banner deleted successfully'], 200);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => "Failed to delete banner"
+            ], 500);
         }
-
-        $banner->delete();
-
-        return response()->json(['message' => 'Banner deleted successfully'], 200);
 
     }
 

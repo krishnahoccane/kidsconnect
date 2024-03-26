@@ -54,6 +54,8 @@
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/animate-css/animate.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/spinkit/spinkit.css') }}" />
+
     {{-- <link rel="stylesheet" href="{{ asset('ui/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}"> --}}
     <link rel="stylesheet"
         href="{{ asset('ui/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
