@@ -104,7 +104,7 @@
                                         <td>${formattedDateTime}</td>
                                         <td>${status}</td>
                                         <td>
-                                            <button type="button" class="btn btn-primary" id="confirm-text">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="modalView" id="confirm-text">
                                                 ${buttonName}
                                             </button>
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
@@ -127,35 +127,73 @@
                                 console.error("Error fetching data from the API:", error);
                             },
                         });
-                        B = document.querySelector("#confirm-text");
-                        B.onclick = function() {
+                        // B = document.querySelector("#confirm-text");
+                        // B.onclick = function() {
+                        //     Swal.fire({
+                        //         title: "Are you sure?",
+                        //         text: "You won't be able to revert this!",
+                        //         icon: "warning",
+                        //         showCancelButton: !0,
+                        //         confirmButtonText: "Yes, delete it!",
+                        //         customClass: {
+                        //             confirmButton: "btn btn-primary me-3 waves-effect waves-light",
+                        //             cancelButton: "btn btn-label-secondary waves-effect waves-light",
+                        //         },
+                        //         buttonsStyling: !1,
+                        //     }).then(function(t) {
+                        //         t.value &&
+                        //             Swal.fire({
+                        //                 icon: "success",
+                        //                 title: "Deleted!",
+                        //                 text: "Your file has been deleted.",
+                        //                 customClass: {
+                        //                     confirmButton: "btn btn-success waves-effect waves-light",
+                        //                 },
+                        //             });
+                        //     });
+                        // }
+                        $(document).on("click", "#confirm-text", function() {
+                            var bannerId = $(this).data('bannerImage');
+                            console.log(bannerId);
+                            // Show SweetAlert confirmation dialog
                             Swal.fire({
-                                title: "Are you sure?",
-                                text: "You won't be able to revert this!",
+                                title: "Confirmation",
+                                text: "Are you sure you want to activate this banner?",
                                 icon: "warning",
-                                showCancelButton: !0,
-                                confirmButtonText: "Yes, delete it!",
-                                customClass: {
-                                    confirmButton: "btn btn-primary me-3 waves-effect waves-light",
-                                    cancelButton: "btn btn-label-secondary waves-effect waves-light",
-                                },
-                                buttonsStyling: !1,
-                            }).then(function(t) {
-                                t.value &&
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: "Deleted!",
-                                        text: "Your file has been deleted.",
-                                        customClass: {
-                                            confirmButton: "btn btn-success waves-effect waves-light",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, activate it!"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Call API to activate the banner using the PUT method
+                                    $.ajax({
+                                        url: "{{ url('http://localhost:8000/api/allBanners') }}/" + bannerId + "/edit",
+                                        method: "PUT",
+                                        data: {
+                                            // If you need to send any data along with the request, include it here
                                         },
+                                        success: function(response) {
+                                            // Handle success response
+                                            console.log("Banner activated:", response);
+                                        },
+                                        error: function(xhr, status, error) {
+                                            // Handle error response
+                                            console.error("Error activating banner:", error);
+                                        }
                                     });
+                                }
                             });
-                        }
+                        });
+
+
+
                         $(document).on("click", "#bannerImage", function() {
                             var imageSrc = $(this).attr('src');
 
                             $('#modals-transparent').find('.carousel-item.active img').attr('src', imageSrc);
+                            $('#modals-transparent').modal('show');
+
                         });
                     </script>
                     <!-- slider modal -->
@@ -170,7 +208,7 @@
                                     <div class="carousel-item active">
                                         <div class="onboarding-media">
                                             <div class="mx-2">
-                                                <img src="" alt="girl-with-laptop-light"
+                                                <img src="" alt=""
                                                     class="img-fluid w-100">
                                             </div>
                                         </div>
@@ -189,5 +227,9 @@
     <!-- /Full Editor -->
 
 </div>
+
+
+
+
 
 @include('./layouts/web.footer')
