@@ -68,8 +68,8 @@ Route::post('requestsent', [RequestSentController::class, 'index']);
 // For Request
 Route::get('request', [RequestController::class, 'index']);
 Route::post('/requests', [RequestController::class, 'create']);
-Route::get('/requests/{id}', [RequestController::class,'show']);
-Route::put('/requests/{id}', [RequestController::class,'update']);
+Route::get('/requests/{id}', [RequestController::class, 'show']);
+Route::put('/requests/{id}', [RequestController::class, 'update']);
 
 
 // For Request Chat
@@ -101,7 +101,9 @@ Route::post('forgotPassword', [SubscriberMailOtpVerification::class, 'forgotpass
 Route::get('allBanners', [bannerController::class, 'index']);
 Route::post('allBanners', [bannerController::class, 'store']);
 Route::get('allBanners/{id}', [bannerController::class, 'show']);
+Route::put('allBanners/{id}/edit', [bannerController::class, 'update']);
 Route::delete('allBanners/{id}', [bannerController::class, 'destroy']);
+Route::delete('allBanners', [bannerController::class, 'destroyall']);
 
 
 

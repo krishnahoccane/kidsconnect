@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Void_;
+use Storage;
 
 class bannerController extends Controller
 {
@@ -54,14 +56,88 @@ class bannerController extends Controller
         }
     }
 
-    public function show()
+    public function show(string $id)
     {
+        $banner = Banner::find($id);
+
+        if ($banner) {
+            return response()->json([
+                'status' => 200,
+                'data' => $banner
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 403,
+                'message' => "Requested Id Data NotFound"
+            ], 403);
+        }
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $banner = Banner::find($id);
+
+
+        if ($banner) {
+
+            $banner->update([
+                'status' => $request->status
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Banner Status is Updated successfully',
+                'data' => $banner
+            ], 200);
+
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No data found'
+            ], 404);
+        }
 
     }
 
-    public function destroy()
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $banner = Banner::find($id);
+
+        if (!$banner) {
+            return response()->json([
+                'status' => 403,
+                'message' => "Requested Id Data NotFound"
+            ], 403);
+        }
+        foreach ($banner->image as $image) {
+            Storage::delete($image);
+        }
+
+        $banner->delete();
+
+        return response()->json(['message' => 'Banner deleted successfully'], 200);
+
+    }
+
+    public function destroyall()
     {
 
+        try {
+            Banner::truncate();
+
+            return response()->json([
+                'status' => 200,
+                'message' => "All Banners deleted successfully"
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => "An error occurred while deleting banners: " . $e->getMessage()
+            ], 500);
+        }
     }
 
 

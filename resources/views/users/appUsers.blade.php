@@ -74,8 +74,10 @@
                     const statusName = callingStatus(profileStatus);
 
                     // Format the date components
-                    const formattedDateOfCreation = `${createdAtDate.getFullYear()}-${(createdAtDate.getMonth() + 1).toString().padStart(2, "0")}-${createdAtDate.getDate().toString().padStart(2, "0")}`;
-                    const formattedDateOfApprove = `${approvedAtDate.getFullYear()}-${(approvedAtDate.getMonth() + 1).toString().padStart(2, "0")}-${approvedAtDate.getDate().toString().padStart(2, "0")}`;
+                    const formattedDateOfCreation =
+                        `${createdAtDate.getFullYear()}-${(createdAtDate.getMonth() + 1).toString().padStart(2, "0")}-${createdAtDate.getDate().toString().padStart(2, "0")}`;
+                    const formattedDateOfApprove =
+                        `${approvedAtDate.getFullYear()}-${(approvedAtDate.getMonth() + 1).toString().padStart(2, "0")}-${approvedAtDate.getDate().toString().padStart(2, "0")}`;
 
                     const row = `
                     <tr>
@@ -106,4 +108,3 @@
 </script>
 
 @include('./layouts/web.footer')
-
