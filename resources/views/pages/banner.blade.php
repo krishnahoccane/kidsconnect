@@ -29,20 +29,9 @@
             </form>
             <div id="preview"></div>
         </div>
-    </div>
+    </div>      
 </div>
 <!-- Multi  -->
-
-
-
-
-
-
-
-
-
-
-
 <div class="row mt-3">
 
     <!-- Full Editor -->

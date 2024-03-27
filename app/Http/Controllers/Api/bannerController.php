@@ -12,7 +12,7 @@ class bannerController extends Controller
 {
     public function index()
     {
-        $banners = Banner::all();
+        $banners = Banner::where('status', '1')->get();
 
         if ($banners->count() > 0) {
             return response()->json([
@@ -25,6 +25,8 @@ class bannerController extends Controller
                 'message' => 'No Data Is Found'
             ], 404);
         }
+
+        
     }
 
     public function store(Request $request)
