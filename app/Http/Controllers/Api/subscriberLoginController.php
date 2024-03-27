@@ -149,7 +149,12 @@ class subscriberLoginController extends Controller
 
         // Find the subscriberLogin data based on the subscriber's ID - here we are comparing the MainsubscriberID
         $subscriberLoginData = subscriberlogins::where('MainSubscriberId', $subscriber->id)->first();
+        $profileImagePath = $request->ProfileImage;
+        $extension = $profileImagePath->getClientOriginalExtension();
+        $fileName = time() . '_' . uniqid() . '.' . $extension;
 
+        $path = "uploads/profiles/";
+        $profileImagePath->move($path, $fileName);
         // Check if subscriber login data exists
         if ($subscriberLoginData) {
             // Create a new account
@@ -164,12 +169,14 @@ class subscriberLoginController extends Controller
                 'Password' => $request->Password,
                 'About' => $request->About,
                 'Address' => $request->Address,
-                'ProfileImage' => $request->ProfileImage,
+                'ProfileImage' =>  $path,
                 'SSNimage' => $request->SSNimage,
                 'Keywords' => $request->Keywords,
                 'LoginType' => $request->LoginType,
                 'RoleId' => $request->RoleId,
                 'MainSubscriberId' => $subscriber->id, // Use the ID of subscriber login data
+
+                
             ]);
 
             // Check if account was created successfully
@@ -246,6 +253,7 @@ class subscriberLoginController extends Controller
             'RoleId' => ['numeric'],
             'MainSubscriberId' => ['numeric']
         ]);
+
 
         if ($validate->fails()) {
 
