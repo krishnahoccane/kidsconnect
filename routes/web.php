@@ -35,9 +35,10 @@ Route::post('/forgotPassword', [ForgotPasswordController::class, 'sendResetLinkE
 Route::middleware(['auth'])->group(function () {
     // Authenticate routes
     //Admin access cotrollers
+    Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard'])->name('dashboard');
+
     Route::get('/password/change', [ForgotPasswordController::class, 'showChangeForm'])->name('password.change');
     Route::post('/password/update', [ForgotPasswordController::class, 'updatePassword'])->name('password.update');
-    Route::get('/dashboard', [adminuserRegistrationController::class, 'dashboard'])->name('dashboard');
     Route::get('/adminProfile', [urlRestrictionController::class, 'adminProfile'])->name('adminProfile');
     Route::get('/adminUsers', [urlRestrictionController::class, 'adminUsers'])->name('adminUsers');
 
