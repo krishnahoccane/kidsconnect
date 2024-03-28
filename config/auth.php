@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'registration',
+        'passwords' => 'registration',
     ],
 
     /*
@@ -48,6 +48,14 @@ return [
             'driver' => 'passport',
             'provider' => 'appUsers',
         ],
+        'subscriber_logins' => [
+            'driver' => 'session',
+            'provider' => 'subscriber_logins',
+        ],
+        'registration' => [
+            'driver' => 'session',
+            'provider' => 'registration',
+        ],
     ],
 
     /*
@@ -70,9 +78,16 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+        'subscriber_logins' => [
+            'driver' => 'eloquent',
             'model' => App\Models\subscriberlogins::class,
         ],
-
+        'registration' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\registration::class,
+        ],
         'appUsers' => [
             'driver' => 'eloquent',
             'model' => App\Models\subscriberlogins::class,

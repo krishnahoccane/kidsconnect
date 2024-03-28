@@ -91,7 +91,6 @@
 <script>
     // $(document).ready(function() {
         // Initialize DataTable
-        
         $.ajax({
             url: `http://localhost:8000/api/subscriberlogins/`,
             method: "GET",

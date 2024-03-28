@@ -701,10 +701,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    @auth
-                                                        <span class="fw-medium d-block">{{ session('username') }}</span>
-                                                        <small class="text-muted">Admin</small>
-                                                    @endauth
+                                                    @auth('registration')
+                                                    <span class="fw-medium d-block">{{ session('username') }}</span>
+                                                    <small class="text-muted">Admin</small>
+                                                @endauth
                                                 </div>
                                             </div>
                                         </a>

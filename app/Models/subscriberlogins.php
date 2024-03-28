@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Notifications\Notifiable;
+
 // use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Illuminate\Database\Eloquent\Model;
@@ -10,9 +12,11 @@ use Illuminate\Foundation\Auth\User as AuthenticatableUser;
 
 class subscriberlogins extends AuthenticatableUser
 {
-    use HasFactory, HasApiTokens;
+    use HasFactory, HasApiTokens, Notifiable;
 
-    protected $table = "subscriber_logins";
+    protected $guard = 'subscriber_logins';
+
+    protected $table = 'subscriber_logins';
     protected $primaryKey = "id";
 
     protected $fillable = [

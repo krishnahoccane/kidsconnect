@@ -34,9 +34,10 @@ Route::delete('roles/{id}', [rolesController::class, 'delete']);
 Route::get('subscriber', [subscriberController::class, 'index']);
 Route::post('subscriber', [subscriberController::class, 'create']);
 
-Route::middleware('auth:api')->group(function () {
-    Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
-});
+// Route::middleware('auth:api')->group(function () {
+//     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
+// });
+Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
 Route::post('login', [Authcontroller::class, 'login']);
 // Route::middleware('auth.api')->get('/subscriberlogins', [SubscriberLoginController::class, 'index']);
 

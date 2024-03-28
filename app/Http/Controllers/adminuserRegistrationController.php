@@ -5,15 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\Registration;
+use App\Models\registration;
 use Illuminate\Support\Facades\Hash; // Import the Hash facade
 use App\Exports\RegistrationsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
+
 
 
 class adminuserRegistrationController extends Controller
 {
     //
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     public function index()
     {
         return view('security/registration');
@@ -52,26 +58,47 @@ class adminuserRegistrationController extends Controller
 
     public function authenticate(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            session([
-                'username' => $user->username,
-                'email' => $user->email,
-                'userid' => $user->id
-            ]); // Store sessions variable with the data
-            return redirect()->intended('dashboard'); // Redirect to the intended URL after successful authentication
+        try {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
+    
+           echo $email = $request->input('email');
+           echo $password = $request->input('password');
+    
+            // Log the entered email and password
+            Log::info('Email entered: ' . $email);
+            Log::info('Password entered: ' . $password);
+    
+            if (Auth::guard('registration')->attempt($request->only('email', 'password'))) {
+                // Authentication succeeded
+                $user = Auth::guard('registration')->user();
+                // Log successful authentication
+                Log::info('User authenticated successfully: ' . $user->email);
+                // Store session variables with the data
+                session([
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'userid' => $user->id
+                ]);
+                return redirect()->route('dashboard');
+                // echo "welcome";
+            } else {
+                // Authentication failed
+                return redirect()->back()->withErrors(['email' => 'Invalid email or password']);
+                // echo "not welcome";
+            }
+            
+        } catch (\Exception $e) {
+            // Log authentication error
+            Log::error('Authentication error: ' . $e->getMessage());
+            // Redirect back with error message
+            return redirect()->back()->withErrors(['email' => 'An error occurred during authentication. Please try again later.']);
         }
-
-        // Authentication failed...
-        return redirect()->back()->withErrors(['email' => 'Invalid email or password']);
     }
+    
+
 
     public function dashboard()
     {
@@ -80,7 +107,7 @@ class adminuserRegistrationController extends Controller
     }
     public function export()
     {
-        return Excel::download(new RegistrationsExport(), 'registrations.xlsx');
+        return Excel::download(new RegistrationsExport(), 'registration.xlsx');
     }
 
     // Logout users
