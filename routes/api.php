@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AuthenticateApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Authcontroller;
@@ -37,7 +38,11 @@ Route::post('subscriber', [subscriberController::class, 'create']);
 // Route::middleware('auth:api')->group(function () {
 //     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
 // });
-Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
+
+Route::middleware([AuthenticateApi::class])->group(function () {
+    Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
+});
+
 Route::post('login', [Authcontroller::class, 'login']);
 // Route::middleware('auth.api')->get('/subscriberlogins', [SubscriberLoginController::class, 'index']);
 
