@@ -391,7 +391,6 @@ class subscriberLoginController extends Controller
             'MainSubscriberId' => ['numeric']
         ]);
 
-
         if ($validate->fails()) {
 
             return response()->json([

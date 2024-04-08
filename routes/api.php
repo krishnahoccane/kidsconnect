@@ -1,17 +1,22 @@
 <?php
 
+use App\Http\Middleware\AuthenticateApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Authcontroller;
 use App\Http\Controllers\Api\adminController;
+<<<<<<< HEAD
 use App\Http\Controllers\Api\rolesController;   
+=======
+use App\Http\Controllers\Api\rolesController;
+>>>>>>> 73fb1aa898b9cc7bfcdf3b1a344c061330a154f7
 use App\Http\Controllers\Api\bannerController;
 use App\Http\Controllers\Api\AllPageController;
 use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\subscriberController;
 use App\Http\Controllers\Api\RequestChatController;
 use App\Http\Controllers\Api\RequestSentController;
-use App\Http\Controllers\API\SubsCirclesController;
+use App\Http\Controllers\Api\SubsCirclesController;
 use App\Http\Controllers\Api\defalutStatusController;
 use App\Http\Controllers\Api\subscriberLoginController;
 use App\Http\Controllers\Api\subscribersKidsController;
@@ -37,7 +42,11 @@ Route::post('subscriber', [subscriberController::class, 'create']);
 // Route::middleware('auth:api')->group(function () {
 //     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
 // });
-Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
+
+Route::middleware([AuthenticateApi::class])->group(function () {
+    Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
+});
+
 Route::post('login', [Authcontroller::class, 'login']);
 // Route::middleware('auth.api')->get('/subscriberlogins', [SubscriberLoginController::class, 'index']);
 
