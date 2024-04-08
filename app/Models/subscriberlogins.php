@@ -14,7 +14,7 @@ class subscriberlogins extends AuthenticatableUser
 {
     use HasFactory, HasApiTokens, Notifiable;
 
-    protected $guard = 'subscriberlogins';
+    protected $guard = 'subscriber_logins';
 
     protected $table = 'subscriber_logins';
     protected $primaryKey = "id";
