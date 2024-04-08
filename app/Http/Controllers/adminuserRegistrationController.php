@@ -64,13 +64,6 @@ class adminuserRegistrationController extends Controller
                 'password' => 'required',
             ]);
     
-           echo $email = $request->input('email');
-           echo $password = $request->input('password');
-    
-            // Log the entered email and password
-            Log::info('Email entered: ' . $email);
-            Log::info('Password entered: ' . $password);
-    
             if (Auth::guard('registration')->attempt($request->only('email', 'password'))) {
                 // Authentication succeeded
                 $user = Auth::guard('registration')->user();
@@ -83,11 +76,9 @@ class adminuserRegistrationController extends Controller
                     'userid' => $user->id
                 ]);
                 return redirect()->route('dashboard');
-                // echo "welcome";
             } else {
                 // Authentication failed
                 return redirect()->back()->withErrors(['email' => 'Invalid email or password']);
-                // echo "not welcome";
             }
             
         } catch (\Exception $e) {

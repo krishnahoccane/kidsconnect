@@ -13,9 +13,14 @@ return [
     |
     */
 
+    // 'defaults' => [
+    //     'guard' => 'registration',
+    //     'passwords' => 'registration',
+    // ],
+    
     'defaults' => [
-        'guard' => 'registration',
-        'passwords' => 'registration',
+        'guard' => 'web',
+        'passwords' => 'users',
     ],
 
     /*
@@ -48,14 +53,14 @@ return [
             'driver' => 'passport',
             'provider' => 'appUsers',
         ],
-        'subscriber_logins' => [
-            'driver' => 'session',
-            'provider' => 'subscriber_logins',
-        ],
-        'registration' => [
-            'driver' => 'session',
-            'provider' => 'registration',
-        ],
+        // 'subscriber_logins' => [
+        //     'driver' => 'session',
+        //     'provider' => 'subscriber_logins', // Use the correct provider name
+        // ],
+        // 'registration' => [
+        //     'driver' => 'session',
+        //     'provider' => 'registration',
+        // ],
     ],
 
     /*
@@ -78,16 +83,16 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-        'subscriber_logins' => [
-            'driver' => 'eloquent',
             'model' => App\Models\subscriberlogins::class,
         ],
-        'registration' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\registration::class,
-        ],
+        // 'subscriber_logins' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\subscriberlogins::class,
+        // ],
+        // 'registration' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\registration::class,
+        // ],
         'appUsers' => [
             'driver' => 'eloquent',
             'model' => App\Models\subscriberlogins::class,

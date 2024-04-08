@@ -208,6 +208,66 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="card-body">
+                                            <ul id="familyMembers" class="list-unstyled mb-0">
+
+                                                {{-- <li class="mb-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="d-flex align-items-start">
+                                                            <div class="avatar me-2">
+                                                                <img src="{{ asset('ui/assets/img/avatars/2.png') }}"
+                                                                    alt="Avatar" class="rounded-circle" />
+                                                            </div>
+                                                            <div class="me-2 ms-1">
+                                                                <h6 class="mb-0">Madission Arora</h6>
+                                                                <small class="text-muted">7 Members</small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ms-auto">
+                                                            <a href="javascript:;"><span
+                                                                    class="badge bg-label-info">Spouse</span></a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="mb-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="d-flex align-items-start">
+                                                            <div class="avatar me-2">
+                                                                <img src="{{ asset('ui/assets/img/avatars/1.png') }}"
+                                                                    alt="Avatar" class="rounded-circle" />
+                                                            </div>
+                                                            <div class="me-2 ms-1">
+                                                                <h6 class="mb-0">Jay Ronaldo</h6>
+                                                                <small class="text-muted">Boy</small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ms-auto">
+                                                            <a href="javascript:;"><span
+                                                                    class="badge bg-label-danger">Kid</span></a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="mb-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="d-flex align-items-start">
+                                                            <div class="avatar me-2">
+                                                                <img src="{{ asset('ui/assets/img/avatars/3.png') }}"
+                                                                    alt="Avatar" class="rounded-circle" />
+                                                            </div>
+                                                            <div class="me-2 ms-1">
+                                                                <h6 class="mb-0">Samnantha</h6>
+                                                                <small class="text-muted">Girl</small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ms-auto">
+                                                            <a href="javascript:;"><span
+                                                                    class="badge bg-label-secondary">Kid</span></a>
+                                                        </div>
+                                                    </div>
+                                                </li> --}}
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                                 <!--/ Teams -->
@@ -600,6 +660,8 @@
             return '<span class="badge bg-label-danger">Father</span>';
         } else if (roleId === 2) {
             return '<span class="badge bg-label-success">Mother</span>';
+        }else if (roleId === 5) {
+            return '<span class="badge bg-label-info">Kid</span>';
         } else {
             return '<span class="badge bg-label-info">Others</span>';
         }
@@ -616,10 +678,11 @@
     // Get the last part of the URL, which is the ID
     var userId = parts[parts.length - 1];
     $.ajax({
-        url: `/api/subscriberlogins/${userId}/family-members`,
+        url: `/api/subscriberlogins/${userId}/familyMembers`,
         method: "GET",
         dataType: "json",
         success: function(response) {
+        console.log(response);
             // Check if data is available
             if (response.data && response.data.length > 0) {
                 // Iterate through family members and dynamically populate the list
@@ -630,7 +693,7 @@
                         <div class="d-flex align-items-center">
                             <div class="d-flex align-items-start">
                                 <div class="avatar me-2">
-                                    <img src="${member.ProfileImage}" alt="Avatar" class="rounded-circle" />
+                                    <img src="../${member.ProfileImage}" alt="Avatar" class="rounded-circle" />
                                 </div>
                                 <div class="me-2 ms-1">
                                     <a href="/userProfile/${member.id}"><h6 class="mb-0">${member.FirstName} ${member.LastName}</h6></a>
