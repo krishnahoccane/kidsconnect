@@ -48,9 +48,9 @@ return [
             'driver' => 'passport',
             'provider' => 'appUsers',
         ],
-        'subscriber_logins' => [
-            'driver' => 'session',
-            'provider' => 'subscriber_logins', // Use the correct provider name
+        'subscriber_api' => [
+            'driver' => 'passport', // Use the Passport driver for API authentication
+            'provider' => 'subscriber_logins', // Use the correct provider name for subscribers
         ],
         'registration' => [
             'driver' => 'session',
@@ -93,7 +93,7 @@ return [
             'model' => App\Models\subscriberlogins::class,
         ],
     ],
-    
+
 
     /*
     |--------------------------------------------------------------------------
