@@ -39,12 +39,13 @@ Route::post('subscriber', [subscriberController::class, 'create']);
 //     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
 // });
 
-Route::middleware([AuthenticateApi::class])->group(function () {
-    Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
-});
+// Route::middleware([AuthenticateApi::class])->group(function () {
+//     // Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
+// });
 
 Route::post('login', [Authcontroller::class, 'login']);
 // Route::middleware('auth.api')->get('/subscriberlogins', [SubscriberLoginController::class, 'index']);
+Route::middleware('auth:api')->get('/subscriberlogins', [SubscriberLoginController::class,'getUserData']);
 
 // Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);

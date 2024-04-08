@@ -35,7 +35,17 @@ class subscriberLoginController extends Controller
         }
     }
 
-
+    public function getUserData(Request $request)
+    {
+        // Access the authenticated user using Auth::user()
+        $user = Auth::user();
+        
+        // You can access all user attributes here
+        $userData = $user->toArray(); // Retrieve all attributes as an array
+        
+        // Return all user data as JSON
+        return response()->json($userData);
+    }
     public function create(Request $request)
     {
         $subscibers = subscribersModel::firstOrCreate([
