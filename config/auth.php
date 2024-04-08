@@ -50,7 +50,7 @@ return [
         ],
         'subscriber_logins' => [
             'driver' => 'session',
-            'provider' => 'subscriber_logins',
+            'provider' => 'subscriber_logins', // Use the correct provider name
         ],
         'registration' => [
             'driver' => 'session',
@@ -78,7 +78,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\subscriberlogins::class,
         ],
         'subscriber_logins' => [
             'driver' => 'eloquent',

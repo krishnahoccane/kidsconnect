@@ -12,6 +12,8 @@ use App\Models\subscribersKidModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 
 class subscriberLoginController extends Controller
 {
@@ -95,37 +97,75 @@ class subscriberLoginController extends Controller
         }
     }
 
+    // public function showcreateAccount($subscriberId)
+    // {
+    //     // Find the subscriber
+    //     $subscriber = subscribersModel::find($subscriberId);
+
+    //     // Check if the subscriber exists
+    //     if (!$subscriber) {
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => "Subscriber not found",
+    //         ], 404);
+    //     }
+
+    //     // Retrieve family members associated with the subscriber
+    //     $familyMembers = subscriberlogins::where('MainSubscriberId', $subscriber->id)
+    //         ->where('IsMain', 0) // Filter out records where IsMain is 0
+    //         ->get();
+
+    //     // Check if family members exist
+    //     if ($familyMembers->isEmpty()) {
+    //         return response()->json([
+    //             'status' => 403,
+    //             'message' => 'No family members found for the subscriber',
+    //         ], 403);
+    //     }
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'data' => $familyMembers,
+    //     ], 200);
+    // }
+
     public function showcreateAccount($subscriberId)
-    {
-        // Find the subscriber
-        $subscriber = subscribersModel::find($subscriberId);
+{
+    // Find the subscriber
+    $subscriber = subscribersModel::find($subscriberId);
 
-        // Check if the subscriber exists
-        if (!$subscriber) {
-            return response()->json([
-                'status' => 404,
-                'message' => "Subscriber not found",
-            ], 404);
-        }
-
-        // Retrieve family members associated with the subscriber
-        $familyMembers = subscriberlogins::where('MainSubscriberId', $subscriber->id)
-            ->where('IsMain', 0) // Filter out records where IsMain is 0
-            ->get();
-
-        // Check if family members exist
-        if ($familyMembers->isEmpty()) {
-            return response()->json([
-                'status' => 403,
-                'message' => 'No family members found for the subscriber',
-            ], 403);
-        }
-
+    // Check if the subscriber exists
+    if (!$subscriber) {
         return response()->json([
-            'status' => 200,
-            'data' => $familyMembers,
-        ], 200);
+            'status' => 404,
+            'message' => "Subscriber not found",
+        ], 404);
     }
+
+    // Execute the SQL query using raw expressions
+    $familyMembers = DB::select("
+        SELECT id, FirstName,LastName,RoleId,ProfileImage
+        FROM subscriber_logins
+        WHERE IsMain = 0 AND MainSubscriberId = $subscriberId
+        UNION
+        SELECT id, FirstName,LastName,RoleId,ProfileImage
+        FROM subscribers_kids
+        WHERE MainSubscriberId = $subscriberId
+    ");
+
+    // Check if family members exist
+    if (empty($familyMembers)) {
+        return response()->json([
+            'status' => 403,
+            'message' => 'No family members found for the subscriber',
+        ], 403);
+    }
+
+    return response()->json([
+        'status' => 200,
+        'data' => $familyMembers,
+    ], 200);
+}
 
 
     // public function createAccounts(Request $request, int $id)
@@ -416,6 +456,79 @@ class subscriberLoginController extends Controller
         return response()->json(['message' => 'Subscriber deleted successfully'], 200);
 
     }
+
+    public function updateAccount(Request $request, int $id)
+{
+    // Validate the request data
+    $validator = Validator::make($request->all(), [
+        'FirstName' => 'string',
+        'LastName' => 'string',
+        'Email' => ['email', Rule::unique('subscriberlogins')->ignore($id)],
+        'Dob' => 'date',
+        'Gender' => 'numeric',
+        'PhoneNumber' => 'numeric',
+        'SSN' => ['string', Rule::unique('subscriberlogins')->ignore($id)],
+        'Password' => 'string',
+        'About' => 'string',
+        'Address' => 'string',
+        'ProfileImage' => 'string',
+        'SSNimage' => 'string',
+        'Keywords' => 'string',
+        'LoginType' => 'numeric',
+        'IsMain' => 'numeric',
+        'RoleId' => 'numeric',
+        'MainSubscriberId' => 'numeric'
+    ]);
+
+    // Check if validation fails
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 422,
+            'message' => $validator->errors()
+        ], 422);
+    }
+
+    // Find the subscriber login account by ID
+    $subscriberLogin = subscriberlogins::find($id);
+
+    // Check if the subscriber login account exists
+    if (!$subscriberLogin) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Subscriber login account not found'
+        ], 404);
+    }
+
+    // Update the subscriber login account with the provided data
+    $subscriberLogin->update([
+        'FirstName' => $request->input('FirstName', $subscriberLogin->FirstName),
+        'LastName' => $request->input('LastName', $subscriberLogin->LastName),
+        'Email' => $request->input('Email', $subscriberLogin->Email),
+        'Dob' => $request->input('Dob', $subscriberLogin->Dob),
+        'Gender' => $request->input('Gender', $subscriberLogin->Gender),
+        'PhoneNumber' => $request->input('PhoneNumber', $subscriberLogin->PhoneNumber),
+        'SSN' => $request->input('SSN', $subscriberLogin->SSN),
+        'Password' => $request->input('Password', $subscriberLogin->Password),
+        'About' => $request->input('About', $subscriberLogin->About),
+        'Address' => $request->input('Address', $subscriberLogin->Address),
+        'ProfileImage' => $request->input('ProfileImage', $subscriberLogin->ProfileImage),
+        'SSNimage' => $request->input('SSNimage', $subscriberLogin->SSNimage),
+        'Keywords' => $request->input('Keywords', $subscriberLogin->Keywords),
+        'LoginType' => $request->input('LoginType', $subscriberLogin->LoginType),
+        'IsMain' => $request->input('IsMain', $subscriberLogin->IsMain),
+        'RoleId' => $request->input('RoleId', $subscriberLogin->RoleId),
+        'MainSubscriberId' => $request->input('MainSubscriberId', $subscriberLogin->MainSubscriberId),
+    ]);
+
+    // Return the response
+    return response()->json([
+        'status' => 200,
+        'message' => 'Subscriber login account updated successfully',
+        'data' => $subscriberLogin
+    ], 200);
+}
+
+    
 
 
 }
