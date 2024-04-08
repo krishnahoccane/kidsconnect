@@ -1,45 +1,43 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+use App\Models\subscriberlogins;
+use Illuminate\Validation\ValidationException;
 
-class Authcontroller extends Controller
+class AuthController extends Controller
 {
-    //
-
     public function login(Request $request)
     {
         $request->validate([
             'Email' => 'required|email',
             'password' => 'required|string'
         ]);
-    
-        // Attempt authentication using the 'subscriberlogin' guard
-        if (Auth::guard('subscriber_logins')->attempt($request->only('Email', 'password'))) {
-            $user = Auth::guard('subscriber_logins')->user(); // Retrieve the authenticated user from the 'subscriberlogin' guard
-    
-            // Create a token using Laravel Passport
-            $token = $user->createToken('kidsconnect')->accessToken;
-            $firstName = $user->FirstName;
-            $lastName = $user->LastName;
-            $email = $user->Email;
-    
-            return response()->json([
-                'token' => $token,
-                'username'=> $firstName . " " . $lastName,
-                'email'=> $email
-            ], 200);
-        } else {
+
+        $subscriber = subscriberlogins::where('Email', $request->input('Email'))->first();
+
+        if (!$subscriber || !password_verify($request->input('password'), $subscriber->password)) {
             // Log authentication failure
             Log::info('Authentication attempt failed for email: ' . $request->input('Email'));
-    
-            return response()->json(['error' => 'Unauthorized'], 401);
+
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
         }
+
+        // Generate token using Laravel Passport
+        $token = $subscriber->createToken('kidsconnect')->accessToken;
+        $username = $subscriber->FirstName . " " . $subscriber->LastName;
+        $email = $subscriber->Email;
+
+        return response()->json([
+            'token' => $token,
+            'username' => $username,
+            'email' => $email
+        ], 200);
     }
-
-    
-
 }

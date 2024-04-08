@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Authcontroller;
 use App\Http\Controllers\Api\adminController;
-use App\Http\Controllers\Api\rolesController;   
+use App\Http\Controllers\Api\rolesController;
 use App\Http\Controllers\Api\bannerController;
 use App\Http\Controllers\Api\AllPageController;
 use App\Http\Controllers\Api\RequestController;
@@ -44,8 +44,7 @@ Route::post('subscriber', [subscriberController::class, 'create']);
 // });
 
 Route::post('login', [Authcontroller::class, 'login']);
-// Route::middleware('auth.api')->get('/subscriberlogins', [SubscriberLoginController::class, 'index']);
-Route::middleware('auth:api')->get('/subscriberlogins', [SubscriberLoginController::class,'getUserData']);
+
 
 // Route::get('subscriberlogins', [subscriberLoginController::class, 'index']);
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
@@ -54,13 +53,11 @@ Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::cl
 Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
 Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
 Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
-Route::get('/subscriberlogins/{subscriberId}/familyMembers', [subscriberLoginController::class, 'showcreateAccount']);
+Route::get('/subscriberlogins/{subscriberId}/family-members', [subscriberLoginController::class, 'showcreateAccount']);
 
 // Subscribers Logins ( Create, View, Update, Delete)
 Route::get('subscribersKids', [subscribersKidsController::class, 'index']);
 Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
-Route::get('subscribersKids/{id}', [subscribersKidsController::class, 'show']); // Show a specific subscriber kid
-Route::put('subscribersKids/{id}', [subscribersKidsController::class, 'update']); // Update a subscribers kid
 
 // For Subs Circles
 Route::post('subcircles', [SubsCirclesController::class, 'index']);
@@ -75,7 +72,7 @@ Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
 Route::post('requestsent', [RequestSentController::class, 'index']);
 
 // For Request
-Route::get('requests', [RequestController::class, 'index']);
+Route::get('request', [RequestController::class, 'index']);
 Route::post('/requests', [RequestController::class, 'create']);
 Route::get('/requests/{id}', [RequestController::class, 'show']);
 Route::put('/requests/{id}', [RequestController::class, 'update']);

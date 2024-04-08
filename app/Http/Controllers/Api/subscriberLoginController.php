@@ -20,12 +20,14 @@ class subscriberLoginController extends Controller
     //
     public function index()
     {
-        // $authenticatedUser = Auth::user();
-        $subscriber = subscriberlogins::all();
-        if ($subscriber) {
+        
+        $user = Auth::guard('api')->user();
+
+        // print_r($user);
+        if ($user) {
             return response()->json([
                 'status' => 200,
-                'data' => $subscriber
+                'data' => $user
             ], 200);
         } else {
             return response()->json([
