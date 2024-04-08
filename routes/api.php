@@ -5,11 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Authcontroller;
 use App\Http\Controllers\Api\adminController;
-<<<<<<< HEAD
 use App\Http\Controllers\Api\rolesController;   
-=======
-use App\Http\Controllers\Api\rolesController;
->>>>>>> 73fb1aa898b9cc7bfcdf3b1a344c061330a154f7
 use App\Http\Controllers\Api\bannerController;
 use App\Http\Controllers\Api\AllPageController;
 use App\Http\Controllers\Api\RequestController;
