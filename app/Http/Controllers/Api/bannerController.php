@@ -12,21 +12,32 @@ class bannerController extends Controller
 {
     public function index()
     {
-        $banners = Banner::where('status', '1')->get();
+        try {
+            $banners = Banner::where('status', '1')->get();
 
-        if ($banners->count() > 0) {
+            if ($banners->count() > 0) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $banners
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'No data found'
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            // Log the exception for debugging
+            Log::error('Error fetching banners: ' . $e->getMessage());
+
+            // Return a generic error response
             return response()->json([
-                'status' => 200,
-                'data' => $banners
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No Data Is Found'
-            ], 404);
+                'status' => 500,
+                'message' => 'Internal Server Error'
+            ], 500);
         }
 
-        
+
     }
 
     public function store(Request $request)
