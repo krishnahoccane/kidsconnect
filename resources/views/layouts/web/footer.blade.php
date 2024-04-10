@@ -12,7 +12,7 @@
             </div>
             <div class="d-none d-lg-inline-block">
 
-                <p>Current Version: 1.1.5 - Working Version: 1.1.6</p>
+                <p>Current Version: 1.1.6 - Working Version: 1.1.7</p>
 
             </div>
         </div>
