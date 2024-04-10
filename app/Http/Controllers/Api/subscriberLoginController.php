@@ -314,7 +314,7 @@ class subscriberLoginController extends Controller
                 'message' => 'Kid Account not created'
             ], 403);
         }
-    } else if (in_array($request->RoleId, [2, 3, 4])) {
+    } else {
         // Create a new account in subscriberlogins table
         $subscriberloginNewAccount = subscriberlogins::create([
             'FirstName' => $request->FirstName,
@@ -348,12 +348,13 @@ class subscriberLoginController extends Controller
                 'message' => 'Subscriber Login Account not created'
             ], 403);
         }
-    } else {
-        return response()->json([
-            'status' => 403,
-            'message' => 'Invalid RoleId'
-        ], 403);
-    }
+    // } else {
+    //     return response()->json([
+    //         'status' => 403,
+    //         'message' => 'Invalid RoleId'
+    //     ], 403);
+    // }
+}
 }
 
 
