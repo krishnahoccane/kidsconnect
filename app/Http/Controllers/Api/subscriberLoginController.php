@@ -21,6 +21,7 @@ class subscriberLoginController extends Controller
     public function index()
     {
 
+
         $user = Auth::guard('api')->user();
         if ($user) {
             return response()->json([
@@ -35,7 +36,17 @@ class subscriberLoginController extends Controller
         }
     }
 
+    public function getUserData(Request $request)
+    {
+        // Access the authenticated user using Auth::user()
+        $user = Auth::user();
 
+        // You can access all user attributes here
+        $userData = $user->toArray(); // Retrieve all attributes as an array
+
+        // Return all user data as JSON
+        return response()->json($userData);
+    }
     public function create(Request $request)
     {
         $subscibers = subscribersModel::firstOrCreate([
@@ -102,6 +113,9 @@ class subscriberLoginController extends Controller
     {
         // Find the subscriber
         $subscriber = subscribersModel::find($subscriberId);
+    {
+        // Find the subscriber
+        $subscriber = subscribersModel::find($subscriberId);
 
         // Check if the subscriber exists
         if (!$subscriber) {
@@ -110,7 +124,16 @@ class subscriberLoginController extends Controller
                 'message' => "Subscriber not found",
             ], 404);
         }
+        // Check if the subscriber exists
+        if (!$subscriber) {
+            return response()->json([
+                'status' => 404,
+                'message' => "Subscriber not found",
+            ], 404);
+        }
 
+        // Execute the SQL query using raw expressions
+        $familyMembers = DB::select("
         // Execute the SQL query using raw expressions
         $familyMembers = DB::select("
         SELECT id, FirstName,LastName,RoleId,ProfileImage
@@ -129,7 +152,19 @@ class subscriberLoginController extends Controller
                 'message' => 'No family members found for the subscriber',
             ], 403);
         }
+        // Check if family members exist
+        if (empty($familyMembers)) {
+            return response()->json([
+                'status' => 403,
+                'message' => 'No family members found for the subscriber',
+            ], 403);
+        }
 
+        return response()->json([
+            'status' => 200,
+            'data' => $familyMembers,
+        ], 200);
+    }
         return response()->json([
             'status' => 200,
             'data' => $familyMembers,
@@ -141,7 +176,17 @@ class subscriberLoginController extends Controller
     {
         // Find the subscriber data with ID
         $subscriber = subscribersModel::find($id);
+    {
+        // Find the subscriber data with ID
+        $subscriber = subscribersModel::find($id);
 
+        // Check if the subscriber exists or not
+        if (!$subscriber) {
+            return response()->json([
+                'status' => 404,
+                'message' => "Subscriber not found",
+            ], 404);
+        }
         // Check if the subscriber exists or not
         if (!$subscriber) {
             return response()->json([
@@ -156,14 +201,18 @@ class subscriberLoginController extends Controller
             // Get the uploaded file
             $profileImage = $request->file('ProfileImage');
 
+
             // Define the storage path
             $path = 'uploads/profiles/';
+
 
             // Generate a unique file name
             $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
 
+
             // Move the uploaded file to the storage path
             $profileImage->move($path, $fileName);
+
 
             // Set the profile image path
             $profileImagePath = $path . $fileName;
@@ -384,7 +433,35 @@ class subscriberLoginController extends Controller
             'RoleId' => 'numeric',
             'MainSubscriberId' => 'numeric'
         ]);
+    {
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
+            'FirstName' => 'string',
+            'LastName' => 'string',
+            'Email' => ['email', Rule::unique('subscriberlogins')->ignore($id)],
+            'Dob' => 'date',
+            'Gender' => 'numeric',
+            'PhoneNumber' => 'numeric',
+            'SSN' => ['string', Rule::unique('subscriberlogins')->ignore($id)],
+            'Password' => 'string',
+            'About' => 'string',
+            'Address' => 'string',
+            'ProfileImage' => 'string',
+            'SSNimage' => 'string',
+            'Keywords' => 'string',
+            'LoginType' => 'numeric',
+            'IsMain' => 'numeric',
+            'RoleId' => 'numeric',
+            'MainSubscriberId' => 'numeric'
+        ]);
 
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'message' => $validator->errors()
+            ], 422);
+        }
         // Check if validation fails
         if ($validator->fails()) {
             return response()->json([
@@ -395,7 +472,16 @@ class subscriberLoginController extends Controller
 
         // Find the subscriber login account by ID
         $subscriberLogin = subscriberlogins::find($id);
+        // Find the subscriber login account by ID
+        $subscriberLogin = subscriberlogins::find($id);
 
+        // Check if the subscriber login account exists
+        if (!$subscriberLogin) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Subscriber login account not found'
+            ], 404);
+        }
         // Check if the subscriber login account exists
         if (!$subscriberLogin) {
             return response()->json([
@@ -424,6 +510,26 @@ class subscriberLoginController extends Controller
             'RoleId' => $request->input('RoleId', $subscriberLogin->RoleId),
             'MainSubscriberId' => $request->input('MainSubscriberId', $subscriberLogin->MainSubscriberId),
         ]);
+        // Update the subscriber login account with the provided data
+        $subscriberLogin->update([
+            'FirstName' => $request->input('FirstName', $subscriberLogin->FirstName),
+            'LastName' => $request->input('LastName', $subscriberLogin->LastName),
+            'Email' => $request->input('Email', $subscriberLogin->Email),
+            'Dob' => $request->input('Dob', $subscriberLogin->Dob),
+            'Gender' => $request->input('Gender', $subscriberLogin->Gender),
+            'PhoneNumber' => $request->input('PhoneNumber', $subscriberLogin->PhoneNumber),
+            'SSN' => $request->input('SSN', $subscriberLogin->SSN),
+            'Password' => $request->input('Password', $subscriberLogin->Password),
+            'About' => $request->input('About', $subscriberLogin->About),
+            'Address' => $request->input('Address', $subscriberLogin->Address),
+            'ProfileImage' => $request->input('ProfileImage', $subscriberLogin->ProfileImage),
+            'SSNimage' => $request->input('SSNimage', $subscriberLogin->SSNimage),
+            'Keywords' => $request->input('Keywords', $subscriberLogin->Keywords),
+            'LoginType' => $request->input('LoginType', $subscriberLogin->LoginType),
+            'IsMain' => $request->input('IsMain', $subscriberLogin->IsMain),
+            'RoleId' => $request->input('RoleId', $subscriberLogin->RoleId),
+            'MainSubscriberId' => $request->input('MainSubscriberId', $subscriberLogin->MainSubscriberId),
+        ]);
 
         // Return the response
         return response()->json([
@@ -432,6 +538,14 @@ class subscriberLoginController extends Controller
             'data' => $subscriberLogin
         ], 200);
     }
+        // Return the response
+        return response()->json([
+            'status' => 200,
+            'message' => 'Subscriber login account updated successfully',
+            'data' => $subscriberLogin
+        ], 200);
+    }
+
 
 
 
