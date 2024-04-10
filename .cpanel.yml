@@ -1,8 +1,7 @@
-##### THIS ALLOWS US TO DEPLOY THE SITE FROM A GIT REPO ######
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/your-username/public_html/
+    - export DEPLOYPATH=/home/kidsconn/public_html/
     - /bin/cp -R app $DEPLOYPATH
     - /bin/cp -R bootstrap $DEPLOYPATH
     - /bin/cp -R config $DEPLOYPATH
