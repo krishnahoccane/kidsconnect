@@ -13,6 +13,7 @@ class subscribersKidModel extends Model
 
     protected $fillable=[
         'MainSubscriberId',
+        'RoleId',
         'FirstName',
         'LastName',
         'Email',

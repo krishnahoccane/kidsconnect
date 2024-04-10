@@ -140,116 +140,113 @@ class subscriberLoginController extends Controller
 
 
     public function createAccounts(Request $request, int $id)
-    {
-        // Find the subscriber data with ID
-        $subscriber = subscribersModel::find($id);
+{
+    // Find the subscriber data with ID
+    $subscriber = subscribersModel::find($id);
 
-        // Check if the subscriber exists or not
-        if (!$subscriber) {
+    // Check if the subscriber exists or not
+    if (!$subscriber) {
+        return response()->json([
+            'status' => 404,
+            'message' => "Subscriber not found",
+        ], 404);
+    }
+
+    // Check if a profile image is uploaded
+    if ($request->hasFile('ProfileImage')) {
+        // Get the uploaded file
+        $profileImage = $request->file('ProfileImage');
+
+        // Define the storage path
+        $path = 'uploads/profiles/';
+
+        // Generate a unique file name
+        $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+
+        // Move the uploaded file to the storage path
+        $profileImage->move($path, $fileName);
+
+        // Set the profile image path
+        $profileImagePath = $path . $fileName;
+    } else {
+        // If no file is uploaded, set the profile image path to null or any default value
+        $profileImagePath = null;
+    }
+
+    // Hash the password
+    $hashedPassword = Hash::make($request->Password);
+
+    // Check the RoleId
+    if ($request->RoleId == 5) {
+        // Create a new account in subscribersKidModel
+        $sub_kidNewAccount = subscribersKidModel::create([
+            'FirstName' => $request->FirstName,
+            'LastName' => $request->LastName,
+            'Email' => $request->Email,
+            'Dob' => $request->Dob,
+            'Gender' => $request->Gender,
+            'PhoneNumber' => $request->PhoneNumber,
+            'SSN' => $request->SSN,
+            'Password' => $hashedPassword, // Insert hashed password
+            'About' => $request->About,
+            'Address' => $request->Address,
+            'ProfileImage' => $profileImagePath,
+            'SSNimage' => $request->SSNimage,
+            'Keywords' => $request->Keywords,
+            'LoginType' => $request->LoginType,
+            'RoleId' => $request->RoleId, // Set RoleId explicitly
+            'MainSubscriberId' => $subscriber->id,
+        ]);
+
+        // Check if account was created successfully
+        if ($sub_kidNewAccount) {
             return response()->json([
-                'status' => 404,
-                'message' => "Subscriber not found",
-            ], 404);
-        }
-
-        // Find the subscriberLogin data based on the subscriber's ID - here we are comparing the MainsubscriberID
-        $subscriberLoginData = subscriberlogins::where('MainSubscriberId', $subscriber->id)->first();
-
-        $hashPassword = Hash::make($request->Password);
-
-        if ($request->hasFile('ProfileImage')) {
-            // Get the uploaded file
-            $profileImage = $request->file('ProfileImage');
-
-            // Define the storage path
-            $path = 'uploads/profiles/';
-
-            // Generate a unique file name
-            $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-
-            // Move the uploaded file to the storage path
-            $profileImage->move($path, $fileName);
-
-            // Set the profile image path
-            $profileImagePath = $path . $fileName;
+                'status' => 200,
+                'message' => "A New Kid Account is created by " . $subscriber->Email,
+                'data' => $sub_kidNewAccount,
+            ], 200);
         } else {
-            // If no file is uploaded, set the profile image path to null or any default value
-            $profileImagePath = null;
+            return response()->json([
+                'status' => 403,
+                'message' => 'Kid Account not created'
+            ], 403);
         }
+    } else {
+        // Create a new account in subscriberlogins table
+        $subscriberloginNewAccount = subscriberlogins::create([
+            'FirstName' => $request->FirstName,
+            'LastName' => $request->LastName,
+            'Email' => $request->Email,
+            'Dob' => $request->Dob,
+            'Gender' => $request->Gender,
+            'PhoneNumber' => $request->PhoneNumber,
+            'SSN' => $request->SSN,
+            'Password' => $hashedPassword, // Insert hashed password
+            'About' => $request->About,
+            'Address' => $request->Address,
+            'ProfileImage' => $profileImagePath,
+            'SSNimage' => $request->SSNimage,
+            'Keywords' => $request->Keywords,
+            'LoginType' => $request->LoginType,
+            'RoleId' => $request->RoleId,
+            'MainSubscriberId' => $subscriber->id,
+        ]);
 
-        // Check the RoleId
-        if ($request->RoleId == 5) {
-            // Create a new account in subscribersKidModel
-            $sub_kidNewAccount = subscribersKidModel::create([
-                'FirstName' => $request->FirstName,
-                'LastName' => $request->LastName,
-                'Email' => $request->Email,
-                'Dob' => $request->Dob,
-                'Gender' => $request->Gender,
-                'PhoneNumber' => $request->PhoneNumber,
-                'SSN' => $request->SSN,
-                'Password' => $hashPassword,
-                'About' => $request->About,
-                'Address' => $request->Address,
-                'ProfileImage' => $profileImagePath,
-                'SSNimage' => $request->SSNimage,
-                'Keywords' => $request->Keywords,
-                'LoginType' => $request->LoginType,
-                'RoleId' => $request->RoleId,
-                'MainSubscriberId' => $subscriber->id,
-            ]);
-
-            // Check if account was created successfully
-            if ($sub_kidNewAccount) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => "A New Kid Account is created by " . $subscriber->Email,
-                    'data' => $sub_kidNewAccount,
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 403,
-                    'message' => 'Kid Account not created'
-                ], 403);
-            }
+        // Check if account was created successfully
+        if ($subscriberloginNewAccount) {
+            return response()->json([
+                'status' => 200,
+                'message' => "A New Subscriber Login Account is created by " . $subscriber->Email,
+                'data' => $subscriberloginNewAccount,
+            ], 200);
         } else {
-            // Create a new account in subscriberlogins table
-            $subscriberloginNewAccount = subscriberlogins::create([
-                'FirstName' => $request->FirstName,
-                'LastName' => $request->LastName,
-                'Email' => $request->Email,
-                'Dob' => $request->Dob,
-                'Gender' => $request->Gender,
-                'PhoneNumber' => $request->PhoneNumber,
-                'SSN' => $request->SSN,
-                'Password' => $hashPassword,
-                // 'About' => $request->About,
-                'Address' => $request->Address,
-                'ProfileImage' => $profileImagePath,
-                'SSNimage' => $request->SSNimage,
-                // 'Keywords' => $request->Keywords,
-                'LoginType' => $request->LoginType,
-                'RoleId' => $request->RoleId,
-                'MainSubscriberId' => $subscriber->id,
-            ]);
-
-            // Check if account was created successfully
-            if ($subscriberloginNewAccount) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => "A New Subscriber Login Account is created by " . $subscriber->Email,
-                    'data' => $subscriberloginNewAccount,
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 403,
-                    'message' => 'Subscriber Login Account not created'
-                ], 403);
-            }
-        } 
-     }
-    
-
+            return response()->json([
+                'status' => 403,
+                'message' => 'Subscriber Login Account not created'
+            ], 403);
+        }
+    }
+}
     public function show($id)
     {
 
