@@ -92,7 +92,7 @@ class subscriberLoginController extends Controller
             if ($subscriberLoginData->isEmpty()) {
                 return response()->json([
                     'status' => 403,
-                    'message' => $subscriber['FirstName'].' Yet to add family profiles'
+                    'message' => $subscriber['FirstName'] . ' Yet to add family profiles'
                 ], 404);
             } else {
                 return response()->json([
@@ -463,6 +463,24 @@ class subscriberLoginController extends Controller
         ], 200);
     }
 
+    public function mainSecondary($id = null)
+    {
+
+        $sub_login = subscriberlogins::where('IsMain', 0)->where('MainSubscriberId', $id)->get();
+
+        if ($sub_login) {
+            return response()->json([
+                'status' => 200,
+                'data' => $sub_login
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No Data Found'
+            ], 404);
+        }
+
+    }
 
 
 
