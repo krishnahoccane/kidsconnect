@@ -173,7 +173,7 @@ class subscriberLoginController extends Controller
             // If no file is uploaded, set the profile image path to null or any default value
             $profileImagePath = null;
         }
-
+        
         // Check the RoleId
         if ($request->RoleId == 5) {
             // Create a new account in subscribersKidModel
