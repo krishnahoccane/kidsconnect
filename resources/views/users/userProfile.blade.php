@@ -65,12 +65,12 @@
                             </ul>
                         </div>
                         <div>
-                            <button class="btn btn-{{ $pStatus_btn }}"
+                            <button class="btn btn-{{ $pStatus_btn }} d-none" 
                                 data-approve-url="/userProfile/{{ $sub_login['id'] }}/approve" id="approveBtn"
                                 {{ $btn_status }}>
                                 {{ $pStatus }}
                             </button>
-                            <button class="btn btn-danger" data-deny-url="/userProfile/{{ $sub_login['id'] }}/deny"
+                            <button class="btn btn-danger d-none" data-deny-url="/userProfile/{{ $sub_login['id'] }}/deny"
                                 id="denyBtn">
                                 Deny
                             </button>
@@ -211,61 +211,6 @@
 
                                         <div class="card-body">
                                             <ul id="familyMembers" class="list-unstyled mb-0">
-
-                                                {{-- <li class="mb-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="avatar me-2">
-                                                                <img src="{{ asset('ui/assets/img/avatars/2.png') }}"
-                                                                    alt="Avatar" class="rounded-circle" />
-                                                            </div>
-                                                            <div class="me-2 ms-1">
-                                                                <h6 class="mb-0">Madission Arora</h6>
-                                                                <small class="text-muted">7 Members</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-auto">
-                                                            <a href="javascript:;"><span
-                                                                    class="badge bg-label-info">Spouse</span></a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="mb-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="avatar me-2">
-                                                                <img src="{{ asset('ui/assets/img/avatars/1.png') }}"
-                                                                    alt="Avatar" class="rounded-circle" />
-                                                            </div>
-                                                            <div class="me-2 ms-1">
-                                                                <h6 class="mb-0">Jay Ronaldo</h6>
-                                                                <small class="text-muted">Boy</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-auto">
-                                                            <a href="javascript:;"><span
-                                                                    class="badge bg-label-danger">Kid</span></a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="mb-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="avatar me-2">
-                                                                <img src="{{ asset('ui/assets/img/avatars/3.png') }}"
-                                                                    alt="Avatar" class="rounded-circle" />
-                                                            </div>
-                                                            <div class="me-2 ms-1">
-                                                                <h6 class="mb-0">Samnantha</h6>
-                                                                <small class="text-muted">Girl</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="ms-auto">
-                                                            <a href="javascript:;"><span
-                                                                    class="badge bg-label-secondary">Kid</span></a>
-                                                        </div>
-                                                    </div>
-                                                </li> --}}
                                             </ul>
                                         </div>
                                     </div>
@@ -660,7 +605,7 @@
             return '<span class="badge bg-label-danger">Father</span>';
         } else if (roleId === 2) {
             return '<span class="badge bg-label-success">Mother</span>';
-        }else if (roleId === 5) {
+        } else if (roleId === 5) {
             return '<span class="badge bg-label-info">Kid</span>';
         } else {
             return '<span class="badge bg-label-info">Others</span>';
@@ -678,11 +623,11 @@
     // Get the last part of the URL, which is the ID
     var userId = parts[parts.length - 1];
     $.ajax({
-        url: `/api/subscriberlogins/${userId}/familyMembers`,
+        url: `http://localhost:8000/api/maincreatedAccounts/${userId}`,
         method: "GET",
         dataType: "json",
         success: function(response) {
-        console.log(response);
+            console.log(response);
             // Check if data is available
             if (response.data && response.data.length > 0) {
                 // Iterate through family members and dynamically populate the list
@@ -715,8 +660,8 @@
         },
         error: function(xhr, status, error) {
             console.error("Error fetching family members:", error);
-            // Handle error case
-            $('#familyMembers').append('<li>Error fetching family members.</li>');
+            var errorMessage = xhr.responseJSON.message; // Extract error message from response JSON
+            $('#familyMembers').append('<li>' + errorMessage + '</li>');
         }
     });
 </script>

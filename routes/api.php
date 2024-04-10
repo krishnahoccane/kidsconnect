@@ -48,12 +48,12 @@ Route::post('login', [Authcontroller::class, 'login']);
 
 // Subscribers  ( Create, View, Update, Delete)
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
-Route::get('subscriberloginsCreateAccount', [subscriberLoginController::class, 'showcreateAccounts']);
+Route::get('maincreatedAccounts/{subscriberId?}', [subscriberLoginController::class, 'maincreatedaccount']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
 Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
 Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
 Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
-Route::get('/subscriberlogins/{subscriberId}/family-members', [subscriberLoginController::class, 'showcreateAccount']);
+// Route::get('/subscriberlogins/{subscriberId}/family-members', [subscriberLoginController::class, 'showcreateAccount']);
 
 // Subscriberskids  ( Create, View, Update, Delete)
 Route::get('subscribersKids', [subscribersKidsController::class, 'index']);

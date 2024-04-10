@@ -82,61 +82,83 @@ class subscriberLoginController extends Controller
     }
 
 
-    public function showcreateAccounts()
+    //Created Accounts by Main Subscriber
+    public function maincreatedaccount($subscriberId = Null)
     {
-        $subscriberLoginData = subscriberlogins::where('IsMain', 0)->get();
+        if ($subscriberId) {
+            $subscriber = subscriberlogins::find($subscriberId);
+            $subscriberLoginData = subscriberlogins::where('IsMain', 0)->where('MainSubscriberId', $subscriberId)->get();
 
-        if ($subscriberLoginData) {
-            return response()->json([
-                'status' => 200,
-                'data' => $subscriberLoginData
-            ], 200);
+            if ($subscriberLoginData->isEmpty()) {
+                return response()->json([
+                    'status' => 403,
+                    'message' => $subscriber['FirstName'].' Yet to add family profiles'
+                ], 404);
+            } else {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $subscriberLoginData
+                ], 200);
+            }
         } else {
-            return response()->json([
-                'status' => 403,
-                'message' => 'No Data Found'
-            ], 403);
+            // Handle case where $subscriberId is not provided
+            // For example, return an error response indicating missing parameter
+            $subscriberLoginData = subscriberlogins::where('IsMain', 0)->get();
+
+            if ($subscriberLoginData->isEmpty()) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'No Data Found'
+                ], 404);
+            } else {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $subscriberLoginData
+                ], 200);
+            }
         }
     }
 
+    //
+    // public function showcreateAccount($subscriberId)
+    // {
+    //     // Find the subscriber
+    //     $subscriber = subscribersModel::find($subscriberId);
 
-    public function showcreateAccount($subscriberId)
-    {
-        // Find the subscriber
-        $subscriber = subscribersModel::find($subscriberId);
+    //     // Check if the subscriber exists
+    //     if (!$subscriber) {
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => "Subscriber not found",
+    //         ], 404);
+    //     }
 
-        // Check if the subscriber exists
-        if (!$subscriber) {
-            return response()->json([
-                'status' => 404,
-                'message' => "Subscriber not found",
-            ], 404);
-        }
+    //     // Execute the SQL query using raw expressions
+    //     $familyMembers = DB::select("
+    //     SELECT id, FirstName,LastName,RoleId,ProfileImage
+    //     FROM subscriber_logins
+    //     WHERE IsMain = 0 AND MainSubscriberId = $subscriberId
+    //     UNION
+    //     SELECT id, FirstName,LastName,RoleId,ProfileImage
+    //     FROM subscribers_kids
+    //     WHERE MainSubscriberId = $subscriberId
+    // ");
 
-        // Execute the SQL query using raw expressions
-        $familyMembers = DB::select("
-        SELECT id, FirstName,LastName,RoleId,ProfileImage
-        FROM subscriber_logins
-        WHERE IsMain = 0 AND MainSubscriberId = $subscriberId
-        UNION
-        SELECT id, FirstName,LastName,RoleId,ProfileImage
-        FROM subscribers_kids
-        WHERE MainSubscriberId = $subscriberId
-    ");
+    //     // Check if family members exist
+    //     if (empty($familyMembers)) {
 
-        // Check if family members exist
-        if (empty($familyMembers)) {
-            return response()->json([
-                'status' => 403,
-                'message' => 'No family members found for the subscriber',
-            ], 403);
-        }
+    //         return response()->json([
+    //             'status' => 403,
+    //             'message' => 'No family members found for the subscriber',
+    //         ], 403);
 
-        return response()->json([
-            'status' => 200,
-            'data' => $familyMembers,
-        ], 200);
-    }
+    //     }
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'data' => $familyMembers,
+    //     ], 200);
+    // }
 
 
     public function createAccounts(Request $request, int $id)
@@ -144,12 +166,13 @@ class subscriberLoginController extends Controller
         // Find the subscriber data with ID
         $subscriber = subscribersModel::find($id);
 
-        // Check if the subscriber exists or not
         if (!$subscriber) {
+
             return response()->json([
                 'status' => 404,
                 'message' => "Subscriber not found",
             ], 404);
+
         }
 
         // Find the subscriberLogin data based on the subscriber's ID - here we are comparing the MainsubscriberID
@@ -158,29 +181,24 @@ class subscriberLoginController extends Controller
         $hashPassword = Hash::make($request->Password);
 
         if ($request->hasFile('ProfileImage')) {
-            // Get the uploaded file
+
             $profileImage = $request->file('ProfileImage');
-
-            // Define the storage path
             $path = 'uploads/profiles/';
-
-            // Generate a unique file name
             $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-
-            // Move the uploaded file to the storage path
             $profileImage->move($path, $fileName);
-
-            // Set the profile image path
             $profileImagePath = $path . $fileName;
+
         } else {
-            // If no file is uploaded, set the profile image path to null or any default value
+
             $profileImagePath = null;
+
         }
-        
+
         // Check the RoleId
         if ($request->RoleId == 5) {
             // Create a new account in subscribersKidModel
             $sub_kidNewAccount = subscribersKidModel::create([
+
                 'FirstName' => $request->FirstName,
                 'LastName' => $request->LastName,
                 'Email' => $request->Email,
@@ -197,24 +215,31 @@ class subscriberLoginController extends Controller
                 'LoginType' => $request->LoginType,
                 'RoleId' => $request->RoleId,
                 'MainSubscriberId' => $subscriber->id,
+
             ]);
 
             // Check if account was created successfully
             if ($sub_kidNewAccount) {
+
                 return response()->json([
                     'status' => 200,
                     'message' => "A New Kid Account is created by " . $subscriber->Email,
                     'data' => $sub_kidNewAccount,
                 ], 200);
+
             } else {
+
                 return response()->json([
                     'status' => 403,
                     'message' => 'Kid Account not created'
                 ], 403);
+
             }
         } else {
+
             // Create a new account in subscriberlogins table
             $subscriberloginNewAccount = subscriberlogins::create([
+
                 'FirstName' => $request->FirstName,
                 'LastName' => $request->LastName,
                 'Email' => $request->Email,
@@ -231,24 +256,29 @@ class subscriberLoginController extends Controller
                 'LoginType' => $request->LoginType,
                 'RoleId' => $request->RoleId,
                 'MainSubscriberId' => $subscriber->id,
+
             ]);
 
             // Check if account was created successfully
             if ($subscriberloginNewAccount) {
+
                 return response()->json([
                     'status' => 200,
                     'message' => "A New Subscriber Login Account is created by " . $subscriber->Email,
                     'data' => $subscriberloginNewAccount,
                 ], 200);
+
             } else {
+
                 return response()->json([
                     'status' => 403,
                     'message' => 'Subscriber Login Account not created'
                 ], 403);
+
             }
-        } 
-     }
-    
+        }
+    }
+
 
     public function show($id)
     {
