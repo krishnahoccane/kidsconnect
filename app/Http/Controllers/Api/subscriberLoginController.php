@@ -154,6 +154,9 @@ class subscriberLoginController extends Controller
 
         // Find the subscriberLogin data based on the subscriber's ID - here we are comparing the MainsubscriberID
         $subscriberLoginData = subscriberlogins::where('MainSubscriberId', $subscriber->id)->first();
+
+        $hashPassword = Hash::make($request->Password);
+
         if ($request->hasFile('ProfileImage')) {
             // Get the uploaded file
             $profileImage = $request->file('ProfileImage');
@@ -185,7 +188,7 @@ class subscriberLoginController extends Controller
                 'Gender' => $request->Gender,
                 'PhoneNumber' => $request->PhoneNumber,
                 'SSN' => $request->SSN,
-                'Password' => $request->Password,
+                'Password' => $hashPassword,
                 'About' => $request->About,
                 'Address' => $request->Address,
                 'ProfileImage' => $profileImagePath,
@@ -209,7 +212,7 @@ class subscriberLoginController extends Controller
                     'message' => 'Kid Account not created'
                 ], 403);
             }
-        } else if (in_array($request->RoleId, [2, 3, 4])) {
+        } else {
             // Create a new account in subscriberlogins table
             $subscriberloginNewAccount = subscriberlogins::create([
                 'FirstName' => $request->FirstName,
@@ -219,7 +222,7 @@ class subscriberLoginController extends Controller
                 'Gender' => $request->Gender,
                 'PhoneNumber' => $request->PhoneNumber,
                 'SSN' => $request->SSN,
-                'Password' => $request->Password,
+                'Password' => $hashPassword,
                 // 'About' => $request->About,
                 'Address' => $request->Address,
                 'ProfileImage' => $profileImagePath,
@@ -243,14 +246,9 @@ class subscriberLoginController extends Controller
                     'message' => 'Subscriber Login Account not created'
                 ], 403);
             }
-        } else {
-            return response()->json([
-                'status' => 403,
-                'message' => 'Invalid RoleId'
-            ], 403);
-        }
-    }
-
+        } 
+     }
+    
 
     public function show($id)
     {
