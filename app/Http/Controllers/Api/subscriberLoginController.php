@@ -7,6 +7,7 @@ use App\Models\defaultStatus;
 use Illuminate\Validation\Rule;
 use App\Models\subscriberlogins;
 use App\Models\subscribersModel;
+use App\Models\petModel;
 use App\Http\Controllers\Controller;
 use App\Models\subscribersKidModel;
 use Illuminate\Support\Facades\Auth;
@@ -162,43 +163,36 @@ class subscriberLoginController extends Controller
 
 
     public function createAccounts(Request $request, int $id)
-{
-    // Find the subscriber data with ID
-    $subscriber = subscribersModel::find($id);
-
+    {
+        // Find the subscriber data with ID
+        $subscriber = subscribersModel::find($id);
+    
         if (!$subscriber) {
-
             return response()->json([
                 'status' => 404,
                 'message' => "Subscriber not found",
             ], 404);
-
         }
-
+    
         // Find the subscriberLogin data based on the subscriber's ID - here we are comparing the MainsubscriberID
         $subscriberLoginData = subscriberlogins::where('MainSubscriberId', $subscriber->id)->first();
-
+    
         $hashPassword = Hash::make($request->Password);
-
+    
         if ($request->hasFile('ProfileImage')) {
-
             $profileImage = $request->file('ProfileImage');
             $path = 'uploads/profiles/';
             $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
             $profileImage->move($path, $fileName);
             $profileImagePath = $path . $fileName;
-
         } else {
-
             $profileImagePath = null;
-
         }
-
+    
         // Check the RoleId
         if ($request->RoleId == 5) {
             // Create a new account in subscribersKidModel
             $sub_kidNewAccount = subscribersKidModel::create([
-
                 'FirstName' => $request->FirstName,
                 'LastName' => $request->LastName,
                 'Email' => $request->Email,
@@ -215,31 +209,49 @@ class subscriberLoginController extends Controller
                 'LoginType' => $request->LoginType,
                 'RoleId' => $request->RoleId,
                 'MainSubscriberId' => $subscriber->id,
-
             ]);
-
+    
             // Check if account was created successfully
             if ($sub_kidNewAccount) {
-
                 return response()->json([
                     'status' => 200,
                     'message' => "A New Kid Account is created by " . $subscriber->Email,
                     'data' => $sub_kidNewAccount,
                 ], 200);
-
             } else {
-
                 return response()->json([
                     'status' => 403,
                     'message' => 'Kid Account not created'
                 ], 403);
-
+            }
+        } elseif ($request->RoleId == 7) {
+            // Create a new account in pet table
+            $petNewAccount = petModel::create([
+                'MainSubscriberId' => $subscriber->id,
+                'RoleId' => $request->RoleId,
+                'Name' => $request->Name,
+                'Gender' => $request->Gender,
+                'Breed' => $request->Breed,
+                'Dob' => $request->Dob,
+                // Add other columns as needed
+            ]);
+    
+            // Check if account was created successfully
+            if ($petNewAccount) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => "A New Pet Account is created by " . $subscriber->Email,
+                    'data' => $petNewAccount,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 403,
+                    'message' => 'Pet Account not created'
+                ], 403);
             }
         } else {
-
             // Create a new account in subscriberlogins table
             $subscriberloginNewAccount = subscriberlogins::create([
-
                 'FirstName' => $request->FirstName,
                 'LastName' => $request->LastName,
                 'Email' => $request->Email,
@@ -248,36 +260,30 @@ class subscriberLoginController extends Controller
                 'PhoneNumber' => $request->PhoneNumber,
                 'SSN' => $request->SSN,
                 'Password' => $hashPassword,
-                // 'About' => $request->About,
                 'Address' => $request->Address,
                 'ProfileImage' => $profileImagePath,
                 'SSNimage' => $request->SSNimage,
-                // 'Keywords' => $request->Keywords,
                 'LoginType' => $request->LoginType,
                 'RoleId' => $request->RoleId,
                 'MainSubscriberId' => $subscriber->id,
-
             ]);
-
+    
             // Check if account was created successfully
             if ($subscriberloginNewAccount) {
-
                 return response()->json([
                     'status' => 200,
                     'message' => "A New Subscriber Login Account is created by " . $subscriber->Email,
                     'data' => $subscriberloginNewAccount,
                 ], 200);
-
             } else {
-
                 return response()->json([
                     'status' => 403,
                     'message' => 'Subscriber Login Account not created'
                 ], 403);
-
             }
         }
     }
+    
 
 
     public function show($id)
