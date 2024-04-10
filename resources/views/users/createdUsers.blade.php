@@ -62,7 +62,7 @@
         async function populateTable() {
             try {
                 const response = await $.ajax({
-                    url: "http://localhost:8000/api/subscriberloginsCreateAccount",
+                    url: "http://localhost:8000/api/maincreatedAccounts",
                     method: "GET",
                     dataType: "json"
                 });

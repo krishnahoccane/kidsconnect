@@ -15,8 +15,8 @@
                                 <th>Subscriber Name</th>
                                 <th>Subscriber Mail</th>
                                 {{-- <th>Status</th> --}}
-                                <th>Created On</th>
-                                <th>Approved Date</th>
+                                <th>Account Created On</th>
+                                {{-- <th>Approved Date</th> --}}
                                 {{-- <th>Approved By</th> --}}
                                 <th class="sorting_disabled">Actions</th>
                             </tr>
@@ -86,7 +86,6 @@
                         <td>${fullName}</td>
                         <td>${item.Email}</td>
                         <td>${formattedDateOfCreation}</td>
-                        <td>${formattedDateOfApprove}</td>
                         
                         <td>
                             <a href="/userProfile/${item.id}"><button type="button" class="btn btn-primary">
