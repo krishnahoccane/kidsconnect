@@ -47,6 +47,18 @@ class subscriberLoginController extends Controller
         ]);
 
         $subscriberId = $subscibers->id;
+
+        if ($request->hasFile('ProfileImage')) {
+            $profileImage = $request->file('ProfileImage');
+            $path = 'uploads/profiles/';
+            $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+            $profileImage->move($path, $fileName);
+            $profileImagePath = $path . $fileName;
+        } else {
+            $profileImagePath = null;
+        }
+
+
         $hashPassword = Hash::make($request->Password);
         $sub_login = subscriberlogins::firstOrCreate([
             'FirstName' => $request->FirstName,
@@ -59,7 +71,7 @@ class subscriberLoginController extends Controller
             'Password' => $hashPassword,
             // 'About' => $request->About,
             'Address' => $request->Address,
-            'ProfileImage' => $request->ProfileImage,
+            'ProfileImage' => $profileImagePath,
             'SSNimage' => $request->SSNimage,
             // 'Keywords' => $request->Keywords,
             'LoginType' => $request->LoginType,
