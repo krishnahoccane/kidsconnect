@@ -11,9 +11,12 @@ class CreatePetsTable extends Migration
         Schema::create('pets', function (Blueprint $table) {
             $table->id();
             $table->string('MainSubscribeId');
+            $table->string('RoleId');
             $table->string('Name');
             $table->string('Breed')->nullable();
+            $table->enum('gender', [0, 1, 2])->default(0);
             $table->date('Dob')->nullable();
+            $table->string('Description')->nullable();
             $table->timestamps();
         });
     }

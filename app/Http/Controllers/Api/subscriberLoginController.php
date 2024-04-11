@@ -230,9 +230,10 @@ class subscriberLoginController extends Controller
                 'MainSubscriberId' => $subscriber->id,
                 'RoleId' => $request->RoleId,
                 'Name' => $request->Name,
-                'Gender' => $request->Gender,
+                'gender' => $request->gender,
                 'Breed' => $request->Breed,
                 'Dob' => $request->Dob,
+                'Description' =>$request->Description
                 // Add other columns as needed
             ]);
     
