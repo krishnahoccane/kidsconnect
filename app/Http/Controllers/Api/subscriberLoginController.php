@@ -48,6 +48,7 @@ class subscriberLoginController extends Controller
 
         $subscriberId = $subscibers->id;
 
+        // Uploading Profile image for subscriber
         if ($request->hasFile('ProfileImage')) {
             $profileImage = $request->file('ProfileImage');
             $path = 'uploads/profiles/';
