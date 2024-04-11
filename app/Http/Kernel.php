@@ -21,7 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\CorsMiddleware::class
+        \App\Http\Middleware\Cors::class
     ];
 
     /**
@@ -80,5 +80,6 @@ class Kernel extends HttpKernel
         // Add your custom middleware here
         'PreventBackHistory' => \App\Http\Middleware\PreventBackHistory::class,
         'auth.api' => \App\Http\Middleware\CheckAuthToken::class,
+        'cors'=> \App\Http\Middleware\Cors::class,
     ];
 }

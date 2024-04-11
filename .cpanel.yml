@@ -1,8 +1,7 @@
-##### THIS ALLOWS US TO DEPLOY THE SITE FROM A GIT REPO ######
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/your-username/public_html/
+    - export DEPLOYPATH=/home/kidsconn/public_html/
     - /bin/cp -R app $DEPLOYPATH
     - /bin/cp -R bootstrap $DEPLOYPATH
     - /bin/cp -R config $DEPLOYPATH
@@ -15,9 +14,8 @@ deployment:
     - /bin/cp -R tests $DEPLOYPATH
     - /bin/cp -R vendor $DEPLOYPATH
     - /bin/cp -R .editorconfig $DEPLOYPATH
-     - /bin/cp -R env.example $DEPLOYPATH
+    - /bin/cp -R .env.example $DEPLOYPATH
     - /bin/cp -R .gitattributes $DEPLOYPATH
-    - /bin/cp -R .gitignore $DEPLOYPATH
     - /bin/cp -R .rnd $DEPLOYPATH
     - /bin/cp -R artisan $DEPLOYPATH
     - /bin/cp -R composer.json $DEPLOYPATH
@@ -28,7 +26,7 @@ deployment:
     - /bin/cp -R postcss.config.js $DEPLOYPATH
     - /bin/cp -R tailwind.config.js $DEPLOYPATH
     - /bin/cp -R vite.config.js $DEPLOYPATH
-    
+    - /bin/cp -R README.md $DEPLOYPATH
 
 
 

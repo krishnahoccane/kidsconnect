@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Middleware\AuthenticateApi;
+// use cors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AuthenticateApi;
+use App\Http\Middleware\Cors;
 use App\Http\Controllers\Api\Authcontroller;
 use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\rolesController;
@@ -44,7 +46,9 @@ Route::middleware([AuthenticateApi::class])->group(function () {
 });
 
 Route::post('login', [Authcontroller::class, 'login']);
-
+// Route::middleware([Cors::class])->group(function () {
+//     Route::post('login', [Authcontroller::class, 'login']);
+// });
 
 // Subscribers  ( Create, View, Update, Delete)
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
