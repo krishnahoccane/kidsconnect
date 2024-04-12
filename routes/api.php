@@ -1,6 +1,7 @@
 <?php
 
 // use cors;
+use App\Http\Controllers\Api\subContacts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AuthenticateApi;
@@ -44,24 +45,40 @@ Route::post('subscriber', [subscriberController::class, 'create']);
 
 // Subscriber Authentication API
 Route::middleware([AuthenticateApi::class])->group(function () {
+    // Subscribers  ( Create, View, Update, Delete)
     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
+    Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
+    Route::get('maincreatedAccounts/{subscriberId?}', [subscriberLoginController::class, 'maincreatedaccount']);
+    Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
+    Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
+    Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
+    Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
+    Route::get('mainSecondary/{id?}', [subscriberLoginController::class, 'mainSecondary']);
+
+    // Subscriberskids  ( Create, View, Update, Delete)
+    Route::get('subscribersKids/{id?}', [subscribersKidsController::class, 'index']);
+    Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
+
+    // subscribers Contacts with Kids
+    Route::get('subcontacts', [subContacts::class, 'index']);
+    Route::get('subcontacts/subscriberId/{subscriberId}/{id?}', [subContacts::class, 'getSubContactedData']);
+    Route::get('subcontacts/contactedId/{contactedId}/{id?}', [subContacts::class, 'getContactedData']);
+
+    Route::post('subcontacts', [subContacts::class, 'store']);
 });
 
 
 
-// Subscribers  ( Create, View, Update, Delete)
-Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
-Route::get('maincreatedAccounts/{subscriberId?}', [subscriberLoginController::class, 'maincreatedaccount']);
-Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
-Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
-Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
-Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
-Route::get('mainSecondary/{id?}',[subscriberLoginController::class, 'mainSecondary']);
-// Route::get('/subscriberlogins/{subscriberId}/family-members', [subscriberLoginController::class, 'showcreateAccount']);
 
-// Subscriberskids  ( Create, View, Update, Delete)
-Route::get('subscribersKids', [subscribersKidsController::class, 'index']);
-Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
+
+
+
+
+
+
+
+
+
 
 // For Subs Circles
 Route::post('subcircles', [SubsCirclesController::class, 'index']);

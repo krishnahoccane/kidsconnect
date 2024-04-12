@@ -16,6 +16,9 @@ class AuthenticateApi
             return $next($request);
         }
 
-        return response()->json(['error' => 'Unauthenticated'], 401);
+        return response()->json([
+            'status' => 401,
+            'error' => 'Authentication Required For Access'
+        ], 401);
     }
 }
