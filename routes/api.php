@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\subscribersKidsController;
 use App\Http\Controllers\Api\SubsCirclesMemberController;
 use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use App\Http\Controllers\Api\SubsChildPermissionsController;
+use App\Http\Controllers\Api\petController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -63,6 +64,8 @@ Route::get('mainSecondary/{id?}',[subscriberLoginController::class, 'mainSeconda
 Route::get('subscribersKids', [subscribersKidsController::class, 'index']);
 Route::get('subscribersKids/{id}', [subscribersKidsController::class, 'show']);
 Route::get('subscriberkidsdata/{subscriberId}',[subscribersKidsController::class,'getKidsBySubscriberId']);
+
+Route::get('subscriberpetdata/{subscriberId}',[petController::class,'getKidsBySubscriberId']);
 
 
 Route::post('subscribersKids', [subscribersKidsController::class, 'create']);

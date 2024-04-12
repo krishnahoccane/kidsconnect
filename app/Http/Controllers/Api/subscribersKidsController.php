@@ -31,14 +31,8 @@ class subscribersKidsController extends Controller
     public function getKidsBySubscriberId($subscriberId)
     {
         // Retrieve kid data based on subscriber ID
-        $kids = subscribersKidModel::select('subscribers_kids.*')
-        ->join('subscriber_logins as sl', 'subscribers_kids.MainSubscriberId', '=', 'sl.MainSubscriberId')
-        ->where('subscribers_kids.MainSubscriberId', $subscriberId)
-        ->distinct()
-        ->get();
-
-    
-        if ($kids->isEmpty()) {
+        $kidMainSubId = subscribersKidModel::where('MainSubscriberId', $subscriberId)->get();
+        if ($kidMainSubId->isEmpty()) {
             return response()->json([
                 'status' => 404,
                 'message' => 'No kids found for the given subscriber ID'
@@ -47,7 +41,7 @@ class subscribersKidsController extends Controller
     
         return response()->json([
             'status' => 200,
-            'data' => $kids
+            'data' => $kidMainSubId
         ], 200);
     }
     public function create(Request $request)
