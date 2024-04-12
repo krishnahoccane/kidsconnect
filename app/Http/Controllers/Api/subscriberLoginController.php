@@ -47,19 +47,6 @@ class subscriberLoginController extends Controller
         ]);
 
         $subscriberId = $subscibers->id;
-
-        // Uploading Profile image for subscriber
-        if ($request->hasFile('ProfileImage')) {
-            $profileImage = $request->file('ProfileImage');
-            $path = 'uploads/profiles/';
-            $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-            $profileImage->move($path, $fileName);
-            $profileImagePath = $path . $fileName;
-        } else {
-            $profileImagePath = null;
-        }
-
-
         $hashPassword = Hash::make($request->Password);
         $sub_login = subscriberlogins::firstOrCreate([
             'FirstName' => $request->FirstName,
@@ -72,7 +59,7 @@ class subscriberLoginController extends Controller
             'Password' => $hashPassword,
             // 'About' => $request->About,
             'Address' => $request->Address,
-            'ProfileImage' => $profileImagePath,
+            'ProfileImage' => $request->ProfileImage,
             'SSNimage' => $request->SSNimage,
             // 'Keywords' => $request->Keywords,
             'LoginType' => $request->LoginType,
@@ -189,7 +176,10 @@ class subscriberLoginController extends Controller
     
         // Find the subscriberLogin data based on the subscriber's ID - here we are comparing the MainsubscriberID
         $subscriberLoginData = subscriberlogins::where('MainSubscriberId', $subscriber->id)->first();
-    
+        $keywords = $request->has('Keywords') ? $request->input('Keywords') : [];
+
+        $serializedKeywords = json_encode($keywords);
+
         $hashPassword = Hash::make($request->Password);
     
         if ($request->hasFile('ProfileImage')) {
@@ -218,7 +208,7 @@ class subscriberLoginController extends Controller
                 'Address' => $request->Address,
                 'ProfileImage' => $profileImagePath,
                 'SSNimage' => $request->SSNimage,
-                'Keywords' => $request->Keywords,
+                'Keywords' => $serializedKeywords,
                 'LoginType' => $request->LoginType,
                 'RoleId' => $request->RoleId,
                 'MainSubscriberId' => $subscriber->id,
@@ -246,7 +236,8 @@ class subscriberLoginController extends Controller
                 'gender' => $request->gender,
                 'Breed' => $request->Breed,
                 'Dob' => $request->Dob,
-                'Description' =>$request->Description
+                'Description' =>$request->Description,
+                'ProfileImage' =>$profileImagePath,
                 // Add other columns as needed
             ]);
     
@@ -486,7 +477,7 @@ class subscriberLoginController extends Controller
     public function mainSecondary($id = null)
     {
 
-        $sub_login = subscriberlogins::where('IsMain', 0)->where('MainSubscriberId', $id)->get();
+        $sub_login = subscriberlogins::where('MainSubscriberId', $id)->get();
 
         if ($sub_login) {
             return response()->json([

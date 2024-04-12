@@ -18,7 +18,8 @@ class petModel extends Model
         'gender',
         'Breed',
         'Dob',
-        'Description'
+        'Description',
+        'ProfileImage'
         
     ];
 }

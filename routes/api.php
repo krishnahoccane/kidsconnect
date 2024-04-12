@@ -62,6 +62,10 @@ Route::get('mainSecondary/{id?}',[subscriberLoginController::class, 'mainSeconda
 
 // Subscriberskids  ( Create, View, Update, Delete)
 Route::get('subscribersKids', [subscribersKidsController::class, 'index']);
+Route::get('subscribersKids/{id}', [subscribersKidsController::class, 'show']);
+Route::get('subscriberkidsdata/{subscriberId}',[subscribersKidsController::class,'getKidsBySubscriberId']);
+
+
 Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
 
 // For Subs Circles

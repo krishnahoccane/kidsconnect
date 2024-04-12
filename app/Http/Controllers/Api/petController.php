@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\subscribersKidModel;
+use App\Models\petModel;
 use App\Models\subscriberlogins;
 
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class subscribersKidsController extends Controller
     //
     public function index(){
         
-        $subKids = subscribersKidModel::all();
+        $subKids = petModel::all();
 
         if ($subKids->count() > 0) {
             return response()->json([
@@ -31,8 +31,8 @@ class subscribersKidsController extends Controller
     public function getKidsBySubscriberId($subscriberId)
     {
         // Retrieve kid data based on subscriber ID
-        $kids = subscribersKidModel::select('subscribers_kids.*')
-        ->join('subscriber_logins as sl', 'subscribers_kids.MainSubscriberId', '=', 'sl.MainSubscriberId')
+        $kids = petModel::select('pet.*')
+        ->join('subscriber_logins as sl', 'pet.MainSubscriberId', '=', 'sl.MainSubscriberId')
         ->where('subscribers_kids.MainSubscriberId', $subscriberId)
         ->distinct()
         ->get();
