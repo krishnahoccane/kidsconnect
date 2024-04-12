@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\subscribersKidsController;
 use App\Http\Controllers\Api\SubsCirclesMemberController;
 use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use App\Http\Controllers\Api\SubsChildPermissionsController;
+use App\Http\Controllers\Api\petController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -58,6 +59,9 @@ Route::middleware([AuthenticateApi::class])->group(function () {
     // Subscriberskids  ( Create, View, Update, Delete)
     Route::get('subscribersKids/{id?}', [subscribersKidsController::class, 'index']);
     Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
+    Route::get('subscriberkidsdata/{subscriberId}', [subscribersKidsController::class, 'getKidsBySubscriberId']);
+    Route::get('subscriberpetdata/{subscriberId}', [petController::class, 'getKidsBySubscriberId']);
+
 
     // subscribers Contacts with Kids
     Route::get('subcontacts', [subContacts::class, 'index']);
@@ -66,18 +70,6 @@ Route::middleware([AuthenticateApi::class])->group(function () {
 
     Route::post('subcontacts', [subContacts::class, 'store']);
 });
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // For Subs Circles

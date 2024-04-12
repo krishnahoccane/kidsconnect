@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Models\subscribersKidModel;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\subscribersKidModel;
+use App\Models\subscriberlogins;
+
+use Illuminate\Http\Request;
 
 class subscribersKidsController extends Controller
 {
@@ -27,23 +30,34 @@ class subscribersKidsController extends Controller
                 'data' => $subKids
             ], 200);
         } else {
-            $subKids = subscribersKidModel::all();
-
-            if ($subKids->isEmpty()) {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'No Data Found'
-                ], 404);
-            } else {
-                return response()->json([
-                    'status' => 200,
-                    'data' => $subKids
-                ], 200);
-            }
+            return response()->json([
+                'status' => 404,
+                'message' => 'No Data Found'
+            ], 404);
         }
+    
+        return response()->json([
+            'status' => 200,
+            'data' => $kidMainSubId
+        ], 200);
     }
 
-
+    public function getKidsBySubscriberId($subscriberId)
+    {
+        // Retrieve kid data based on subscriber ID
+        $kidMainSubId = subscribersKidModel::where('MainSubscriberId', $subscriberId)->get();
+        if ($kidMainSubId->isEmpty()) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No kids found for the given subscriber ID'
+            ], 404);
+        }
+    
+        return response()->json([
+            'status' => 200,
+            'data' => $kidMainSubId
+        ], 200);
+    }
     public function create(Request $request)
     {
 
@@ -102,9 +116,9 @@ class subscribersKidsController extends Controller
     //update the kids profile by id
 
     public function update(Request $request, $id)
-    {
-        // Find the subscriber kid by its ID
-        $subKid = subscribersKidModel::find($id);
+ {
+    // Find the subscriber kid by its ID
+    $subKid = subscribersKidModel::find($id);
 
         // Check if the subscriber kid exists
         if (!$subKid) {
