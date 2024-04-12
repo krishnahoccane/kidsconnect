@@ -29,13 +29,22 @@ class subscribersKidsController extends Controller
                 'data' => $subKids
             ], 200);
         } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No Data Found'
-            ], 404);
+            $subKids = subscribersKidModel::all();
+
+            if ($subKids->isEmpty()) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'No Data Found'
+                ], 404);
+            } else {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $subKids
+                ], 200);
+            }
         }
-    
     }
+
 
     public function getKidsBySubscriberId($subscriberId)
     {
@@ -111,9 +120,9 @@ class subscribersKidsController extends Controller
     //update the kids profile by id
 
     public function update(Request $request, $id)
- {
-    // Find the subscriber kid by its ID
-    $subKid = subscribersKidModel::find($id);
+    {
+        // Find the subscriber kid by its ID
+        $subKid = subscribersKidModel::find($id);
 
         // Check if the subscriber kid exists
         if (!$subKid) {
