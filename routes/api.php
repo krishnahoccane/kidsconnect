@@ -26,6 +26,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//Login Token generation API
+Route::post('login', [Authcontroller::class, 'login']);
+
+
 // For Roles
 Route::get('roles', [rolesController::class, 'index']);
 Route::get('roles/{id}', [rolesController::class, 'show']);
@@ -37,18 +41,13 @@ Route::delete('roles/{id}', [rolesController::class, 'delete']);
 Route::get('subscriber', [subscriberController::class, 'index']);
 Route::post('subscriber', [subscriberController::class, 'create']);
 
-// Route::middleware('auth:api')->group(function () {
-//     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
-// });
 
+// Subscriber Authentication API
 Route::middleware([AuthenticateApi::class])->group(function () {
     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
 });
 
-Route::post('login', [Authcontroller::class, 'login']);
-// Route::middleware([Cors::class])->group(function () {
-//     Route::post('login', [Authcontroller::class, 'login']);
-// });
+
 
 // Subscribers  ( Create, View, Update, Delete)
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
