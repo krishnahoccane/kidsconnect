@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use App\Models\subscriberlogins;
 use App\Models\subscribersKidModel;
 use App\Http\Controllers\Controller;
-use App\Models\subscribersKidModel;
-use App\Models\subscriberlogins;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-use Illuminate\Http\Request;
 
 class subscribersKidsController extends Controller
 {
@@ -36,10 +35,6 @@ class subscribersKidsController extends Controller
             ], 404);
         }
     
-        return response()->json([
-            'status' => 200,
-            'data' => $kidMainSubId
-        ], 200);
     }
 
     public function getKidsBySubscriberId($subscriberId)
@@ -52,7 +47,7 @@ class subscribersKidsController extends Controller
                 'message' => 'No kids found for the given subscriber ID'
             ], 404);
         }
-    
+
         return response()->json([
             'status' => 200,
             'data' => $kidMainSubId
