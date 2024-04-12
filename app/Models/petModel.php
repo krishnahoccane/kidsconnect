@@ -15,8 +15,10 @@ class petModel extends Model
         'MainSubscriberId',
         'RoleId',
         'Name',
+        'gender',
         'Breed',
-        'Dob'
+        'Dob',
+        'Description'
         
     ];
 }
