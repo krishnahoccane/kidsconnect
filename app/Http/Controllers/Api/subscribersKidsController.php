@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\subscribersKidModel;
 use App\Models\subscriberlogins;
-
 use Illuminate\Http\Request;
 
 class subscribersKidsController extends Controller

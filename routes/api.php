@@ -65,7 +65,10 @@ Route::get('subscribersKids', [subscribersKidsController::class, 'index']);
 Route::get('subscribersKids/{id}', [subscribersKidsController::class, 'show']);
 Route::get('subscriberkidsdata/{subscriberId}',[subscribersKidsController::class,'getKidsBySubscriberId']);
 
+// for pet data ( Create, View, Update, Delete)
+Route::get('subscriberpetdata', [petController::class, 'index']);
 Route::get('subscriberpetdata/{subscriberId}',[petController::class,'getKidsBySubscriberId']);
+Route::put('subscriberpetdata/{petId}/update', [petController::class, 'updatePetProfile']);
 
 
 Route::post('subscribersKids', [subscribersKidsController::class, 'create']);

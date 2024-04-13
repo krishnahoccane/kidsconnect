@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Models\RequestChat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\RequestSentTo;
+
 
 class RequestChatController extends Controller
 {
@@ -25,11 +27,21 @@ class RequestChatController extends Controller
         }
     }
 
-        public function create(Request $request)
+    public function create(Request $request)
     {
+        // Get the RequestSent instance based on RequestSentId
+        $requestSent = RequestSentTo::find($request->input('RequestId'));
+
+        if (!$requestSent) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Request Sent not found',
+            ], 404);
+        }
+
         // Create a new request chat instance with the provided data
         $newRequestChat = RequestChat::create([
-            'RequestId' => $request->input('RequestId'),
+            'RequestId' => $requestSent->RequestId,
             'RequestSentId' => $request->input('RequestSentId'),
             'ChatSenderId' => $request->input('ChatSenderId'),
             'message' => $request->input('message'),
@@ -51,6 +63,4 @@ class RequestChatController extends Controller
             ], 500);
         }
     }
-
-
 }

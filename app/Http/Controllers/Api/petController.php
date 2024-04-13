@@ -44,6 +44,42 @@ class petController extends Controller
             'data' => $kidMainSubId
         ], 200);
     }
-
+    public function updatePetProfile(Request $request, $petId)
+    {
+        $pet = petModel::find($petId);
+    
+        if (!$pet) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Pet not found',
+            ], 404);
+        }
+    
+        // Update pet's profile information
+        $pet->Name = $request->input('Name', $pet->Name);
+        $pet->Breed = $request->input('Breed', $pet->Breed);
+        $pet->gender = $request->input('Gender', $pet->gender); // Use lowercase 'gender'
+        $pet->Dob = $request->input('Dob', $pet->Dob);
+        $pet->Description = $request->input('Description', $pet->Description);
+    
+        // Check if a new profile image is uploaded
+        if ($request->hasFile('ProfileImage')) {
+            $profileImage = $request->file('ProfileImage');
+            $path = 'uploads/profiles/';
+            $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+            $profileImage->move($path, $fileName);
+            $pet->ProfileImage = $path . $fileName;
+        }
+    
+        // Save changes to the database
+        $pet->save();
+    
+        return response()->json([
+            'status' => 200,
+            'message' => 'Pet profile updated successfully',
+            'data' => $pet,
+        ], 200);
+    }
+    
     
 }
