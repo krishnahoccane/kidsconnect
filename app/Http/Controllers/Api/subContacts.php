@@ -1,0 +1,227 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use Illuminate\Http\Request;
+use App\Models\defaultStatus;
+use App\Http\Controllers\Controller;
+use App\Models\subScriberContactModel;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+class subContacts extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $allcontacts = subScriberContactModel::all();
+
+        if ($allcontacts->count() > 0) {
+            $responseData = [];
+
+            foreach ($allcontacts as $contact) {
+
+                $status = $contact->status;
+
+                $statusName = defaultStatus::where('id', $status)->value('name');
+
+                $responseData[] = [
+                    'id' => $contact->id,
+                    'subscriberId' => $contact->subscriberId,
+                    'contactedId' => $contact->contactedId,
+                    'status' => $statusName,
+                    'created_at' => $contact->created_at,
+                    'updated_at' => $contact->updated_at,
+                ];
+            }
+
+            return response()->json($responseData);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => "allcontacts table is empty"
+            ], 404);
+        }
+    }
+
+
+    // Getting SubscriberId - Contacted Data
+
+    public function getSubContactedData($subscriberId)
+    {
+
+
+        $subsciberContactedTo = subScriberContactModel::where('subscriberId', $subscriberId)->get();
+
+        // if ($allcontacts) {
+
+        //     return response()->json([
+        //         'status' => 200,
+        //         'data' => $allcontacts
+        //     ], 200);
+
+        // } else {
+
+        //     return response()->json([
+        //         'status' => 404,
+        //         'message' => 'No such record found'
+        //     ], 404);
+
+        // }
+
+        if ($subsciberContactedTo->count() > 0) {
+            $responseData = [];
+
+            foreach ($subsciberContactedTo as $contact) {
+
+                $status = $contact->status;
+
+                $statusName = defaultStatus::where('id', $status)->value('name');
+
+                $responseData[] = [
+                    'id' => $contact->id,
+                    'subscriberId' => $contact->subscriberId,
+                    'contactedId' => $contact->contactedId,
+                    'status' => $statusName,
+                    'created_at' => $contact->created_at,
+                    'updated_at' => $contact->updated_at,
+                ];
+            }
+
+            return response()->json($responseData);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => "allcontacts table is empty"
+            ], 404);
+        }
+    }
+
+
+    // Getting ContactedID - to find out how many subscribers have contacted them
+
+
+    public function getContactedData($contactedId, $id = null)
+    {
+        if ($id !== null) {
+            try {
+                //**findOrFail()** is used here to check whether the given id is avialable or not
+                //because we are writing 2 conditions is 1-contactedId and 2-Id of subscriber_contacts table to find out perticular subContact id and get the info - comment [vishal]
+
+                $contactedBySubscribers = subScriberContactModel::findOrFail($id);
+            } catch (ModelNotFoundException $e) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "Given Id is not available"
+                ], 404);
+            }
+
+            $statusId = $contactedBySubscribers->status;
+            $statusName = defaultStatus::where('id', $statusId)->value('name');
+            
+            $contactedBySubscribers->status = $statusName;
+
+            return response()->json([
+                'status' => 200,
+                'message' => $contactedBySubscribers
+            ], 200);
+        } else {
+            $contactedBySubscribers = subScriberContactModel::where('contactedId', $contactedId)->get();
+
+            if ($contactedBySubscribers->isEmpty()) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "No records found for the provided contactedId"
+                ], 404);
+            }
+
+            $responseData = [];
+
+            foreach ($contactedBySubscribers as $contact) {
+                $statusName = defaultStatus::where('id', $contact->status)->value('name');
+
+                $responseData[] = [
+                    'id' => $contact->id,
+                    'subscriberId' => $contact->subscriberId,
+                    'contactedId' => $contact->contactedId,
+                    'status' => $statusName,
+                    'created_at' => $contact->created_at,
+                    'updated_at' => $contact->updated_at,
+                ];
+            }
+
+            return response()->json($responseData);
+        }
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $requestData = $request->all();
+
+        $subscriberContactData = subScriberContactModel::create($requestData);
+
+        if ($subscriberContactData) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Contact added susccessfully waiting for approval'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 403,
+                'message' => "Data is not added"
+            ], 403);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+}
