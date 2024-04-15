@@ -59,9 +59,6 @@ class RequestSentController extends Controller
             'SenderFeedback' => $request->SenderFeedback,
             'SenderFeedbackDate' => $request->SenderFeedbackDate,
             'status' => $request->status,
-            'CreatedDate' => now(), // Assuming you want to set the current date/time
-            'UpdatedBy' => $request->user()->id, // Assuming you want to store the ID of the user who made the request
-            'UpdatedDate' => now(), // Assuming you want to set the current date/time
         ]);
     
         // Return the response based on whether the request was successful
