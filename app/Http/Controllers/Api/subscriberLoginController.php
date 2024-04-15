@@ -176,6 +176,7 @@ class subscriberLoginController extends Controller
 
         // Find the subscriberLogin data based on the subscriber's ID - here we are comparing the MainsubscriberID
         $subscriberLoginData = subscriberlogins::where('MainSubscriberId', $subscriber->id)->first();
+        
         $keywords = $request->has('Keywords') ? $request->input('Keywords') : [];
 
         $serializedKeywords = json_encode($keywords);
