@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\subscriberlogins;
+use App\Models\subscribersKidModel;
 use Illuminate\Http\Request;
 use App\Models\defaultStatus;
 use App\Http\Controllers\Controller;
@@ -53,22 +55,6 @@ class subContacts extends Controller
 
 
         $subsciberContactedTo = subScriberContactModel::where('subscriberId', $subscriberId)->get();
-
-        // if ($allcontacts) {
-
-        //     return response()->json([
-        //         'status' => 200,
-        //         'data' => $allcontacts
-        //     ], 200);
-
-        // } else {
-
-        //     return response()->json([
-        //         'status' => 404,
-        //         'message' => 'No such record found'
-        //     ], 404);
-
-        // }
 
         if ($subsciberContactedTo->count() > 0) {
             $responseData = [];
@@ -128,7 +114,7 @@ class subContacts extends Controller
             ], 200);
         } else {
             $contactedBySubscribers = subScriberContactModel::where('contactedId', $contactedId)->get();
-
+            $kidsData = subscribersKidModel::find($contactedId);
             if ($contactedBySubscribers->isEmpty()) {
                 return response()->json([
                     'status' => 404,
@@ -140,6 +126,8 @@ class subContacts extends Controller
 
             foreach ($contactedBySubscribers as $contact) {
                 $statusName = defaultStatus::where('id', $contact->status)->value('name');
+                $mainsubscriberId = $kidsData['MainSubscriberId'];
+                $mainData = subscriberlogins::where('MainSubscriberId', $mainsubscriberId)->get();
 
                 $responseData[] = [
                     'id' => $contact->id,
@@ -148,13 +136,22 @@ class subContacts extends Controller
                     'status' => $statusName,
                     'created_at' => $contact->created_at,
                     'updated_at' => $contact->updated_at,
+                    'KidName'=>$kidsData['FirstName'],
+                    'MainData'=>$mainData
                 ];
             }
+            // 
+
+            // return response()->json([
+            //     'status' => 200,
+            //     'message' => $kidsData
+            // ], 200);
 
             return response()->json($responseData);
         }
     }
 
+    
 
 
 
