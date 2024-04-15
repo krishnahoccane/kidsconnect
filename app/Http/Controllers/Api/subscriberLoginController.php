@@ -166,14 +166,14 @@ class subscriberLoginController extends Controller
     {
         // Find the subscriber data with ID
         $subscriber = subscribersModel::find($id);
-    
+
         if (!$subscriber) {
             return response()->json([
                 'status' => 404,
                 'message' => "Subscriber not found",
             ], 404);
         }
-    
+
         // Find the subscriberLogin data based on the subscriber's ID - here we are comparing the MainsubscriberID
         $subscriberLoginData = subscriberlogins::where('MainSubscriberId', $subscriber->id)->first();
         $keywords = $request->has('Keywords') ? $request->input('Keywords') : [];
@@ -181,7 +181,7 @@ class subscriberLoginController extends Controller
         $serializedKeywords = json_encode($keywords);
 
         $hashPassword = Hash::make($request->Password);
-    
+
         if ($request->hasFile('ProfileImage')) {
             $profileImage = $request->file('ProfileImage');
             $path = 'uploads/profiles/';
@@ -191,7 +191,7 @@ class subscriberLoginController extends Controller
         } else {
             $profileImagePath = null;
         }
-    
+
         // Check the RoleId
         if ($request->RoleId == 5) {
             // Create a new account in subscribersKidModel
@@ -213,7 +213,7 @@ class subscriberLoginController extends Controller
                 'RoleId' => $request->RoleId,
                 'MainSubscriberId' => $subscriber->id,
             ]);
-    
+
             // Check if account was created successfully
             if ($sub_kidNewAccount) {
                 return response()->json([
@@ -236,11 +236,11 @@ class subscriberLoginController extends Controller
                 'gender' => $request->gender,
                 'Breed' => $request->Breed,
                 'Dob' => $request->Dob,
-                'Description' =>$request->Description,
-                'ProfileImage' =>$profileImagePath,
+                'Description' => $request->Description,
+                'ProfileImage' => $profileImagePath,
                 // Add other columns as needed
             ]);
-    
+
             // Check if account was created successfully
             if ($petNewAccount) {
                 return response()->json([
@@ -272,7 +272,7 @@ class subscriberLoginController extends Controller
                 'RoleId' => $request->RoleId,
                 'MainSubscriberId' => $subscriber->id,
             ]);
-    
+
             // Check if account was created successfully
             if ($subscriberloginNewAccount) {
                 return response()->json([
@@ -288,7 +288,7 @@ class subscriberLoginController extends Controller
             }
         }
     }
-    
+
 
 
     public function show($id)
@@ -309,10 +309,6 @@ class subscriberLoginController extends Controller
         }
 
     }
-
-
-
-
     public function update(Request $request, int $id)
     {
 

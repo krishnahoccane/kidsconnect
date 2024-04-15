@@ -45,6 +45,10 @@ class RequestController extends Controller
         // Retrieve the subscriber based on the provided id
         $subscriberId = $request->input('SubscriberId');
 
+        $keywords = $request->has('Keywords') ? $request->input('Keywords') : [];
+
+        $serializedKeywords = json_encode($keywords);
+
         // Create a new request instance with the provided data
         $newRequest = RequestModel::create([
             'Subject' => $request->Subject,
