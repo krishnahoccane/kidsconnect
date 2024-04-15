@@ -10,6 +10,7 @@ class RequestModel extends Model
     use HasFactory;
 
     protected $table = 'request';
+    protected $primaryKey = "id";
     protected $fillable = [
         'SubscriberId',
         'SubschildId',

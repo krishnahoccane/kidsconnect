@@ -84,7 +84,8 @@ Route::post('submembers', [SubsCirclesMemberController::class, 'index']);
 Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
 
 // For Request Sent To
-Route::post('requestsent', [RequestSentController::class, 'index']);
+Route::get('requestsent', [RequestSentController::class, 'index']);
+Route::post('requestsent',[RequestSentController::class, 'store']);
 
 // For Request
 Route::get('requests', [RequestController::class, 'index']);
