@@ -1,6 +1,7 @@
 <?php
 
 // use cors;
+use App\Http\Controllers\Api\imageUpload;
 use App\Http\Controllers\Api\subContacts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,15 +43,15 @@ Route::delete('roles/{id}', [rolesController::class, 'delete']);
 // FOr Subscribers
 Route::get('subscriber', [subscriberController::class, 'index']);
 Route::post('subscriber', [subscriberController::class, 'create']);
+Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
+Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
 
 
 // Subscriber Authentication API
 Route::middleware([AuthenticateApi::class])->group(function () {
     // Subscribers  ( Create, View, Update, Delete)
     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
-    Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
     Route::get('maincreatedAccounts/{subscriberId?}', [subscriberLoginController::class, 'maincreatedaccount']);
-    Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
     Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
     Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
     Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
@@ -70,7 +71,8 @@ Route::middleware([AuthenticateApi::class])->group(function () {
 
     Route::post('subcontacts', [subContacts::class, 'store']);
 });
-
+// Image uplaod testing
+Route::post('imageupload', [imageUpload::class, 'create']);
 
 // For Subs Circles
 Route::post('subcircles', [SubsCirclesController::class, 'index']);
