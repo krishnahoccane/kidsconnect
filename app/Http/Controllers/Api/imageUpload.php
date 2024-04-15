@@ -9,9 +9,9 @@ class imageUpload extends Controller
 {
     public function create(Request $request)
     {
-        $request->validate([
-            'ProfileImage' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // max 2MB
-        ]);
+        // $request->validate([
+        //     'ProfileImage' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // max 2MB
+        // ]);
 
         if ($request->hasFile('ProfileImage')) {
             $profileImage = $request->file('ProfileImage');

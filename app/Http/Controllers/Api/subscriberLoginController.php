@@ -60,7 +60,7 @@ class subscriberLoginController extends Controller
             // 'About' => $request->About,
             'Address' => $request->Address,
             'ProfileImage' => $request->ProfileImage,
-            'SSNimage' => $request->SSNimage,
+            // 'SSNimage' => $request->SSNimage,
             // 'Keywords' => $request->Keywords,
             'LoginType' => $request->LoginType,
             'IsMain' => 1,
