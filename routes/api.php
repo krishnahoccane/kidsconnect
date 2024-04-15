@@ -85,7 +85,7 @@ Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
 Route::post('requestsent', [RequestSentController::class, 'index']);
 
 // For Request
-Route::get('request', [RequestController::class, 'index']);
+Route::get('requests', [RequestController::class, 'index']);
 Route::post('/requests', [RequestController::class, 'create']);
 Route::get('/requests/{id}', [RequestController::class, 'show']);
 Route::put('/requests/{id}', [RequestController::class, 'update']);
