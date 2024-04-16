@@ -20,24 +20,26 @@ class subContacts extends Controller
 
         if ($id !== null) {
             try {
-                $subscriberContacts = subScriberContactModel::where('subscriberId',$id)->get();
-                        
+                $subscriberContacts = subScriberContactModel::where('subscriberId', $id)->get();
+
+                // Map status IDs to status names
+                $subscriberContacts = $subscriberContacts->map(function ($contact) {
+                    $statusId = $contact->status;
+                    $statusName = defaultStatus::where('id', $statusId)->value('name');
+                    $contact->status = $statusName;
+                    return $contact;
+                });
+
+                return response()->json([
+                    'status' => 200,
+                    'data' => $subscriberContacts
+                ], 200);
             } catch (ModelNotFoundException $e) {
                 return response()->json([
                     'status' => 404,
                     'message' => "Given Id is not available"
                 ], 404);
             }
-
-            // $statusId = $subscriberContacts->status;
-            // $statusName = defaultStatus::where('id', $statusId)->value('name');
-
-            // $subscriberContacts->status = $statusName;
-
-            return response()->json([
-                'status' => 200,
-                'data' => $subscriberContacts
-            ], 200);
         } else {
 
             $allcontacts = subScriberContactModel::all();
