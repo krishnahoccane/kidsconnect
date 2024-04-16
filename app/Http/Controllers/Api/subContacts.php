@@ -15,36 +15,67 @@ class subContacts extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id = null)
     {
-        $allcontacts = subScriberContactModel::all();
 
-        if ($allcontacts->count() > 0) {
-            $responseData = [];
+        if ($id !== null) {
+            try {
+                $subscriberContacts = subScriberContactModel::where('subscriberId', $id)->get();
 
-            foreach ($allcontacts as $contact) {
+                // Map status IDs to status names
+                $subscriberContacts = $subscriberContacts->map(function ($contact) {
+                    $statusId = $contact->status;
+                    $statusName = defaultStatus::where('id', $statusId)->value('name');
+                    $contact->status = $statusName;
+                    return $contact;
+                });
 
-                $status = $contact->status;
-
-                $statusName = defaultStatus::where('id', $status)->value('name');
-
-                $responseData[] = [
-                    'id' => $contact->id,
-                    'subscriberId' => $contact->subscriberId,
-                    'contactedId' => $contact->contactedId,
-                    'status' => $statusName,
-                    'created_at' => $contact->created_at,
-                    'updated_at' => $contact->updated_at,
-                ];
+                return response()->json([
+                    'status' => 200,
+                    'data' => $subscriberContacts
+                ], 200);
+            } catch (ModelNotFoundException $e) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "Given Id is not available"
+                ], 404);
             }
-
-            return response()->json($responseData);
         } else {
-            return response()->json([
-                'status' => 404,
-                'message' => "allcontacts table is empty"
-            ], 404);
+
+            $allcontacts = subScriberContactModel::all();
+
+            if ($allcontacts->count() > 0) {
+                $responseData = [];
+
+                foreach ($allcontacts as $contact) {
+
+                    $status = $contact->status;
+
+                    $statusName = defaultStatus::where('id', $status)->value('name');
+
+                    $responseData[] = [
+                        'id' => $contact->id,
+                        'subscriberId' => $contact->subscriberId,
+                        'contactedId' => $contact->contactedId,
+                        'status' => $statusName,
+                        'created_at' => $contact->created_at,
+                        'updated_at' => $contact->updated_at,
+                    ];
+                }
+
+                return response()->json($responseData);
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "allcontacts table is empty"
+                ], 404);
+            }
         }
+
+
+
+
+
     }
 
 
@@ -105,7 +136,7 @@ class subContacts extends Controller
 
             $statusId = $contactedBySubscribers->status;
             $statusName = defaultStatus::where('id', $statusId)->value('name');
-            
+
             $contactedBySubscribers->status = $statusName;
 
             return response()->json([
@@ -136,8 +167,8 @@ class subContacts extends Controller
                     'status' => $statusName,
                     'created_at' => $contact->created_at,
                     'updated_at' => $contact->updated_at,
-                    'KidName'=>$kidsData['FirstName'],
-                    'MainData'=>$mainData
+                    'KidName' => $kidsData['FirstName'],
+                    'MainData' => $mainData
                 ];
             }
             // 
@@ -151,7 +182,7 @@ class subContacts extends Controller
         }
     }
 
-    
+
 
 
 
