@@ -1,14 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\API;
-
 use App\Models\RequestSentTo;
 use App\Http\Controllers\Controller;
 use App\Models\subscriberlogins;
 use Illuminate\Http\Request;
 use App\Models\RequestModel;
-
-
 
 class RequestSentController extends Controller
 {
@@ -34,8 +31,6 @@ class RequestSentController extends Controller
         // Retrieve the request details using the provided request ID
         $requestDetails = RequestModel::find($request->id);   
         
-
-        
         // Check if the request exists
         if (!$requestDetails) {
             return response()->json([
@@ -44,7 +39,6 @@ class RequestSentController extends Controller
             ], 404);
         }
     
-       
         // Create a new requestsentTo instance with the provided data
         $newRequestSentTo = RequestSentTo::create([
             'RequestId' => $requestDetails,
