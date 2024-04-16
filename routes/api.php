@@ -65,11 +65,12 @@ Route::middleware([AuthenticateApi::class])->group(function () {
 
 
     // subscribers Contacts with Kids
-    Route::get('subcontacts', [subContacts::class, 'index']);
+    Route::get('subcontacts/{id?}', [subContacts::class, 'index']);
     Route::get('subcontacts/subscriberId/{subscriberId}/{id?}', [subContacts::class, 'getSubContactedData']);
     Route::get('subcontacts/contactedId/{contactedId}/{id?}', [subContacts::class, 'getContactedData']);
 
     Route::post('subcontacts', [subContacts::class, 'store']);
+
 });
 // Image uplaod testing
 Route::post('imageupload', [imageUpload::class, 'create']);
