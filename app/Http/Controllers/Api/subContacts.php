@@ -23,72 +23,45 @@ class subContacts extends Controller
             try {
                 $query = subScriberContactModel::where('subscriberId', $id)->where('status', "4")->get();
 
-                $contactedIds = []; 
+                $responseData = [];
                 foreach ($query as $contact) {
-                    $contactedIds[] = $contact->contactedId; 
+                    $contactedId = $contact->contactedId;
+
+                    // Fetch kid data for each contactedId
+                    $kidData = subscribersKidModel::where('id', $contactedId)->get()->toArray();
+
+                    // Fetch main subscriber data for each kid
+                    $mainSubscriberIDs = [];
+                    foreach ($kidData as $kid) {
+                        $mainSubscriberIDs[] = $kid['MainSubscriberId'];
+                    }
+
+                    $mainData = subscriberlogins::whereIn('MainSubscriberId', $mainSubscriberIDs)->get()->toArray();
+
+                    // Assemble the response data
+                    $responseData[] = [
+                        'id' => $contact->id,
+                        'contactedId' => $contactedId,
+                        'kidData' => $kidData, // printing the data in array of object - Kids data
+                        'mainData' => $mainData, // printing the data in array of object - Parents data
+                        'status' => $contact->status,
+                        'created_at' => $contact->created_at,
+                        'updated_at' => $contact->updated_at,
+                    ];
                 }
 
                 return response()->json([
                     'status' => 200,
-                    'message' => $contactedIds 
+                    'message' => $responseData
                 ], 200);
-
-                // print_r($query[0]['contactedId']);
-
-
-                // if ($query->count() > 0) {
-                //     $responseData = [];
-
-                //     foreach ($query as $contact) {
-
-
-
-                //         // foreach ($query as $contact) {
-                //         $status = $contact->status;
-                //         $contactedId = $contact->contactedId;
-
-                //         $kidsData = subscribersKidModel::find($contactedId);
-                //         if ($query->isEmpty()) {
-                //             return response()->json([
-                //                 'status' => 404,
-                //                 'message' => "No records found for the provided contactedId"
-                //             ], 404);
-                //         }
-
-                //         $responseData = [];
-                //         $statusName = defaultStatus::where('id', $contact->status)->value('name');
-                //         $mainsubscriberId = $kidsData['MainSubscriberId'];
-                //         $mainData = subscriberlogins::where('MainSubscriberId', $mainsubscriberId)->get();
-
-                //         $responseData[] = [
-                //             'id' => $contact->id,
-                //             'subscriberId' => $contact->subscriberId,
-                //             'contactedId' => $contact->contactedId,
-                //             'status' => $statusName,
-                //             'created_at' => $contact->created_at,
-                //             'updated_at' => $contact->updated_at,
-                //             'KidName' => $kidsData['FirstName'],
-                //             'MainData' => $mainData
-                //         ];
-                //         // }
-
-
-                //         return response()->json($responseData);
-
-                //     }
-
-                // } else {
-                //     return response()->json([
-                //         'status' => 404,
-                //         'message' => "allcontacts table is empty"
-                //     ], 404);
-                // }
-            } catch (ModelNotFoundException $e) {
+            } catch (\Exception $e) {
+                // Handle exceptions
                 return response()->json([
-                    'status' => 404,
-                    'message' => "Given Id is not available"
-                ], 404);
+                    'status' => 500,
+                    'message' => 'Error: ' . $e->getMessage()
+                ], 500);
             }
+
         } else {
 
             $allcontacts = subScriberContactModel::all();
