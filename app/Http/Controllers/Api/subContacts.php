@@ -23,17 +23,15 @@ class subContacts extends Controller
             try {
                 $query = subScriberContactModel::where('subscriberId', $id)->where('status', "4")->get();
 
-                // $conatctedID = $query['contactedId'];
+                $contactedIds = []; 
                 foreach ($query as $contact) {
-
-                    $contactedId = $contact->contactedId;
-
-                    return response()->json([
-                        'status' => 200,
-                        'message' => $contactedId
-                    ], 200);
-
+                    $contactedIds[] = $contact->contactedId; 
                 }
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => $contactedIds 
+                ], 200);
 
                 // print_r($query[0]['contactedId']);
 
