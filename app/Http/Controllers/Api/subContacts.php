@@ -36,23 +36,23 @@ class subContacts extends Controller
                         $mainSubscriberIDs[] = $kid['MainSubscriberId'];
                     }
 
-                    $mainData = subscriberlogins::whereIn('MainSubscriberId', $mainSubscriberIDs)->get()->toArray();
+                    // $mainData = subscriberlogins::whereIn('MainSubscriberId', $mainSubscriberIDs)->get()->toArray();
 
                     // Assemble the response data
-                    $responseData[] = [
-                        'id' => $contact->id,
-                        'contactedId' => $contactedId,
-                        'kidData' => $kidData, // printing the data in array of object - Kids data
-                        'mainData' => $mainData, // printing the data in array of object - Parents data
-                        'status' => $contact->status,
-                        'created_at' => $contact->created_at,
-                        'updated_at' => $contact->updated_at,
-                    ];
+                    // $responseData[] = [
+                    //     'id' => $contact->id,
+                    //     'contactedId' => $contactedId,
+                    //     'kidData' => $kidData, // printing the data in array of object - Kids data
+                    //     // 'mainData' => $mainData, // printing the data in array of object - Parents data
+                    //     'status' => $contact->status,
+                    //     'created_at' => $contact->created_at,
+                    //     'updated_at' => $contact->updated_at,
+                    // ];
                 }
 
                 return response()->json([
                     'status' => 200,
-                    'message' => $responseData
+                    'data' => $kidData
                 ], 200);
             } catch (\Exception $e) {
                 // Handle exceptions
