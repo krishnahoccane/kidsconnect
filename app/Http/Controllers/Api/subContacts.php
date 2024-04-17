@@ -23,18 +23,19 @@ class subContacts extends Controller
             try {
                 $query = subScriberContactModel::where('subscriberId', $id)->where('status', "4")->get();
 
-                $responseData = [];
+                $kidsData = [];
                 foreach ($query as $contact) {
                     $contactedId = $contact->contactedId;
 
                     // Fetch kid data for each contactedId
-                    $kidData = subscribersKidModel::where('id', $contactedId)->get()->toArray();
+                    $kidsData[] = subscribersKidModel::where('id', $contactedId)->get()->toArray();
 
+                    $mergedKidData = array_merge(...$kidsData);
                     // Fetch main subscriber data for each kid
-                    $mainSubscriberIDs = [];
-                    foreach ($kidData as $kid) {
-                        $mainSubscriberIDs[] = $kid['MainSubscriberId'];
-                    }
+                    // $mainSubscriberIDs = [];
+                    // foreach ($kidData as $kid) {
+                    //     $mainSubscriberIDs[] = $kid['MainSubscriberId'];
+                    // }
 
                     // $mainData = subscriberlogins::whereIn('MainSubscriberId', $mainSubscriberIDs)->get()->toArray();
 
@@ -52,7 +53,7 @@ class subContacts extends Controller
 
                 return response()->json([
                     'status' => 200,
-                    'data' => $kidData
+                    'data' => $mergedKidData
                 ], 200);
             } catch (\Exception $e) {
                 // Handle exceptions
