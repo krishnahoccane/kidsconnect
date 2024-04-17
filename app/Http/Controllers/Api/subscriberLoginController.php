@@ -312,40 +312,12 @@ class subscriberLoginController extends Controller
     }
     public function update(Request $request, int $id)
     {
-
-        $validate = Validator::make($request->all(), [
-
-            'FirstName' => ['string'],
-            'LastName' => ['string'],
-            'email' => ['email', Rule::unique('subscriber_logins')->ignore($id)],
-            'Dob' => ['date'],
-            'Gender' => ['numeric'],
-            'PhoneNumber' => ['numeric'],
-            'SSN' => ['string', Rule::unique('subscriber_logins')->ignore($id)],
-            'Password' => ['string'],
-            'About' => ['string'],
-            'Address' => ['string'],
-            'ProfileImage' => ['string'],
-            'SSNimage' => ['string'],
-            'Keywords' => ['string'],
-            'LoginType' => ['numeric'],
-            'IsMain' => ['numeric'],
-            'RoleId' => ['numeric'],
-            'MainSubscriberId' => ['numeric']
-        ]);
-
-        if ($validate->fails()) {
-
-            return response()->json([
-                'status' => 422,
-                'message' => $validate->messages()
-            ], 422);
-
-        } else {
-
             $role = subscriberlogins::find($id);
 
             if ($role) {
+
+                $hashedPassword = Hash::make($request->Password);
+
 
                 $role->update([
                     'FirstName' => $request->FirstName,
@@ -355,7 +327,7 @@ class subscriberLoginController extends Controller
                     'Gender' => $request->Gender,
                     'PhoneNumber' => $request->PhoneNumber,
                     'SSN' => $request->SSN,
-                    'Password' => $request->Password,
+                    'Password' => $hashedPassword,
                     'About' => $request->About,
                     'Address' => $request->Address,
                     'ProfileImage' => $request->ProfileImage,
@@ -372,12 +344,6 @@ class subscriberLoginController extends Controller
                     'status' => 200,
                     'message' => 'Subscriber is Updated successfully'
                 ], 200);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'No Subscriber found'
-                ], 404);
-            }
         }
 
     }

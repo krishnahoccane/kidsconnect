@@ -19,21 +19,65 @@ class subContacts extends Controller
     {
 
         if ($id !== null) {
+            // Handle requests with specific ID
             try {
-                $subscriberContacts = subScriberContactModel::where('subscriberId', $id)->get();
-
-                // Map status IDs to status names
-                $subscriberContacts = $subscriberContacts->map(function ($contact) {
-                    $statusId = $contact->status;
-                    $statusName = defaultStatus::where('id', $statusId)->value('name');
-                    $contact->status = $statusName;
-                    return $contact;
-                });
+                $query = subScriberContactModel::where('subscriberId', $id)->where('status', "4")->get();
 
                 return response()->json([
-                    'status' => 200,
-                    'data' => $subscriberContacts
-                ], 200);
+                                    'status' => 200,
+                                    'message' => [
+                                        
+                                    ]
+                                ], 200);
+
+
+                // if ($query->count() > 0) {
+                //     $responseData = [];
+
+                //     foreach ($query as $contact) {
+
+
+
+                //         // foreach ($query as $contact) {
+                //         $status = $contact->status;
+                //         $contactedId = $contact->contactedId;
+
+                //         $kidsData = subscribersKidModel::find($contactedId);
+                //         if ($query->isEmpty()) {
+                //             return response()->json([
+                //                 'status' => 404,
+                //                 'message' => "No records found for the provided contactedId"
+                //             ], 404);
+                //         }
+
+                //         $responseData = [];
+                //         $statusName = defaultStatus::where('id', $contact->status)->value('name');
+                //         $mainsubscriberId = $kidsData['MainSubscriberId'];
+                //         $mainData = subscriberlogins::where('MainSubscriberId', $mainsubscriberId)->get();
+
+                //         $responseData[] = [
+                //             'id' => $contact->id,
+                //             'subscriberId' => $contact->subscriberId,
+                //             'contactedId' => $contact->contactedId,
+                //             'status' => $statusName,
+                //             'created_at' => $contact->created_at,
+                //             'updated_at' => $contact->updated_at,
+                //             'KidName' => $kidsData['FirstName'],
+                //             'MainData' => $mainData
+                //         ];
+                //         // }
+
+
+                //         return response()->json($responseData);
+
+                //     }
+
+                // } else {
+                //     return response()->json([
+                //         'status' => 404,
+                //         'message' => "allcontacts table is empty"
+                //     ], 404);
+                // }
             } catch (ModelNotFoundException $e) {
                 return response()->json([
                     'status' => 404,
