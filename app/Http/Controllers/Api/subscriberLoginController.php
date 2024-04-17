@@ -45,7 +45,15 @@ class subscriberLoginController extends Controller
             'RoleId' => $request->RoleId,
             'Email' => $request->Email
         ]);
-
+        if ($request->hasFile('ProfileImage')) {
+            $profileImage = $request->file('ProfileImage');
+            $path = 'uploads/profiles/';
+            $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+            $profileImage->move($path, $fileName);
+            $profileImagePath = $path . $fileName;
+        } else {
+            $profileImagePath = null;
+        }
         $subscriberId = $subscibers->id;
         $hashPassword = Hash::make($request->Password);
         $sub_login = subscriberlogins::firstOrCreate([
@@ -57,9 +65,9 @@ class subscriberLoginController extends Controller
             'PhoneNumber' => $request->PhoneNumber,
             'SSN' => $request->SSN,
             'Password' => $hashPassword,
-            // 'About' => $request->About,
+            'About' => $request->About,
             'Address' => $request->Address,
-            'ProfileImage' => $request->ProfileImage,
+            'ProfileImage' => $profileImagePath,
             // 'SSNimage' => $request->SSNimage,
             // 'Keywords' => $request->Keywords,
             'LoginType' => $request->LoginType,
@@ -176,7 +184,7 @@ class subscriberLoginController extends Controller
 
         // Find the subscriberLogin data based on the subscriber's ID - here we are comparing the MainsubscriberID
         $subscriberLoginData = subscriberlogins::where('MainSubscriberId', $subscriber->id)->first();
-        
+
         $keywords = $request->has('Keywords') ? $request->input('Keywords') : [];
 
         $serializedKeywords = json_encode($keywords);
