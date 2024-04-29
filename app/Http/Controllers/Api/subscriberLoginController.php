@@ -128,46 +128,6 @@ class subscriberLoginController extends Controller
         }
     }
 
-    //
-    // public function showcreateAccount($subscriberId)
-    // {
-    //     // Find the subscriber
-    //     $subscriber = subscribersModel::find($subscriberId);
-
-    //     // Check if the subscriber exists
-    //     if (!$subscriber) {
-    //         return response()->json([
-    //             'status' => 404,
-    //             'message' => "Subscriber not found",
-    //         ], 404);
-    //     }
-
-    //     // Execute the SQL query using raw expressions
-    //     $familyMembers = DB::select("
-    //     SELECT id, FirstName,LastName,RoleId,ProfileImage
-    //     FROM subscriber_logins
-    //     WHERE IsMain = 0 AND MainSubscriberId = $subscriberId
-    //     UNION
-    //     SELECT id, FirstName,LastName,RoleId,ProfileImage
-    //     FROM subscribers_kids
-    //     WHERE MainSubscriberId = $subscriberId
-    // ");
-
-    //     // Check if family members exist
-    //     if (empty($familyMembers)) {
-
-    //         return response()->json([
-    //             'status' => 403,
-    //             'message' => 'No family members found for the subscriber',
-    //         ], 403);
-
-    //     }
-
-    //     return response()->json([
-    //         'status' => 200,
-    //         'data' => $familyMembers,
-    //     ], 200);
-    // }
 
 
     public function createAccounts(Request $request, int $id)
@@ -320,40 +280,52 @@ class subscriberLoginController extends Controller
     }
     public function update(Request $request, int $id)
     {
-            $role = subscriberlogins::find($id);
+        $role = subscriberlogins::find($id);
 
-            if ($role) {
-
-                $hashedPassword = Hash::make($request->Password);
-
-
-                $role->update([
-                    'FirstName' => $request->FirstName,
-                    'LastName' => $request->LastName,
-                    'email' => $request->email,
-                    'Dob' => $request->Dob,
-                    'Gender' => $request->Gender,
-                    'PhoneNumber' => $request->PhoneNumber,
-                    'SSN' => $request->SSN,
-                    'Password' => $hashedPassword,
-                    'About' => $request->About,
-                    'Address' => $request->Address,
-                    'ProfileImage' => $request->ProfileImage,
-                    'SSNimage' => $request->SSNimage,
-                    'Keywords' => $request->Keywords,
-                    'LoginType' => $request->LoginType,
-                    'IsMain' => $request->IsMain,
-                    'RoleId' => $request->RoleId,
-                    'MainSubscriberId' => $request->MainSubscriberId
-
-                ]);
-
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Subscriber is Updated successfully'
-                ], 200);
+        if ($request->hasFile('ProfileImage')) {
+            $profileImage = $request->file('ProfileImage');
+            $path = 'uploads/profiles/';
+            $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+            $profileImage->move($path, $fileName);
+            $profileImagePath = $path . $fileName;
+        } else {
+            $profileImagePath = null;
         }
 
+
+        if ($role) {
+            $updateData = [
+                'FirstName' => $request->FirstName,
+                'LastName' => $request->LastName,
+                'email' => $request->email,
+                'Dob' => $request->Dob,
+                'Gender' => $request->Gender,
+                'PhoneNumber' => $request->PhoneNumber,
+                'SSN' => $request->SSN,
+                'About' => $request->About,
+                'Address' => $request->Address,
+                'ProfileImage' => $profileImagePath,
+                'SSNimage' => $request->SSNimage,
+                'Keywords' => $request->Keywords,
+                'LoginType' => $request->LoginType,
+                'IsMain' => $request->IsMain,
+                'RoleId' => $request->RoleId,
+                'MainSubscriberId' => $request->MainSubscriberId
+            ];
+
+            // Check if the password field is present in the request
+            if ($request->has('Password')) {
+                $hashedPassword = Hash::make($request->Password);
+                $updateData['Password'] = $hashedPassword;
+            }
+
+            $role->update($updateData);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Subscriber is Updated successfully'
+            ], 200);
+        }
     }
 
     public function delete(Request $request, int $id)

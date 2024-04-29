@@ -15,8 +15,8 @@
                         <h4 class="mb-0">Forgot Password</h4>
                     </div>
                     <div class="card-body">
-                        <p class="lead">Your Forgot Password is:</p>
-                        <h2 class="text-center font-weight-bold text-primary">{{ $password }}</h2>
+                        {{-- <p class="lead">Your Forgot Password is:</p> --}}
+                       <h4>This is link for reset password</h4><a href="{{ route('reset.password.show', ['email' => $email]) }}">Reset Password</a>
                     </div>
                     <div class="card-footer bg-light">
                         <p class="text-muted mb-0">This OTP is valid for a single use and should not be shared with anyone. If you didn't request this OTP, please ignore this email.</p>

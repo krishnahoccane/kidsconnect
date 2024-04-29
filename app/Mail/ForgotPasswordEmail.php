@@ -19,18 +19,23 @@ class ForgotPasswordEmail extends Mailable
         $this->password = $password;
     }
 
-    public function build()
-    {   
-        $email = $this->email;
-        $fromEmail = config('mail.from.address');
-        $subject = 'Password Recovery';
-        $name = 'Kids Connect';
+    // public function build()
+    // {   
+    //     $email = $this->email;
+    //     $fromEmail = config('mail.from.address');
+    //     $subject = 'Password Recovery';
+    //     $name = 'Kids Connect';
         
-        return $this->view('mailsBody.forgotPassword')
-            ->to($email)
-            ->from($fromEmail, $name)
-            ->replyTo($fromEmail, $name)
-            ->subject($subject)
-            ->with(['password' => $this->password]);
+    //     return $this->view('mailsBody.forgotPassword')
+    //         ->to($email)
+    //         ->from($fromEmail, $name)
+    //         ->replyTo($fromEmail, $name)
+    //         ->subject($subject)
+    //         ->with(['password' => $this->password]);
+    // }
+    public function build()
+    {
+        return $this->subject('Reset Your Password')->view('mailsBody.forgotPassword');
     }
 }
+

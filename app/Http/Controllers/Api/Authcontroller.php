@@ -40,4 +40,6 @@ class AuthController extends Controller
             'email' => $email
         ], 200);
     }
+
+    
 }

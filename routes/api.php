@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\SubsCirclesMemberController;
 use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use App\Http\Controllers\Api\SubsChildPermissionsController;
 use App\Http\Controllers\Api\petController;
+use App\Http\Controllers\Api\ResetPassword;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -32,6 +33,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //Login Token generation API
 Route::post('login', [Authcontroller::class, 'login']);
 
+// Route to send OTP for password reset
+Route::post('password/reset/send-link', [ResetPassword::class, 'sendResetLinkEmail']);
+Route::get('/reset-password', [ResetPassword::class, 'showResetPasswordForm'])->name('reset.password.show');
+Route::put('/reset-password', [ResetPassword::class, 'updatePassword'])->name('reset.password.update');
+
+
+// Route to reset password using OTP
+// Route::post('password/reset', [ResetPassword::class, 'reset']);
 
 // For Roles
 Route::get('roles', [rolesController::class, 'index']);
