@@ -78,6 +78,7 @@
                         <button class="btn btn-primary d-grid w-100">
                             Sign up
                         </button>
+                        
                     </form>
 
                     <p class="text-center">
