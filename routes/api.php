@@ -1,6 +1,7 @@
 <?php
 
 // use cors;
+use App\Http\Controllers\Api\RegCodeController;
 use Illuminate\Http\Request;
 use App\Http\Middleware\Cors;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,6 @@ use App\Http\Controllers\Api\rolesController;
 use App\Http\Controllers\Api\bannerController;
 use App\Http\Controllers\Api\AllPageController;
 use App\Http\Controllers\Api\RequestController;
-use App\Http\Controllers\Api\CodeTypecontroller;
 use App\Http\Controllers\Api\CodeTypescontroller;
 use App\Http\Controllers\Api\subscriberController;
 use App\Http\Controllers\Api\RequestChatController;
@@ -62,6 +62,11 @@ Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::cl
 Route::get('codetype', [CodeTypescontroller::class, 'index']);
 
 // For Reg_code Data
+Route::get('regcodedata/{id}', [RegCodeController::class, 'index']);
+Route::get('regcodedata/{id}/userid/{user_id}', [RegCodeController::class, 'show']);
+Route::post('verify', [RegCodeController::class, 'verify']);
+
+
 // Route::post('codetype', [subscriberController::class, 'create']);
 // Route::post('codetype', [subscriberLoginController::class, 'create']);
 // Route::post('codetype/{id}', [subscriberLoginController::class, 'createAccounts']);
