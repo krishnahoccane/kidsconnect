@@ -1,18 +1,22 @@
 <?php
 
 // use cors;
-use App\Http\Controllers\Api\imageUpload;
-use App\Http\Controllers\Api\subContacts;
 use Illuminate\Http\Request;
+use App\Http\Middleware\Cors;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AuthenticateApi;
-use App\Http\Middleware\Cors;
+use App\Http\Controllers\Api\imageUpload;
+use App\Http\Controllers\Api\subContacts;
+use App\Http\Controllers\Api\petController;
+use App\Http\Controllers\Api\ResetPassword;
 use App\Http\Controllers\Api\Authcontroller;
 use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\rolesController;
 use App\Http\Controllers\Api\bannerController;
 use App\Http\Controllers\Api\AllPageController;
 use App\Http\Controllers\Api\RequestController;
+use App\Http\Controllers\Api\CodeTypecontroller;
+use App\Http\Controllers\Api\CodeTypescontroller;
 use App\Http\Controllers\Api\subscriberController;
 use App\Http\Controllers\Api\RequestChatController;
 use App\Http\Controllers\Api\RequestSentController;
@@ -23,8 +27,6 @@ use App\Http\Controllers\Api\subscribersKidsController;
 use App\Http\Controllers\Api\SubsCirclesMemberController;
 use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use App\Http\Controllers\Api\SubsChildPermissionsController;
-use App\Http\Controllers\Api\petController;
-use App\Http\Controllers\Api\ResetPassword;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -54,6 +56,15 @@ Route::get('subscriber', [subscriberController::class, 'index']);
 Route::post('subscriber', [subscriberController::class, 'create']);
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
+
+
+// FOr Code Type
+Route::get('codetype', [CodeTypescontroller::class, 'index']);
+
+// For Reg_code Data
+// Route::post('codetype', [subscriberController::class, 'create']);
+// Route::post('codetype', [subscriberLoginController::class, 'create']);
+// Route::post('codetype/{id}', [subscriberLoginController::class, 'createAccounts']);
 
 
 // Subscriber Authentication API
