@@ -137,18 +137,18 @@
         ]
     });
 
-   
-// document.addEventListener('DOMContentLoaded', function() {
-//     console.log('DOMContentLoaded event fired.');
-//     ClassicEditor
-//         .create(document.getElementById('editor'))
-//         .then(editor => {
-//             console.log('Editor initialized successfully:', editor);
-//         })
-//         .catch(error => {
-//             console.error('Error initializing editor:', error);
-//         });
-// });
+
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     console.log('DOMContentLoaded event fired.');
+    //     ClassicEditor
+    //         .create(document.getElementById('editor'))
+    //         .then(editor => {
+    //             console.log('Editor initialized successfully:', editor);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error initializing editor:', error);
+    //         });
+    // });
 
 
 
