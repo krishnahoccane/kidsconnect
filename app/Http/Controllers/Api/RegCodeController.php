@@ -81,6 +81,7 @@ class RegCodeController extends Controller
         if ($verifyingCode) {
             return response()->json([
                 'status' => 200,
+                'message'=>'Code Verified Successfully',
                 'data' => $verifyingCode
             ], 200);
         } else {
