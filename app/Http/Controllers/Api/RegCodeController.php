@@ -121,7 +121,7 @@ class RegCodeController extends Controller
     private function generateUniqueCode()
     {
         // Generate a random 4-digit code
-        $code = str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        $code = str_pad(mt_rand(0, 9999), 5, '0', STR_PAD_LEFT);
 
         // Check if the code already exists in the database
         $existingCode = RegCodes::where('code_number', $code)->exists();

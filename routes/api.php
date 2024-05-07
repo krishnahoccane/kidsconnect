@@ -62,7 +62,7 @@ Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::cl
 Route::get('codetype', [CodeTypescontroller::class, 'index']);
 
 // For Reg_code Data
-Route::get('regcodedata/{id?}', [RegCodeController::class, 'index']);
+Route::get('regcodedata/{id}', [RegCodeController::class, 'index']);
 Route::get('regcodedata/{id}/userid/{user_id}', [RegCodeController::class, 'show']);
 Route::post('verify', [RegCodeController::class, 'verify']);
 
