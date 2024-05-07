@@ -72,119 +72,73 @@ class RegCodeController extends Controller
         }
     }
 
-    // public function verify(Request $request){
+    public function verify(Request $request)
+    {
+        $entryVerificationCode = $request->input('code');
+        $verifyingCode = RegCodes::where('code_number', $entryVerificationCode)->first();
 
-    //     $entryVerificationCode = $request->input('code');
-
-    //     $verifyingCode = RegCodes::where('code_number', $entryVerificationCode)->first();
-       
-
-    //     if($verifyingCode){
-    //         $type = $verifyingCode->code_type_id;
-    //         $verifyingCodeType = CodeTypes::where('id', $type)->first();
-    //         return response()->json([
-
-    //             'status' => 200,
-    //             'message' => "Code Matched",
-    //             'The entry code type is: '=>$verifyingCodeType->CodeName
-
-
-    //         ], 200);
-    //     }else{
-    //         return response()->json([
-
-    //             'status' => 403,
-    //             'message' => "Code Not Matched"
-
-    //         ], 403);
-    //     }
-
-    // }
-    // public function verify(Request $request){
-    //     $entryVerificationCode = $request->input('code');
-    
-    //     $verifyingCode = RegCodes::where('code_number', $entryVerificationCode)->first();
-       
-    //     if($verifyingCode){
-    //         // Get the Ref_Inv_By ID from the RegCodes table
-    //         $refInvById = $verifyingCode->code_type_id;
-    
-    //         // Assuming $request contains other necessary subscriber data
-    //         $subscriberData = $request->all();
-    //         // Insert the verifying code ID and Ref_Inv_By ID into the subscriber data
-    //         $subscriberData['EntryCode'] = $verifyingCode->id;
-    //         $subscriberData['Ref_Inv_By'] = $refInvById;
-            
-    //         // Create or update the subscriber
-    //         $subscriber = subscriberlogins::create($subscriberData);
-    
-    //         $type = $verifyingCode->code_type_id;
-    //         $verifyingCodeType = CodeTypes::where('id', $type)->first();
-    //         return response()->json([
-    //             'status' => 200,
-    //             'message' => "Code Matched",
-    //             'The entry code type is: ' => $verifyingCodeType->CodeName,
-    //             'subscriber_email' => $subscriber->Email,
-    //             'subscriber_password' => 'password' // You can return password here if needed
-    //         ], 200);
-    //     }else{
-    //         return response()->json([
-    //             'status' => 403,
-    //             'message' => "Code Not Matched"
-    //         ], 403);
-    //     }
-    // }
-    
- // Verify Endpoint
-public function verify(Request $request){
-    $entryVerificationCode = $request->input('code');
-
-    $verifyingCode = RegCodes::where('code_number', $entryVerificationCode)->first();
-   
-    if($verifyingCode){
-        // Get the Ref_Inv_By ID from the RegCodes table
-        $refInvById = $verifyingCode->code_type_id;
-
-        // Assuming $request contains other necessary subscriber data
-        $subscriberData = $request->all();
-        // Insert the verifying code ID and Ref_Inv_By ID into the subscriber data
-        $subscriberData['EntryCode'] = $verifyingCode->id;
-        $subscriberData['Ref_Inv_By'] = $refInvById;
-        
-        // Create the subscriber
-        $subscriber = subscriberlogins::create($subscriberData);
-
-        $type = $verifyingCode->code_type_id;
-        $verifyingCodeType = CodeTypes::where('id', $type)->first();
-        return response()->json([
-            'status' => 200,
-            'message' => "Code Matched",
-            'The entry code type is: ' => $verifyingCodeType->CodeName,
-            'subscriber_id' => $subscriber->id // Return the subscriber ID
-        ], 200);
-    }else{
-        return response()->json([
-            'status' => 403,
-            'message' => "Code Not Matched"
-        ], 403);
+        if ($verifyingCode) {
+            return response()->json([
+                'status' => 403,
+                'data' => $verifyingCode
+            ], 403);
+        } else {
+            return response()->json([
+                'status' => 403,
+                'message' => "Code Not Matched"
+            ], 403);
+        }
     }
-}
 
-// Update Endpoint
-public function update(Request $request, $subscriber_id){
-    // Find the subscriber by ID
-    $subscriber = subscriberlogins::findOrFail($subscriber_id);
+    public function verifyAndCreate(Request $request, $entryId)
+    {
+        // return $entryId;
 
-    // Update email and password
-    $subscriber->update([
-        'Email' => $request->input('email'),
-        'Password' => bcrypt($request->input('password'))
-    ]);
+        // if (!$entryId) {
+        //     // $type = $verifyingCode->code_type_id;
+        //     // $verifyingCodeType = CodeTypes::where('id', $type)->first();
 
-    return response()->json([
-        'status' => 200,
-        'message' => "Subscriber updated successfully"
-    ], 200);
-}
-   
+            $entryRefType = 1;
+            $Refcode =  $this->generateUniqueCode();
+            $entryInvType = 2;
+            $Invcode =  $this->generateUniqueCode();
+            $RegfcodeEntry = RegCodes::firstOrCreate([
+                'code_type_id' => $entryRefType,
+                'code_number' => $Refcode,
+                'user_id' => $entryId
+            ]);
+            if ($RegfcodeEntry) {
+                $InvcodeEntry = RegCodes::firstOrCreate([
+                    'code_type_id' => $entryInvType,
+                    'code_number' => $Invcode,
+                    'user_id' => $entryId
+                ]);
+
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Thank you for registration'
+                ]);
+            }
+        // }
+
+    }
+
+    private function generateUniqueCode()
+    {
+        // Generate a random 4-digit code
+        $code = str_pad(mt_rand(10000, 99999), 5, '0', STR_PAD_LEFT);
+
+
+        // Check if the code already exists in the database
+        $existingCode = RegCodes::where('code_number', $code)->exists();
+
+        // If the code already exists, recursively call the function to generate a new code
+        if ($existingCode) {
+            return $this->generateUniqueCode();
+        }
+
+        // If the code doesn't exist, return it
+        return $code;
+    }
+
 }
