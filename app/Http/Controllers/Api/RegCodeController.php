@@ -119,7 +119,7 @@ class RegCodeController extends Controller
                 return response()->json([
                     'status'=>200,
                     'message'=>'Thank you for registration',
-                    'data'=>$entryId
+                    'id'=>$entryId
                 ]);
             }
         // }
