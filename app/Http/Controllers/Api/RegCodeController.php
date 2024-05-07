@@ -73,25 +73,40 @@ class RegCodeController extends Controller
         }
     }
 
-    public function verify(Request $request){
+    public function verify(Request $request)
+    {
 
         $entryVerificationCode = $request->input('code');
 
         $verifyingCode = RegCodes::where('code_number', $entryVerificationCode)->first();
-       
 
-        if($verifyingCode){
+
+        if ($verifyingCode) {
             $type = $verifyingCode->code_type_id;
             $verifyingCodeType = CodeTypes::where('id', $type)->first();
-            return response()->json([
 
-                'status' => 200,
-                'message' => "Code Matched",
-                'The entry code type is: '=>$verifyingCodeType->CodeName
+            $entryRefType = 1;
+            $Refcode = $this->generateUniqueCode();
+            $entryInvType = 2;
+            $Invcode = $this->generateUniqueCode();
+            $RegfcodeEntry = RegCodes::firstOrCreate([
+                'code_type_id' => $entryRefType,
+                'code_number' => $Refcode,
+            ]);
+            if ($RegfcodeEntry) {
+                $InvcodeEntry = RegCodes::firstOrCreate([
+                    'code_type_id' => $entryInvType,
+                    'code_number' => $Invcode,
+                ]);
+                return response()->json([
+                    'status' => 200,
+                    'message' => "Code Matched",
+                    'The entry code type is: ' => $verifyingCodeType->CodeName
+                ], 200);
+            }
 
 
-            ], 200);
-        }else{
+        } else {
             return response()->json([
 
                 'status' => 403,
@@ -100,5 +115,23 @@ class RegCodeController extends Controller
             ], 403);
         }
 
+    }
+
+
+    private function generateUniqueCode()
+    {
+        // Generate a random 4-digit code
+        $code = str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+
+        // Check if the code already exists in the database
+        $existingCode = RegCodes::where('code_number', $code)->exists();
+
+        // If the code already exists, recursively call the function to generate a new code
+        if ($existingCode) {
+            return $this->generateUniqueCode();
+        }
+
+        // If the code doesn't exist, return it
+        return $code;
     }
 }
