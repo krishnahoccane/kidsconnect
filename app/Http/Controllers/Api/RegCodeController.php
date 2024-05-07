@@ -75,53 +75,60 @@ class RegCodeController extends Controller
 
     public function verify(Request $request)
     {
-
         $entryVerificationCode = $request->input('code');
-
         $verifyingCode = RegCodes::where('code_number', $entryVerificationCode)->first();
 
-
         if ($verifyingCode) {
-            $type = $verifyingCode->code_type_id;
-            $verifyingCodeType = CodeTypes::where('id', $type)->first();
+            return response()->json([
+                'status' => 403,
+                'data' => $verifyingCode
+            ], 403);
+        } else {
+            return response()->json([
+                'status' => 403,
+                'message' => "Code Not Matched"
+            ], 403);
+        }
+    }
+
+    public function verifyAndCreate(Request $request, $entryId)
+    {
+        // return $entryId;
+
+        // if (!$entryId) {
+        //     // $type = $verifyingCode->code_type_id;
+        //     // $verifyingCodeType = CodeTypes::where('id', $type)->first();
 
             $entryRefType = 1;
-            $Refcode = $this->generateUniqueCode();
+            $Refcode =  $this->generateUniqueCode();
             $entryInvType = 2;
-            $Invcode = $this->generateUniqueCode();
+            $Invcode =  $this->generateUniqueCode();
             $RegfcodeEntry = RegCodes::firstOrCreate([
                 'code_type_id' => $entryRefType,
                 'code_number' => $Refcode,
+                'user_id' => $entryId
             ]);
             if ($RegfcodeEntry) {
                 $InvcodeEntry = RegCodes::firstOrCreate([
                     'code_type_id' => $entryInvType,
                     'code_number' => $Invcode,
+                    'user_id' => $entryId
                 ]);
+
                 return response()->json([
-                    'status' => 200,
-                    'message' => "Code Matched",
-                    'The entry code type is: ' => $verifyingCodeType->CodeName
-                ], 200);
+                    'status'=>200,
+                    'message'=>'Thank you for registration'
+                ]);
             }
-
-
-        } else {
-            return response()->json([
-
-                'status' => 403,
-                'message' => "Code Not Matched"
-
-            ], 403);
-        }
+        // }
 
     }
-
 
     private function generateUniqueCode()
     {
         // Generate a random 4-digit code
-        $code = str_pad(mt_rand(0, 9999), 5, '0', STR_PAD_LEFT);
+        $code = str_pad(mt_rand(10000, 99999), 5, '0', STR_PAD_LEFT);
+
 
         // Check if the code already exists in the database
         $existingCode = RegCodes::where('code_number', $code)->exists();
@@ -134,4 +141,5 @@ class RegCodeController extends Controller
         // If the code doesn't exist, return it
         return $code;
     }
+
 }

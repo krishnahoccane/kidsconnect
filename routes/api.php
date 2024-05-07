@@ -65,6 +65,8 @@ Route::get('codetype', [CodeTypescontroller::class, 'index']);
 Route::get('regcodedata/{id}', [RegCodeController::class, 'index']);
 Route::get('regcodedata/{id}/userid/{user_id}', [RegCodeController::class, 'show']);
 Route::post('verify', [RegCodeController::class, 'verify']);
+Route::get('verify/{entryId}', [RegCodeController::class, 'verifyAndCreate'])->name('verifyAndCreate');;
+
 
 
 // Route::post('codetype', [subscriberController::class, 'create']);

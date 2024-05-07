@@ -41,47 +41,24 @@ class subscriberLoginController extends Controller
 
     public function create(Request $request)
     {
-        $subscibers = subscribersModel::firstOrCreate([
-            'RoleId' => $request->RoleId,
-            'Email' => $request->Email
-        ]);
-        if ($request->hasFile('ProfileImage')) {
-            $profileImage = $request->file('ProfileImage');
-            $path = 'uploads/profiles/';
-            $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-            $profileImage->move($path, $fileName);
-            $profileImagePath = $path . $fileName;
-        } else {
-            $profileImagePath = null;
-        }
-        $subscriberId = $subscibers->id;
+
+        $Email = $request->Email;
         $hashPassword = Hash::make($request->Password);
+        $EntryCodeId = $request->EntryCode;
         $sub_login = subscriberlogins::firstOrCreate([
-            'FirstName' => $request->FirstName,
-            'LastName' => $request->LastName,
-            'Email' => $request->Email,
-            'Dob' => $request->Dob,
-            'Gender' => $request->Gender,
-            'PhoneNumber' => $request->PhoneNumber,
-            'SSN' => $request->SSN,
+
+            'Email' => $Email,
+
             'Password' => $hashPassword,
-            'About' => $request->About,
-            'Address' => $request->Address,
-            'ProfileImage' => $profileImagePath,
-            // 'SSNimage' => $request->SSNimage,
-            // 'Keywords' => $request->Keywords,
-            'LoginType' => $request->LoginType,
-            'IsMain' => 1,
-            'RoleId' => $request->RoleId,
-            'MainSubscriberId' => $subscriberId,
+
+            'EntryCode' => $EntryCodeId
+
         ]);
 
         if ($sub_login->wasRecentlyCreated) {
-            return response()->json([
-                'status' => 200,
-                'message' => ' Subscriber Registered successfully and mainsubscriber id is' . $subscriberId,
-                'data' => $sub_login
-            ], 200);
+            $EntryId = $sub_login->id;
+            return redirect()->route('verifyAndCreate', ['entryId' => $EntryId]);
+
         } else {
             return response()->json([
                 'status' => 409,
