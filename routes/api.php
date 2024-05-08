@@ -56,6 +56,7 @@ Route::get('subscriber', [subscriberController::class, 'index']);
 Route::post('subscriber', [subscriberController::class, 'create']);
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
+Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
 
 
 // FOr Code Type
@@ -80,7 +81,7 @@ Route::middleware([AuthenticateApi::class])->group(function () {
     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
     Route::get('maincreatedAccounts/{subscriberId?}', [subscriberLoginController::class, 'maincreatedaccount']);
     Route::get('subscriberlogins/{id}', [subscriberLoginController::class, 'show']);
-    Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
+    // Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
     Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
     Route::get('mainSecondary/{id?}', [subscriberLoginController::class, 'mainSecondary']);
 

@@ -77,10 +77,9 @@ class RegCodeController extends Controller
 
         if ($verifyingCode) {
             return response()->json([
-                'status' => 200,
-                'message'=>'Code Verified Successfully',
+                'status' => 403,
                 'data' => $verifyingCode
-            ], 200);
+            ], 403);
         } else {
             return response()->json([
                 'status' => 403,
@@ -115,8 +114,7 @@ class RegCodeController extends Controller
 
                 return response()->json([
                     'status'=>200,
-                    'message'=>'Thank you for registration',
-                    'id'=>$entryId
+                    'message'=>'Thank you for registration'
                 ]);
             }
         // }
