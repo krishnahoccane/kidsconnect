@@ -41,7 +41,6 @@ class subscriberLoginController extends Controller
 
     public function create(Request $request)
     {
-
         $Email = $request->Email;
         $hashPassword = Hash::make($request->Password);
         $EntryCodeId = $request->EntryCode;

@@ -53,8 +53,6 @@ class RegCodeController extends Controller
                 ], 404);
             }
         }
-
-
     }
 
 
