@@ -77,9 +77,9 @@ class RegCodeController extends Controller
 
         if ($verifyingCode) {
             return response()->json([
-                'status' => 403,
+                'status' => 200,
                 'data' => $verifyingCode
-            ], 403);
+            ], 200);
         } else {
             return response()->json([
                 'status' => 403,

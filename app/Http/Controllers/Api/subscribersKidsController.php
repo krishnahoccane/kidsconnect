@@ -74,7 +74,6 @@ class subscribersKidsController extends Controller
             'Dob' => $request->Dob,
             'Gender' => $request->Gender,
             'PhoneNumber' => $request->PhoneNumber,
-            'SSN' => $request->SSN,
             'Password' => $request->Password,
             'About' => $request->About,
             'Address' => $request->Address,
