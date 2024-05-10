@@ -74,8 +74,6 @@ class subscriberLoginController extends Controller
 
     // If the subscriber with the given ID exists
     if ($subscriber) {
-        // Update the subscriber's profile fields with the new values from the request
-
         // Check if the request has a profile image file
         if ($request->hasFile('ProfileImage')) {
             // Upload and save the profile image
@@ -111,7 +109,8 @@ class subscriberLoginController extends Controller
         // Return a success response
         return response()->json([
             'status' => 200,
-            'message' => 'Profile updated successfully'
+            'message' => 'Profile updated successfully',
+            'data' => $subscriber,
         ], 200);
     } else {
         // Return an error response if the subscriber with the given ID was not found
