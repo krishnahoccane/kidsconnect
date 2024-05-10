@@ -111,7 +111,7 @@ class subscriberLoginController extends Controller
         // Return a success response
         return response()->json([
             'status' => 200,
-            'message' => 'Profile updated successfully'
+            'message' => $subscriber
         ], 200);
     } else {
         // Return an error response if the subscriber with the given ID was not found
