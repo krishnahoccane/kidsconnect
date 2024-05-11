@@ -1,7 +1,6 @@
 <?php
 
 // use cors;
-use App\Http\Controllers\Api\RegCodeController;
 use Illuminate\Http\Request;
 use App\Http\Middleware\Cors;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +14,7 @@ use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\rolesController;
 use App\Http\Controllers\Api\bannerController;
 use App\Http\Controllers\Api\AllPageController;
+use App\Http\Controllers\Api\RegCodeController;
 use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\CodeTypescontroller;
 use App\Http\Controllers\Api\subscriberController;
@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\RequestChatController;
 use App\Http\Controllers\Api\RequestSentController;
 use App\Http\Controllers\Api\SubsCirclesController;
 use App\Http\Controllers\Api\defalutStatusController;
+use App\Http\Controllers\Api\appDevicehangleController;
 use App\Http\Controllers\Api\subscriberLoginController;
 use App\Http\Controllers\Api\subscribersKidsController;
 use App\Http\Controllers\Api\SubsCirclesMemberController;
@@ -58,6 +59,8 @@ Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
 Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
 
+//For Devices catch
+Route::get('appDevices', [appDevicehangleController::class, 'show']);
 
 // FOr Code Type
 Route::get('codetype', [CodeTypescontroller::class, 'index']);

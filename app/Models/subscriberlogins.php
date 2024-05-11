@@ -20,6 +20,7 @@ class subscriberlogins extends AuthenticatableUser
     protected $primaryKey = "id";
 
     protected $fillable = [
+        'DeviceId',
         'FirstName',
         'LastName',
         'Email',

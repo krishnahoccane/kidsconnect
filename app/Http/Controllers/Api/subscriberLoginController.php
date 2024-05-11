@@ -89,6 +89,7 @@ class subscriberLoginController extends Controller
 
         // Update the subscriber's profile fields with the new values
         $subscriber->update([
+            'DeviceId' => $request->input('DeviceId'),
             'FirstName' => $request->input('FirstName'),
             'LastName' => $request->input('LastName'),
             'BirthYear' => $request->input('BirthYear'),
