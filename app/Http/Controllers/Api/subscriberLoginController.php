@@ -67,59 +67,71 @@ class subscriberLoginController extends Controller
             ], 409);
         }
     }
-   public function update(Request $request, $id)
-{
-    // Find the subscriber by ID
-    $subscriber = subscriberlogins::find($id);
+    public function update(Request $request, $id)
+    {
+        // Find the subscriber by ID
+        $subscriber = SubscriberLogins::find($id);
+    
+        // If the subscriber with the given ID exists
+        if ($subscriber) {
+            // Check if the request has a profile image file
+            if ($request->hasFile('ProfileImage')) {
+                // Upload and save the profile image
+                $profileImage = $request->file('ProfileImage');
+                $path = 'uploads/profiles/';
+                $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+                $profileImage->move($path, $fileName);
+                $profileImagePath = $path . $fileName;
+            } else {
+                // If no profile image is provided, keep the existing profile image path
+                $profileImagePath = $subscriber->ProfileImage;
+            }
+    
+            // Extract data from the request based on content type
+            if ($request->isJson()) {
+                // Raw JSON request
+                $data = $request->all();
+            } else {
+                // Form-data request
+                $data = $request->except(['ProfileImage']); // Exclude ProfileImage from form data
+            }
+    
+            \Log::info('Request Data', $request->all());
 
-    // If the subscriber with the given ID exists
-    if ($subscriber) {
-        // Check if the request has a profile image file
-        if ($request->hasFile('ProfileImage')) {
-            // Upload and save the profile image
-            $profileImage = $request->file('ProfileImage');
-            $path = 'uploads/profiles/';
-            $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-            $profileImage->move($path, $fileName);
-            $profileImagePath = $path . $fileName;
+            // Update the subscriber's profile fields with the new values
+            $subscriber->update([
+                'FirstName' => $data['FirstName'] ?? null,
+                'LastName' => $data['LastName'] ?? null,
+                'BirthYear' => $data['BirthYear'] ?? null,
+                'Gender' => $data['Gender'] ?? null,
+                'PhoneNumber' => $data['PhoneNumber'] ?? null,
+                'About' => $data['About'] ?? null,
+                'Address' => $data['Address'] ?? null,
+                'City' => $data['City'] ?? null,
+                'State' => $data['State'] ?? null,
+                'Zipcode' => $data['Zipcode'] ?? null,
+                'Country' => $data['Country'] ?? null,
+                'ProfileImage' => $profileImagePath,
+                'Keywords' => $data['Keywords'] ?? null,
+                'LoginType' => $data['LoginType'] ?? null,
+                'RoleId' => $data['RoleId'] ?? null,
+                'MainSubscriberId' => $subscriber->id,
+            ]);
+    
+            // Return a success response
+            return response()->json([
+                'status' => 200,
+                'message' => 'Profile updated successfully',
+                'data' => $subscriber,
+            ], 200);
         } else {
-            // If no profile image is provided, keep the existing profile image path
-            $profileImagePath = $subscriber->ProfileImage;
+            // Return an error response if the subscriber with the given ID was not found
+            return response()->json([
+                'status' => 404,
+                'message' => 'Subscriber not found'
+            ], 404);
         }
-
-        // Update the subscriber's profile fields with the new values
-        $subscriber->update([
-            'FirstName' => $request->input('FirstName'),
-            'LastName' => $request->input('LastName'),
-            'BirthYear' => $request->input('BirthYear'),
-            'Gender' => $request->input('Gender'),
-            'PhoneNumber' => $request->input('PhoneNumber'),
-            'About' => $request->input('About'),
-            'Address' => $request->input('Address'),
-            'City' => $request->input('City'),
-            'State' => $request->input('State'),
-            'Zipcode' => $request->input('Zipcode'),
-            'Country' => $request->input('Country'),
-            'ProfileImage' => $profileImagePath,
-            'Keywords' => $request->input('Keywords'),
-            'LoginType' => $request->input('LoginType'),
-            'RoleId' => $request->input('RoleId')
-        ]);
-
-        // Return a success response
-        return response()->json([
-            'status' => 200,
-            'message' => 'Profile updated successfully',
-            'data' => $subscriber,
-        ], 200);
-    } else {
-        // Return an error response if the subscriber with the given ID was not found
-        return response()->json([
-            'status' => 404,
-            'message' => 'Subscriber not found'
-        ], 404);
     }
-}
 
 
     //Created Accounts by Main Subscriber
