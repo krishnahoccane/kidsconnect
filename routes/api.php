@@ -61,6 +61,8 @@ Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
 
 //For Devices catch
 Route::get('appDevices', [appDevicehangleController::class, 'show']);
+Route::post('appDevices', [appDevicehangleController::class, 'DeviceValidate']);
+
 
 // FOr Code Type
 Route::get('codetype', [CodeTypescontroller::class, 'index']);
