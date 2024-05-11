@@ -67,25 +67,36 @@ class subscriberLoginController extends Controller
             ], 409);
         }
     }
-   public function update(Request $request, $id)
-{
-    // Find the subscriber by ID
-    $subscriber = subscriberlogins::find($id);
-
-    // If the subscriber with the given ID exists
-    if ($subscriber) {
-        // Check if the request has a profile image file
-        if ($request->hasFile('ProfileImage')) {
-            // Upload and save the profile image
-            $profileImage = $request->file('ProfileImage');
-            $path = 'uploads/profiles/';
-            $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-            $profileImage->move($path, $fileName);
-            $profileImagePath = $path . $fileName;
-        } else {
-            // If no profile image is provided, keep the existing profile image path
-            $profileImagePath = $subscriber->ProfileImage;
-        }
+    public function update(Request $request, $id)
+    {
+        // Find the subscriber by ID
+        $subscriber = SubscriberLogins::find($id);
+    
+        // If the subscriber with the given ID exists
+        if ($subscriber) {
+            // Check if the request has a profile image file
+            if ($request->hasFile('ProfileImage')) {
+                // Upload and save the profile image
+                $profileImage = $request->file('ProfileImage');
+                $path = 'uploads/profiles/';
+                $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+                $profileImage->move($path, $fileName);
+                $profileImagePath = $path . $fileName;
+            } else {
+                // If no profile image is provided, keep the existing profile image path
+                $profileImagePath = $subscriber->ProfileImage;
+            }
+    
+            // Extract data from the request based on content type
+            if ($request->isJson()) {
+                // Raw JSON request
+                $data = $request->all();
+            } else {
+                // Form-data request
+                $data = $request->except(['ProfileImage']); // Exclude ProfileImage from form data
+            }
+    
+            \Log::info('Request Data', $request->all());
 
         // Update the subscriber's profile fields with the new values
         $subscriber->update([
