@@ -44,6 +44,7 @@ class subscriberLoginController extends Controller
 
         $id = $request->id;
         $Email = $request->Email;
+        $DeviceId = $request->DeviceId;
         $hashPassword = Hash::make($request->Password);
         $EntryCodeId = $request->EntryCode;
         $sub_login = subscriberlogins::firstOrCreate([
@@ -52,7 +53,9 @@ class subscriberLoginController extends Controller
 
             'Password' => $hashPassword,
 
-            'EntryCode' => $EntryCodeId
+            'EntryCode' => $EntryCodeId,
+
+            'DeviceId' => $DeviceId
 
         ]);
 

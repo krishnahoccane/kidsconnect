@@ -9,12 +9,43 @@ use Illuminate\Http\Request;
 class appDevicehangleController extends Controller
 {
     //
-    public function show(){
+    public function show()
+    {
         $appDevices = subscriberlogins::pluck('DeviceId')->filter()->values();
 
         return response()->json([
-            'status'=>200,
-            'data'=>$appDevices
-        ],200);
+            'status' => 200,
+            'data' => $appDevices
+        ], 200);
     }
+    // public function validate(Request $request, $DeviceId)
+    // {
+    //     // Retrieve DeviceId from the request
+    //     $deviceId = $request->input('DeviceId');
+
+    //     // Retrieve records based on the provided DeviceId
+    //     $appDevicesVerify = subscriberlogins::where('DeviceId', $deviceId)->get();
+
+    //     return response()->json($appDevicesVerify);
+    // }
+
+    public function DeviceValidate(Request $request)
+    {
+        $deviceId = $request->DeviceId;
+        $deviceIdVerification = subscriberlogins::where('DeviceId', $deviceId)->get();
+        if ($deviceIdVerification->count() > 0) {
+            return response()->json([
+                'status' => 200,
+                'data' => $deviceIdVerification
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 201,
+                'message' => 'Welcome to KidConnect',
+                'code' => 99999
+            ], 201);
+        }
+
+    }
+
 }
