@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AuthenticateApi;
 use App\Http\Controllers\Api\imageUpload;
 use App\Http\Controllers\Api\subContacts;
+use App\Http\Controllers\Api\AddSecondary;
 use App\Http\Controllers\Api\petController;
 use App\Http\Controllers\Api\ResetPassword;
+use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\Authcontroller;
 use App\Http\Controllers\Api\adminController;
 use App\Http\Controllers\Api\rolesController;
@@ -73,7 +75,12 @@ Route::get('regcodedata/{id}/userid/{user_id}', [RegCodeController::class, 'show
 Route::post('verify', [RegCodeController::class, 'verify']);
 Route::get('verify/{entryId}', [RegCodeController::class, 'verifyAndCreate'])->name('verifyAndCreate');;
 
+//secondary person CRUD
+Route::get('addsecondary', [AddSecondary::class, 'index']);
+Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
 
+Route::get('countries', [CountryController::class, 'index']);
+Route::get('countries/{code}', [CountryController::class, 'show']);
 
 // Route::post('codetype', [subscriberController::class, 'create']);
 // Route::post('codetype', [subscriberLoginController::class, 'create']);

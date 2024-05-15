@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'c375780e20ba38ef48e85839db682d0a7195b9fd',
+        'reference' => '9097bf2b177491efc74357235d6bc0cd66c14c39',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -463,7 +463,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'c375780e20ba38ef48e85839db682d0a7195b9fd',
+            'reference' => '9097bf2b177491efc74357235d6bc0cd66c14c39',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1132,6 +1132,15 @@
             'replaced' => array(
                 0 => '4.7.5',
             ),
+        ),
+        'rinvex/countries' => array(
+            'pretty_version' => 'v9.0.1',
+            'version' => '9.0.1.0',
+            'reference' => '0fdccd0e37bc2f53ae93dda7bbb498189f2e4e22',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../rinvex/countries',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'sebastian/cli-parser' => array(
             'pretty_version' => '2.0.1',

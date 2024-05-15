@@ -42,5 +42,6 @@ return array(
     'c72349b1fe8d0deeedd3a52e8aa814d8' => $vendorDir . '/mockery/mockery/library/helpers.php',
     'ce9671a430e4846b44e1c68c7611f9f5' => $vendorDir . '/mockery/mockery/library/Mockery.php',
     'd634523d799d97a8ab4807b650bf5cea' => $vendorDir . '/pestphp/pest-plugin-laravel/src/Autoload.php',
+    '3c3a02bc9945aa3571024986c07a1e55' => $vendorDir . '/rinvex/countries/src/helpers.php',
     '320163ac6b93aebe3dc25b60a0533d56' => $vendorDir . '/spatie/laravel-ignition/src/helpers.php',
 );
