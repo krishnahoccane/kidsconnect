@@ -79,8 +79,7 @@ Route::get('verify/{entryId}', [RegCodeController::class, 'verifyAndCreate'])->n
 Route::get('addsecondary', [AddSecondary::class, 'index']);
 Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
 
-Route::get('countries', [CountryController::class, 'index']);
-Route::get('countries/{code}', [CountryController::class, 'show']);
+
 
 // Route::post('codetype', [subscriberController::class, 'create']);
 // Route::post('codetype', [subscriberLoginController::class, 'create']);
