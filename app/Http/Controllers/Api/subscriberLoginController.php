@@ -78,29 +78,18 @@ class subscriberLoginController extends Controller
         // If the subscriber with the given ID exists
         if ($subscriber) {
             // Check if the request has a profile image file
-            if ($request->hasFile('ProfileImage')) {
-                // Upload and save the profile image
-                $profileImage = $request->file('ProfileImage');
-                $path = 'uploads/profiles/';
-                $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-                $profileImage->move($path, $fileName);
-                $profileImagePath = $path . $fileName;
-            } else {
-                // If no profile image is provided, keep the existing profile image path
-                $profileImagePath = $subscriber->ProfileImage;
-            }
+            // if ($request->hasFile('ProfileImage')) {
+            //     // Upload and save the profile image
+            //     $profileImage = $request->file('ProfileImage');
+            //     $path = 'uploads/profiles/';
+            //     $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+            //     $profileImage->move($path, $fileName);
+            //     $profileImagePath = $path . $fileName;
+            // } else {
+            //     // If no profile image is provided, keep the existing profile image path
+            //     $profileImagePath = null;
+            // }
     
-            // Extract data from the request based on content type
-            if ($request->isJson()) {
-                // Raw JSON request
-                $data = $request->all();
-            } else {
-                // Form-data request
-                $data = $request->except(['ProfileImage']); // Exclude ProfileImage from form data
-            }
-    
-            \Log::info('Request Data', $request->all());
-
         // Update the subscriber's profile fields with the new values
         $subscriber->update([
             'DeviceId' => $request->input('DeviceId'),
@@ -115,10 +104,11 @@ class subscriberLoginController extends Controller
             'State' => $request->input('State'),
             'Zipcode' => $request->input('Zipcode'),
             'Country' => $request->input('Country'),
-            'ProfileImage' => $profileImagePath,
+            // 'ProfileImage' => $profileImagePath,
             'Keywords' => $request->input('Keywords'),
-            'LoginType' => $request->input('LoginType'),
-            'RoleId' => $request->input('RoleId')
+            'LoginType' =>"2",
+            'RoleId' => $request->input('RoleId'),
+            'MainSubscriberId' => $subscriber->id,
         ]);
 
         // Return a success response
