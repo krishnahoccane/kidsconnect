@@ -88,7 +88,7 @@ class RegCodeController extends Controller
         }
     }
 
-    public function verifyAndCreate(Request $request, $entryId)
+    public function verifyAndCreate($entryId, $sub_login)
     {
         // return $entryId;
 
@@ -114,7 +114,8 @@ class RegCodeController extends Controller
 
                 return response()->json([
                     'status'=>200,
-                    'message'=>'Thank you for registration'
+                    'message'=>'Thank you for registration',
+                    'data'=>$sub_login
                 ]);
             }
         // }

@@ -74,7 +74,7 @@ Route::get('codetype', [CodeTypescontroller::class, 'index']);
 Route::get('regcodedata/{id}', [RegCodeController::class, 'index']);
 Route::get('regcodedata/{id}/userid/{user_id}', [RegCodeController::class, 'show']);
 Route::post('verify', [RegCodeController::class, 'verify']);
-Route::get('verify/{entryId}', [RegCodeController::class, 'verifyAndCreate'])->name('verifyAndCreate');;
+Route::get('verify/{entryId}/{sub_login}', [RegCodeController::class, 'verifyAndCreate'])->name('verifyAndCreate');;
 
 //secondary person CRUD
 Route::get('addsecondary', [AddSecondary::class, 'index']);

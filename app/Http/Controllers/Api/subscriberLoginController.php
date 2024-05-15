@@ -59,9 +59,13 @@ class subscriberLoginController extends Controller
 
         ]);
 
+        // if($sub_login->wasRecentlyCreated){
+        //     // return response()->json(['status'=>200,'data'=>$sub_login],200);
+        // }
+
         if ($sub_login->wasRecentlyCreated) {
             $EntryId = $sub_login->id;
-            return redirect()->route('verifyAndCreate', ['entryId' => $EntryId]);
+            return redirect()->route('verifyAndCreate', ['entryId' => $EntryId,'sub_login'=>$sub_login]);
 
         } else {
             return response()->json([
