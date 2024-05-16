@@ -109,7 +109,6 @@ Route::middleware([AuthenticateApi::class])->group(function () {
     Route::get('subcontacts/{id?}', [subContacts::class, 'index']);
     Route::get('subcontacts/subscriberId/{subscriberId}/{id?}', [subContacts::class, 'getSubContactedData']);
     Route::get('subcontacts/contactedId/{contactedId}/{id?}', [subContacts::class, 'getContactedData']);
-
     Route::post('subcontacts', [subContacts::class, 'store']);
 
 });
