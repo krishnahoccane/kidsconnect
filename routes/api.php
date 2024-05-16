@@ -55,8 +55,12 @@ Route::put('roles/{id}/edit', [rolesController::class, 'update']);
 Route::delete('roles/{id}', [rolesController::class, 'delete']);
 
 // FOr Subscribers
-Route::get('subscriber', [subscriberController::class, 'index']);
-Route::post('subscriber', [subscriberController::class, 'create']);
+
+//** For Admin side */
+Route::get('subscriber', [subscriberController::class, 'index']);// For Admin
+//** */
+
+// Route::post('subscriber', [subscriberController::class, 'create']);// Not _using _now
 Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
 Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
@@ -65,14 +69,19 @@ Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
 Route::get('appDevices', [appDevicehangleController::class, 'show']);
 Route::post('appDevices', [appDevicehangleController::class, 'DeviceValidate']);
 
-// FOr Entry Code Type
+
+//** For Entry Code Type */
+// ** Fetching the Device ID's  **//
 Route::get('codetype', [CodeTypescontroller::class, 'index']);
+// ** Fetching the Device ID's  **//
+
 
 // For Reg_code Data
 Route::get('regcodedata/{id}', [RegCodeController::class, 'index']);
 Route::get('regcodedata/{id}/userid/{user_id}', [RegCodeController::class, 'show']);
 Route::post('verify', [RegCodeController::class, 'verify']);
 Route::get('verify/{entryId}/{sub_login}', [RegCodeController::class, 'verifyAndCreate'])->name('verifyAndCreate');;
+
 
 //secondary person CRUD
 Route::get('addsecondary', [AddSecondary::class, 'index']);
@@ -104,6 +113,7 @@ Route::middleware([AuthenticateApi::class])->group(function () {
     Route::post('subcontacts', [subContacts::class, 'store']);
 
 });
+
 // Image uplaod testing
 Route::post('imageupload', [imageUpload::class, 'create']);
 

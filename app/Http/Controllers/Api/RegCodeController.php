@@ -90,35 +90,29 @@ class RegCodeController extends Controller
 
     public function verifyAndCreate($entryId, $sub_login)
     {
-        // return $entryId;
 
-        // if (!$entryId) {
-        //     // $type = $verifyingCode->code_type_id;
-        //     // $verifyingCodeType = CodeTypes::where('id', $type)->first();
-
-            $entryRefType = 1;
-            $Refcode =  $this->generateUniqueCode();
-            $entryInvType = 2;
-            $Invcode =  $this->generateUniqueCode();
-            $RegfcodeEntry = RegCodes::firstOrCreate([
-                'code_type_id' => $entryRefType,
-                'code_number' => $Refcode,
+        $entryRefType = 1;
+        $Refcode = $this->generateUniqueCode();
+        $entryInvType = 2;
+        $Invcode = $this->generateUniqueCode();
+        $RegfcodeEntry = RegCodes::firstOrCreate([
+            'code_type_id' => $entryRefType,
+            'code_number' => $Refcode,
+            'user_id' => $entryId
+        ]);
+        if ($RegfcodeEntry) {
+            $InvcodeEntry = RegCodes::firstOrCreate([
+                'code_type_id' => $entryInvType,
+                'code_number' => $Invcode,
                 'user_id' => $entryId
             ]);
-            if ($RegfcodeEntry) {
-                $InvcodeEntry = RegCodes::firstOrCreate([
-                    'code_type_id' => $entryInvType,
-                    'code_number' => $Invcode,
-                    'user_id' => $entryId
-                ]);
 
-                return response()->json([
-                    'status'=>200,
-                    'message'=>'Thank you for registration',
-                    'data'=>$sub_login
-                ]);
-            }
-        // }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Thank you for registration',
+                'data' => $sub_login
+            ]);
+        }
 
     }
 
