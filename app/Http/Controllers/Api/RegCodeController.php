@@ -90,6 +90,9 @@ class RegCodeController extends Controller
 
     public function verifyAndCreate($entryId, $sub_login)
     {
+        $subEntryData = subscriberlogins::find($sub_login);
+        
+
 
         $entryRefType = 1;
         $Refcode = $this->generateUniqueCode();
@@ -106,11 +109,17 @@ class RegCodeController extends Controller
                 'code_number' => $Invcode,
                 'user_id' => $entryId
             ]);
+            $subEntryData = subscriberlogins::find($sub_login);
 
+            // $subId = $subEntryData->id;
+            // $subDeviceId = $subEntryData->DeviceId;
+            // $subPassword = $subEntryData->password;
+            // $subEntrCode = $subEntryData->EntryCode;
+            
             return response()->json([
                 'status' => 200,
                 'message' => 'Thank you for registration',
-                'data' => $sub_login
+                'data' => $subEntryData
             ]);
         }
 

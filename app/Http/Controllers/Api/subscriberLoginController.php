@@ -44,35 +44,65 @@ class subscriberLoginController extends Controller
 
         $id = $request->id;
         $Email = $request->Email;
-        $DeviceId = $request->DeviceId;
-        $hashPassword = Hash::make($request->Password);
         $EntryCodeId = $request->EntryCode;
-        $sub_login = subscriberlogins::firstOrCreate([
+        // $DeviceId = $request->DeviceId;
+        $phoneNumber = $request->phoneNumber;
 
-            'Email' => $Email,
+        if(empty($Email)){
+            $phoneNumberExist = subscriberlogins::where('phoneNumber',$phoneNumber)->first();
+            if($phoneNumberExist){
+                return response()->json([
+                    'status'=>200,
+                    'data'=>$phoneNumberExist
+                ],200);
+            }else{
+                return response()->json([
+                    'status'=>404,
+                    'message'=>$phoneNumberExist
+                ],404);
+            }
+        }elseif(empty($phoneNumber)){
+            $EmailExist = subscriberlogins::where('Email', $Email)->first();
+            if($EmailExist){
+                return response()->json([
+                    'status'=>200,
+                    'data'=>$EmailExist
+                ],200);
+            }else{
+                return response()->json([
+                    'status'=>404,
+                    'message'=>$EmailExist
+                ],404);
+            }
+        }
+        // $hashPassword = Hash::make($request->Password);
+        // $EntryCodeId = $request->EntryCode;
+        // $sub_login = subscriberlogins::firstOrCreate([
 
-            'Password' => $hashPassword,
+        //     'Email' => $Email,
 
-            'EntryCode' => $EntryCodeId,
+        //     'Password' => $hashPassword,
 
-            'DeviceId' => $DeviceId
+        //     'EntryCode' => $EntryCodeId,
 
-        ]);
+        //     'DeviceId' => $DeviceId
+
+        // ]);
 
         // if($sub_login->wasRecentlyCreated){
         //     // return response()->json(['status'=>200,'data'=>$sub_login],200);
         // }
 
-        if ($sub_login->wasRecentlyCreated) {
-            $EntryId = $sub_login->id;
-            return redirect()->route('verifyAndCreate', ['entryId' => $EntryId,'sub_login'=>$sub_login]);
+        // if ($sub_login->wasRecentlyCreated) {
+        //     $EntryId = $sub_login->id;
+        //     return redirect()->route('verifyAndCreate', ['entryId' => $EntryId,'sub_login'=>$sub_login]);
 
-        } else {
-            return response()->json([
-                'status' => 409,
-                'message' => 'Subscriber already exists'
-            ], 409);
-        }
+        // } else {
+        //     return response()->json([
+        //         'status' => 409,
+        //         'message' => 'Subscriber already exists'
+        //     ], 409);
+        // }
     }
     public function update(Request $request, $id)
     {
