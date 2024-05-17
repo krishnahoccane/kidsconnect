@@ -66,6 +66,7 @@ class subscribersKidsController extends Controller
     {
 
         $subKids = subscribersKidModel::all();
+        
 
         $subKids = subscribersKidModel::firstOrCreate([
             'FirstName' => $request->FirstName,
