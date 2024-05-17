@@ -73,15 +73,13 @@ class AddSecondary extends Controller
                     ], 404);
                 }
             }
-            // 
+
         } else {
             return response()->json([
                 'status' => 404,
                 'message' => 'Email Id Not Registered'
             ], 404);
         }
-
-
 
     }
 }

@@ -18,16 +18,6 @@ class appDevicehangleController extends Controller
             'data' => $appDevices
         ], 200);
     }
-    // public function validate(Request $request, $DeviceId)
-    // {
-    //     // Retrieve DeviceId from the request
-    //     $deviceId = $request->input('DeviceId');
-
-    //     // Retrieve records based on the provided DeviceId
-    //     $appDevicesVerify = subscriberlogins::where('DeviceId', $deviceId)->get();
-
-    //     return response()->json($appDevicesVerify);
-    // }
 
     public function DeviceValidate(Request $request)
     {
