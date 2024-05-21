@@ -89,7 +89,7 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
 
 
 // Subscriber Authentication API
-Route::middleware([AuthenticateApi::class])->group(function () {
+// Route::middleware([AuthenticateApi::class])->group(function () {
     // Subscribers  ( Create, View, Update, Delete)
     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
     Route::get('maincreatedAccounts/{subscriberId?}', [subscriberLoginController::class, 'maincreatedaccount']);
@@ -102,7 +102,7 @@ Route::middleware([AuthenticateApi::class])->group(function () {
     Route::get('subscribersKids', [subscribersKidsController::class, 'index']);
     Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
     Route::get('subscriberkidsdata/{subscriberId}', [subscribersKidsController::class, 'getKidsBySubscriberId']);
-    Route::put('/subscribersKids/{id}', [subscribersKidsController::class,'update']);
+    Route::put('subscribersKids/{id}', [subscribersKidsController::class,'update']);
 
     Route::get('subscriberpetdata/{subscriberId}', [petController::class, 'getKidsBySubscriberId']);
 
@@ -114,7 +114,7 @@ Route::middleware([AuthenticateApi::class])->group(function () {
     Route::get('subcontacts/contactedId/{contactedId}/{id?}', [subContacts::class, 'getContactedData']);
     Route::post('subcontacts', [subContacts::class, 'store']);
 
-});
+// });
 
 // Image uplaod testing
 Route::post('imageupload', [imageUpload::class, 'create']);
