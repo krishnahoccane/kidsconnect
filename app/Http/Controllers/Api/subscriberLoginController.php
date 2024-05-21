@@ -41,9 +41,16 @@ class subscriberLoginController extends Controller
 
     public function create(Request $request)
     {
+<<<<<<< HEAD
         // $id = $request->id;
         $email = $request->Email;
         $entryCodeId = $request->EntryCode;
+=======
+        $id = $request->id;
+        $Email = $request->Email;
+        $EntryCodeId = $request->EntryCode;
+        // $DeviceId = $request->DeviceId;
+>>>>>>> e72cdc4dc0057dcab13ea95e9e3dd4a87ea2d08e
         $phoneNumber = $request->phoneNumber;
 
         if (empty($email)) {
@@ -113,6 +120,7 @@ class subscriberLoginController extends Controller
         // If the subscriber with the given ID exists
         if ($subscriber) {
             // Check if the request has a profile image file
+<<<<<<< HEAD
             // if ($request->hasFile('ProfileImage')) {
             //     // Upload and save the profile image
             //     $profileImage = $request->file('ProfileImage');
@@ -124,6 +132,40 @@ class subscriberLoginController extends Controller
             //     // If no profile image is provided, keep the existing profile image path
             //     $profileImagePath = null;
             // }
+=======
+            if ($request->hasFile('ProfileImage')) {
+                // Upload and save the profile image
+                $profileImage = $request->file('ProfileImage');
+                $path = 'uploads/profiles/';
+                $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+                $profileImage->move($path, $fileName);
+                $profileImagePath = $path . $fileName;
+            } else {
+                // If no profile image is provided, keep the existing profile image path
+                $profileImagePath = null;
+            }
+    
+        // Update the subscriber's profile fields with the new values
+        $subscriber->update([
+            'DeviceId' => $request->input('DeviceId'),
+            'FirstName' => $request->input('FirstName'),
+            'LastName' => $request->input('LastName'),
+            'BirthYear' => $request->input('BirthYear'),
+            'Gender' => $request->input('Gender'),
+            'PhoneNumber' => $request->input('PhoneNumber'),
+            'About' => $request->input('About'),
+            'Address' => $request->input('Address'),
+            'City' => $request->input('City'),
+            'State' => $request->input('State'),
+            'Zipcode' => $request->input('Zipcode'),
+            'Country' => $request->input('Country'),
+            // 'ProfileImage' => $profileImagePath,
+            'Keywords' => $request->input('Keywords'),
+            'LoginType' =>"2",
+            'RoleId' => $request->input('RoleId'),
+            'MainSubscriberId' => $subscriber->id,
+        ]);
+>>>>>>> e72cdc4dc0057dcab13ea95e9e3dd4a87ea2d08e
 
             // Update the subscriber's profile fields with the new values
             $subscriber->update([
