@@ -125,27 +125,27 @@ class subscriberLoginController extends Controller
                 // If no profile image is provided, keep the existing profile image path
                 $profileImagePath = null;
             }
-    
-        // Update the subscriber's profile fields with the new values
-        $subscriber->update([
-            'DeviceId' => $request->input('DeviceId'),
-            'FirstName' => $request->input('FirstName'),
-            'LastName' => $request->input('LastName'),
-            'BirthYear' => $request->input('BirthYear'),
-            'Gender' => $request->input('Gender'),
-            'PhoneNumber' => $request->input('PhoneNumber'),
-            'About' => $request->input('About'),
-            'Address' => $request->input('Address'),
-            'City' => $request->input('City'),
-            'State' => $request->input('State'),
-            'Zipcode' => $request->input('Zipcode'),
-            'Country' => $request->input('Country'),
-            // 'ProfileImage' => $profileImagePath,
-            'Keywords' => $request->input('Keywords'),
-            'LoginType' =>"2",
-            'RoleId' => $request->input('RoleId'),
-            'MainSubscriberId' => $subscriber->id,
-        ]);
+
+            // Update the subscriber's profile fields with the new values
+            $subscriber->update([
+                'DeviceId' => $request->input('DeviceId'),
+                'FirstName' => $request->input('FirstName'),
+                'LastName' => $request->input('LastName'),
+                'BirthYear' => $request->input('BirthYear'),
+                'Gender' => $request->input('Gender'),
+                'PhoneNumber' => $request->input('PhoneNumber'),
+                'About' => $request->input('About'),
+                'Address' => $request->input('Address'),
+                'City' => $request->input('City'),
+                'State' => $request->input('State'),
+                'Zipcode' => $request->input('Zipcode'),
+                'Country' => $request->input('Country'),
+                // 'ProfileImage' => $profileImagePath,
+                'Keywords' => $request->input('Keywords'),
+                'LoginType' => "2",
+                'RoleId' => $request->input('RoleId'),
+                'MainSubscriberId' => $subscriber->id,
+            ]);
             // Return a success response
             return response()->json([
                 'status' => 200,
