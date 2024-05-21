@@ -83,11 +83,12 @@ class subscribersKidsController extends Controller
             'LoginType' => $request->LoginType,
             'MainSubscriberId' => $request->MainSubscriberId
         ]);
-
+      
         if ($subKids->wasRecentlyCreated) {
             return response()->json([
                 'status' => 200,
-                'message' => 'Kids Profile Created Successfully'
+                'message' => 'Kids Profile Created Successfully',
+                'data'=>$subKids
             ], 200);
         } else {
             return response()->json([
