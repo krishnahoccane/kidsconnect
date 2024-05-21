@@ -41,74 +41,75 @@ class subscriberLoginController extends Controller
 
     public function create(Request $request)
     {
-
-        $id = $request->id;
-        $Email = $request->Email;
-        $EntryCodeId = $request->EntryCode;
-        // $DeviceId = $request->DeviceId;
+        // $id = $request->id;
+        $email = $request->Email;
+        $entryCodeId = $request->EntryCode;
         $phoneNumber = $request->phoneNumber;
 
-        if(empty($Email)){
-            $phoneNumberExist = subscriberlogins::where('phoneNumber',$phoneNumber)->first();
-            if($phoneNumberExist){
+        if (empty($email)) {
+            $phoneNumberExist = subscriberlogins::where('phoneNumber', $phoneNumber)->first();
+            if ($phoneNumberExist) {
                 return response()->json([
-                    'status'=>200,
-                    'data'=>$phoneNumberExist
-                ],200);
-            }else{
-                return response()->json([
-                    'status'=>404,
-                    'message'=>$phoneNumberExist
-                ],404);
+                    'status' => 200,
+                    'data' => $phoneNumberExist,
+                ], 200);
+            } else {
+                // Create subscriber record with phone number
+                $this->createSubscriberData($request, null, $entryCodeId, $phoneNumber);
             }
-        }elseif(empty($phoneNumber)){
-            $EmailExist = subscriberlogins::where('Email', $Email)->first();
-            if($EmailExist){
+        } elseif (empty($phoneNumber)) {
+            $emailExist = subscriberlogins::where('Email', $email)->first();
+            if ($emailExist) {
                 return response()->json([
-                    'status'=>200,
-                    'data'=>$EmailExist
-                ],200);
-            }else{
-                return response()->json([
-                    'status'=>404,
-                    'message'=>$EmailExist
-                ],404);
+                    'status' => 200,
+                    'data' => $emailExist
+                ], 200);
+            } else {
+                // Create subscriber record with email
+                $this->createSubscriberData($request, $email, $entryCodeId, null);
             }
         }
-        // $hashPassword = Hash::make($request->Password);
-        // $EntryCodeId = $request->EntryCode;
-        // $sub_login = subscriberlogins::firstOrCreate([
-
-        //     'Email' => $Email,
-
-        //     'Password' => $hashPassword,
-
-        //     'EntryCode' => $EntryCodeId,
-
-        //     'DeviceId' => $DeviceId
-
-        // ]);
-
-        // if($sub_login->wasRecentlyCreated){
-        //     // return response()->json(['status'=>200,'data'=>$sub_login],200);
-        // }
-
-        // if ($sub_login->wasRecentlyCreated) {
-        //     $EntryId = $sub_login->id;
-        //     return redirect()->route('verifyAndCreate', ['entryId' => $EntryId,'sub_login'=>$sub_login]);
-
-        // } else {
-        //     return response()->json([
-        //         'status' => 409,
-        //         'message' => 'Subscriber already exists'
-        //     ], 409);
-        // }
     }
+
+    public function createSubscriberData(Request $request, $email, $entryCodeId, $phoneNumber)
+    {
+        $subscriberData = [
+            'EntryCode' => $entryCodeId,
+        ];
+
+        // Check whether to store email or phone number
+        if ($email) {
+            $subscriberData['Email'] = $email;
+        }
+        if ($phoneNumber) {
+            $subscriberData['PhoneNumber'] = $phoneNumber;
+        }
+
+        // Create subscriber record
+        $subscriber = subscriberlogins::create($subscriberData);
+
+        // Check if subscriber was created successfully
+        if ($subscriber) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Profile created successfully',
+                'data' => $subscriber,
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to create profile',
+            ], 500);
+        }
+    }
+
+
+
     public function update(Request $request, $id)
     {
         // Find the subscriber by ID
         $subscriber = SubscriberLogins::find($id);
-    
+
         // If the subscriber with the given ID exists
         if ($subscriber) {
             // Check if the request has a profile image file
@@ -123,42 +124,42 @@ class subscriberLoginController extends Controller
             //     // If no profile image is provided, keep the existing profile image path
             //     $profileImagePath = null;
             // }
-    
-        // Update the subscriber's profile fields with the new values
-        $subscriber->update([
-            'DeviceId' => $request->input('DeviceId'),
-            'FirstName' => $request->input('FirstName'),
-            'LastName' => $request->input('LastName'),
-            'BirthYear' => $request->input('BirthYear'),
-            'Gender' => $request->input('Gender'),
-            'PhoneNumber' => $request->input('PhoneNumber'),
-            'About' => $request->input('About'),
-            'Address' => $request->input('Address'),
-            'City' => $request->input('City'),
-            'State' => $request->input('State'),
-            'Zipcode' => $request->input('Zipcode'),
-            'Country' => $request->input('Country'),
-            // 'ProfileImage' => $profileImagePath,
-            'Keywords' => $request->input('Keywords'),
-            'LoginType' =>"2",
-            'RoleId' => $request->input('RoleId'),
-            'MainSubscriberId' => $subscriber->id,
-        ]);
 
-        // Return a success response
-        return response()->json([
-            'status' => 200,
-            'message' => 'Profile updated successfully',
-            'data' => $subscriber,
-        ], 200);
-    } else {
-        // Return an error response if the subscriber with the given ID was not found
-        return response()->json([
-            'status' => 404,
-            'message' => 'Subscriber not found'
-        ], 404);
+            // Update the subscriber's profile fields with the new values
+            $subscriber->update([
+                'DeviceId' => $request->input('DeviceId'),
+                'FirstName' => $request->input('FirstName'),
+                'LastName' => $request->input('LastName'),
+                'BirthYear' => $request->input('BirthYear'),
+                'Gender' => $request->input('Gender'),
+                'PhoneNumber' => $request->input('PhoneNumber'),
+                'About' => $request->input('About'),
+                'Address' => $request->input('Address'),
+                'City' => $request->input('City'),
+                'State' => $request->input('State'),
+                'Zipcode' => $request->input('Zipcode'),
+                'Country' => $request->input('Country'),
+                // 'ProfileImage' => $profileImagePath,
+                'Keywords' => $request->input('Keywords'),
+                'LoginType' => "2",
+                'RoleId' => $request->input('RoleId'),
+                'MainSubscriberId' => $subscriber->id,
+            ]);
+
+            // Return a success response
+            return response()->json([
+                'status' => 200,
+                'message' => 'Profile updated successfully',
+                'data' => $subscriber,
+            ], 200);
+        } else {
+            // Return an error response if the subscriber with the given ID was not found
+            return response()->json([
+                'status' => 404,
+                'message' => 'Subscriber not found'
+            ], 404);
+        }
     }
-}
 
 
     //Created Accounts by Main Subscriber
