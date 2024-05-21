@@ -99,10 +99,13 @@ Route::middleware([AuthenticateApi::class])->group(function () {
     Route::get('mainSecondary/{id?}', [subscriberLoginController::class, 'mainSecondary']);
 
     // Subscriberskids  ( Create, View, Update, Delete)
-    Route::get('subscribersKids/{id?}', [subscribersKidsController::class, 'index']);
+    Route::get('subscribersKids', [subscribersKidsController::class, 'index']);
     Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
     Route::get('subscriberkidsdata/{subscriberId}', [subscribersKidsController::class, 'getKidsBySubscriberId']);
+    Route::put('/subscribersKids/{id}', [subscribersKidsController::class,'update']);
+
     Route::get('subscriberpetdata/{subscriberId}', [petController::class, 'getKidsBySubscriberId']);
+
 
 
     // subscribers Contacts with Kids

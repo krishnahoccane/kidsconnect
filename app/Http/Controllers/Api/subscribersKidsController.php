@@ -132,22 +132,34 @@ class subscribersKidsController extends Controller
             ], 404);
         }
 
+        if ($subKid) {
+            // Check if the request has a profile image file
+            if ($request->hasFile('ProfileImage')) {
+                // Upload and save the profile image
+                $profileImage = $request->file('ProfileImage');
+                $path = 'uploads/profiles/';
+                $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+                $profileImage->move($path, $fileName);
+                $profileImagePath = $path . $fileName;
+            } else {
+                // If no profile image is provided, keep the existing profile image path
+                $profileImagePath = null;
+            }
+    
+        // Update the subscriber's profile fields with the new values
+       
         // Update the subscriber kid instance with the provided data
         $subKid->update([
-            'FirstName' => $request->input('FirstName', $subKid->FirstName),
-            'LastName' => $request->input('LastName', $subKid->LastName),
-            'Email' => $request->input('Email', $subKid->Email),
-            'Dob' => $request->input('Dob', $subKid->Dob),
-            'Gender' => $request->input('Gender', $subKid->Gender),
-            'PhoneNumber' => $request->input('PhoneNumber', $subKid->PhoneNumber),
-            'SSN' => $request->input('SSN', $subKid->SSN),
-            'Password' => $request->input('Password', $subKid->Password),
-            'About' => $request->input('About', $subKid->About),
-            'Address' => $request->input('Address', $subKid->Address),
-            'ProfileImage' => $request->input('ProfileImage', $subKid->ProfileImage),
-            'Keywords' => $request->input('Keywords', $subKid->Keywords),
-            'LoginType' => $request->input('LoginType', $subKid->LoginType),
-            'MainSubscriberId' => $request->input('MainSubscriberId', $subKid->MainSubscriberId),
+            'FirstName' => $request->input('FirstName'),
+            'LastName' => $request->input('LastName'),
+            'Dob' => $request->input('Dob'),
+            'Gender' => $request->input('Gender'),
+            'About' => $request->input('About'),
+            'Address' => $request->input('Address'),
+            'ProfileImage' => $profileImagePath,
+            'Keywords' => $request->input('Keywords'),
+            'LoginType' => $request->input('LoginType'),
+            'MainSubscriberId' => $request->input('MainSubscriberId'),
         ]);
 
         // Return the response based on whether the subscriber kid was successfully updated
@@ -167,4 +179,5 @@ class subscribersKidsController extends Controller
 
 
 
+    }
 }

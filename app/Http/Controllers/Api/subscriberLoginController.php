@@ -41,7 +41,6 @@ class subscriberLoginController extends Controller
 
     public function create(Request $request)
     {
-
         $id = $request->id;
         $Email = $request->Email;
         $DeviceId = $request->DeviceId;
@@ -82,17 +81,17 @@ class subscriberLoginController extends Controller
         // If the subscriber with the given ID exists
         if ($subscriber) {
             // Check if the request has a profile image file
-            // if ($request->hasFile('ProfileImage')) {
-            //     // Upload and save the profile image
-            //     $profileImage = $request->file('ProfileImage');
-            //     $path = 'uploads/profiles/';
-            //     $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-            //     $profileImage->move($path, $fileName);
-            //     $profileImagePath = $path . $fileName;
-            // } else {
-            //     // If no profile image is provided, keep the existing profile image path
-            //     $profileImagePath = null;
-            // }
+            if ($request->hasFile('ProfileImage')) {
+                // Upload and save the profile image
+                $profileImage = $request->file('ProfileImage');
+                $path = 'uploads/profiles/';
+                $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+                $profileImage->move($path, $fileName);
+                $profileImagePath = $path . $fileName;
+            } else {
+                // If no profile image is provided, keep the existing profile image path
+                $profileImagePath = null;
+            }
     
         // Update the subscriber's profile fields with the new values
         $subscriber->update([
