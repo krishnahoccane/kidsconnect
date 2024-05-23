@@ -61,7 +61,7 @@ Route::get('subscriber', [subscriberController::class, 'index']);// For Admin
 //** */
 
 // Route::post('subscriber', [subscriberController::class, 'create']);// Not _using _now
-Route::post('subscriberlogins', [subscriberLoginController::class, 'create']);
+Route::post('subscriberlogins', [SubscriberLoginController::class, 'create']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
 Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
 
