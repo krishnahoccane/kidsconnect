@@ -43,7 +43,6 @@ Route::post('password/reset/send-link', [ResetPassword::class, 'sendResetLinkEma
 Route::get('/reset-password', [ResetPassword::class, 'showResetPasswordForm'])->name('reset.password.show');
 Route::put('/reset-password', [ResetPassword::class, 'updatePassword'])->name('reset.password.update');
 
-
 // Route to reset password using OTP
 // Route::post('password/reset', [ResetPassword::class, 'reset']);
 
@@ -60,8 +59,8 @@ Route::delete('roles/{id}', [rolesController::class, 'delete']);
 Route::get('subscriber', [subscriberController::class, 'index']);// For Admin
 //** */
 
-Route::post('subscriber', [subscriberController::class, 'create']);// Not _using _now
-// Route::post('subscriberlogins', [SubscriberLoginController::class, 'create']);
+// Route::post('subscriber', [subscriberController::class, 'create']);// Not _using _now
+Route::post('subscriberloginsData', [subscriberLoginController::class, 'create']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
 Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
 
@@ -127,6 +126,7 @@ Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
 
 // For Request Sent To
 Route::get('requestsent', [RequestSentController::class, 'index']);
+
 Route::post('requestsent',[RequestSentController::class, 'store']);
 
 // For Request

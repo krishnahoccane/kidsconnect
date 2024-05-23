@@ -56,7 +56,6 @@ class subscribersKidsController extends Controller
                 'message' => 'No kids found for the given subscriber ID'
             ], 404);
         }
-
         return response()->json([
             'status' => 200,
             'data' => $kidMainSubId
