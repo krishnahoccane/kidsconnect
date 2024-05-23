@@ -36,4 +36,69 @@ class subscriberController extends Controller
 
     }
 
+    public function create(Request $request)
+    {
+        // $id = $request->id;
+        $email = $request->Email;
+        $entryCodeId = $request->EntryCode;
+        // $DeviceId = $request->DeviceId;
+        $phoneNumber = $request->phoneNumber;
+
+        if (empty($email)) {
+            $phoneNumberExist = subscriberlogins::where('phoneNumber', $phoneNumber)->first();
+            if ($phoneNumberExist) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $phoneNumberExist,
+                ], 200);
+            } else {
+                // Create subscriber record with phone number
+                $this->createSubscriberData($request, null, $entryCodeId, $phoneNumber);
+            }
+        } elseif (empty($phoneNumber)) {
+            $emailExist = subscriberlogins::where('Email', $email)->first();
+            if ($emailExist) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $emailExist
+                ], 200);
+            } else {
+                // Create subscriber record with email
+                $this->createSubscriberData($request, $email, $entryCodeId, null);
+            }
+        }
+    }
+
+    public function createSubscriberData(Request $request, $email, $entryCodeId, $phoneNumber)
+    {
+        $subscriberData = [
+            'EntryCode' => $entryCodeId,
+        ];
+
+        // Check whether to store email or phone number
+        if ($email) {
+            $subscriberData['Email'] = $email;
+        }
+        if ($phoneNumber) {
+            $subscriberData['PhoneNumber'] = $phoneNumber;
+        }
+
+        // Create subscriber record
+        $subscriber = subscriberlogins::create($subscriberData);
+
+        // Check if subscriber was created successfully
+        if ($subscriber) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Profile created successfully',
+                'data' => $subscriber,
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to create profile',
+            ], 500);
+        }
+    }
+
 }
