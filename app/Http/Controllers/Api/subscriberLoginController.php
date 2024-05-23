@@ -105,10 +105,10 @@ class subscriberLoginController extends Controller
             $subscriber->save();
 
             return response()->json([
-                'status' => 201,
+                'status' => 200,
                 'message' => 'Subscriber created successfully with email.',
                 'data' => $subscriber
-            ], 201);
+            ], 200);
         }
     }
 
