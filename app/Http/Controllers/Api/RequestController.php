@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\API;
-
 use App\Models\RequestModel;
 use App\Models\defaultStatus;
 use App\Models\subscriberlogins;
