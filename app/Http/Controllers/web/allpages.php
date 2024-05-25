@@ -18,4 +18,8 @@ class allpages extends Controller
         return view('sitepages/termsandconditions');
     }
 
+    public function deleteaccount(){
+        return view('sitepages/accountdeletion');
+    }
+
 }

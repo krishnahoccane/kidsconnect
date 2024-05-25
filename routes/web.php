@@ -85,6 +85,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/privacy-policies', [allPages::class, 'privacypolicy']);
 Route::get('/terms-conditions', [allPages::class, 'termsandconditions']);
+Route::get('/delete-account', [allPages::class, 'deleteaccount']);
+
 
 
 
