@@ -6,6 +6,8 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\web\urlRestrictionController;
 use App\Http\Controllers\adminuserRegistrationController;
 use App\Http\Controllers\web\subscriberUserProfileConstroller;
+use App\Http\Controllers\web\allpages;
+
 // use App\Http\Controllers\Api\bannerController;
 
 
@@ -79,6 +81,11 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('allBanners/{id}', [bannerController::class, 'show']);
     // Route::delete('allBanners/{id}', [bannerController::class, 'destroy']);
 });
+
+
+Route::get('/privacy-policies', [allPages::class, 'privacypolicy']);
+Route::get('/terms-conditions', [allPages::class, 'termsandconditions']);
+
 
 
 
