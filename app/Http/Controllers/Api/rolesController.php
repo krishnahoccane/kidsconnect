@@ -117,7 +117,8 @@ class rolesController extends Controller
 
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Role Updated successfully'
+                    'message' => 'Role Updated successfully',
+                    'data' => $role
                 ], 200);
             } else {
                 return response()->json([
@@ -133,13 +134,13 @@ class rolesController extends Controller
     {
         $role = roles::find($id);
 
-        if(!$role){
-            return response()->json(['status'=>404,'message'=>"Given role for delete is not found"],404);
+        if (!$role) {
+            return response()->json(['status' => 404, 'message' => "Given role for delete is not found"], 404);
         }
 
-        $role -> delete();
+        $role->delete();
 
-        return response()->json(['status'=>200,'message'=>"Given role is deleted Successfully"],200);
+        return response()->json(['status' => 200, 'message' => "Given role is deleted Successfully"], 200);
     }
 
 }
