@@ -131,9 +131,9 @@ Route::post('requestsent',[RequestSentController::class, 'store']);
 
 // For Request
 Route::get('requests', [RequestController::class, 'index']);
-Route::post('/requests', [RequestController::class, 'create']);
-Route::get('/requests/{id}', [RequestController::class, 'show']);
-Route::put('/requests/{id}', [RequestController::class, 'update']);
+Route::post('requests', [RequestController::class, 'create']);
+Route::get('requests/{id}', [RequestController::class, 'show']);
+Route::put('requests/{id}', [RequestController::class, 'update']);
 Route::get('previousevent/{subscriberId}', [RequestController::class, 'previousevent']);
 Route::get('activeEvent/{subscriberId}', [RequestController::class, 'activeEvent']);
 

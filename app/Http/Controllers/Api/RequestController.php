@@ -54,7 +54,7 @@ class RequestController extends Controller
         $newRequest = RequestModel::create([
             'Subject' => $request->Subject,
             'SubscriberId' => $subscriberId,
-            'SubschildId' => $request->SubschildId,
+            'SubscribersKidId' => $request->SubschildId,
             'RequestFor' => $request->RequestFor,
             'EventFrom' => $request->EventFrom,
             'EventTo' => $request->EventTo,
