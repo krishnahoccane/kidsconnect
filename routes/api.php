@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\RequestSentController;
 use App\Http\Controllers\Api\SubsCirclesController;
 use App\Http\Controllers\Api\defalutStatusController;
 use App\Http\Controllers\Api\appDevicehangleController;
+use App\Http\Controllers\Api\RequestFavoriteController;
 use App\Http\Controllers\Api\subscriberLoginController;
 use App\Http\Controllers\Api\subscribersKidsController;
 use App\Http\Controllers\Api\SubsCirclesMemberController;
@@ -79,7 +80,8 @@ Route::get('codetype', [CodeTypescontroller::class, 'index']);
 Route::get('regcodedata/{id}', [RegCodeController::class, 'index']);
 Route::get('regcodedata/{id}/userid/{user_id}', [RegCodeController::class, 'show']);
 Route::post('verify', [RegCodeController::class, 'verify']);
-Route::get('verify/{entryId}/{sub_login}', [RegCodeController::class, 'verifyAndCreate'])->name('verifyAndCreate');;
+Route::get('verify/{entryId}/{sub_login}', [RegCodeController::class, 'verifyAndCreate'])->name('verifyAndCreate');
+;
 
 
 //secondary person CRUD
@@ -127,15 +129,25 @@ Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
 // For Request Sent To
 Route::get('requestsent', [RequestSentController::class, 'index']);
 
-Route::post('requestsent',[RequestSentController::class, 'store']);
+Route::post('requestsent', [RequestSentController::class, 'store']);
 
 // For Request
 Route::get('requests', [RequestController::class, 'index']);
 Route::post('requests', [RequestController::class, 'create']);
 Route::get('requests/{id}', [RequestController::class, 'show']);
 Route::put('requests/{id}', [RequestController::class, 'update']);
+Route::put('requests/FavOrNot/{event_id}', [RequestController::class, 'FavOrNot']);
+
+
 Route::get('previousevent/{subscriberId}', [RequestController::class, 'previousevent']);
 Route::get('activeEvent/{subscriberId}', [RequestController::class, 'activeEvent']);
+
+//for Favorate events
+Route::get('favoriteevents', [RequestFavoriteController::class, 'index']);
+Route::get('favoriteevents/{sub_id}', [RequestFavoriteController::class, 'show']);
+Route::put('favoriteevents/{evn_id}', [RequestFavoriteController::class, 'makeFav']);
+
+
 
 
 // For Request Chat

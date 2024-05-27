@@ -24,6 +24,7 @@ class RequestModel extends Model
         'Keywords',
         'RecordType',
         'Statusid',
+        'isEventFav',
         'EventLocation',
         'EventInfo',
         'LocationType',
