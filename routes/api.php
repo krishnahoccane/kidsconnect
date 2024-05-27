@@ -134,6 +134,8 @@ Route::get('requests', [RequestController::class, 'index']);
 Route::post('/requests', [RequestController::class, 'create']);
 Route::get('/requests/{id}', [RequestController::class, 'show']);
 Route::put('/requests/{id}', [RequestController::class, 'update']);
+Route::get('previousevent/{subscriberId}', [RequestController::class, 'previousevent']);
+Route::get('activeEvent/{subscriberId}', [RequestController::class, 'activeEvent']);
 
 
 // For Request Chat

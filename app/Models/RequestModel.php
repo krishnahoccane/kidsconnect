@@ -9,22 +9,29 @@ class RequestModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'request';
+    protected $table = 'EventRequests';
     protected $primaryKey = "id";
     protected $fillable = [
         'SubscriberId',
-        'SubschildId',
-        'Subject' ,
-        'RequestFor',
-        'EventFrom',
-        'EventTo',
+        'SubscribersKidId',
+        'EventName',
+        'EventType',
+        'EventFor',
+        'EventStartDate',
+        'EventEndDate',
+        'EventStartTime',
+        'EventEndTime',
         'Keywords',
-        'RecordType	',
+        'RecordType',
         'Statusid',
+        'EventLocation',
+        'EventInfo',
         'LocationType',
-        'Location',
-        'PickDropInfo',
-        'SpecialNotes',
+        'EventLocation',
+        'EventInfo', 
+        'PickupLocation',
+        'DropLocation',
+        'IsPickUp',
         'PrimaryResponsibleId',
         'ActivityType',
         'areGroupMemberVisible',

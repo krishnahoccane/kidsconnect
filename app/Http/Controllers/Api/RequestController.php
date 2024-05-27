@@ -7,6 +7,8 @@ use App\Models\subscriberlogins;
 use App\Models\subscribersModel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+
 
 class RequestController extends Controller
 {
@@ -87,35 +89,68 @@ class RequestController extends Controller
     }
 
 
+    // public function show($id)
+    // {
+    //     // Find the request by its ID
+    //     $request = RequestModel::find($id);
+    //     $arr = [];
+    //     $keywords = $request['Keywords'];
+
+    //     array_push($arr, $keywords);
+
+    //     $request['Keywords'] = $arr;
+
+    //     array_push($arr, $request['Keywords']);
+
+    //     // Check if the request exists
+    //     if (!$request) {
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => 'Request not found'
+    //         ], 404);
+
+    //     }
+
+    //     // Return the response with the request data
+    //     return response()->json([
+    //         'status' => 200,
+    //         'message' => 'Request found',
+    //         'data' => $request
+    //     ], 200);
+    // }
+
     public function show($id)
-    {
-        // Find the request by its ID
-        $request = RequestModel::find($id);
-        $arr = [];
-        $keywords = $request['Keywords'];
+{
+    // Find the request by its ID
+    $request = RequestModel::find($id);
 
-        array_push($arr, $keywords);
-
-        $request['Keywords'] = $arr;
-
-        array_push($arr, $request['Keywords']);
-
-        // Check if the request exists
-        if (!$request) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Request not found'
-            ], 404);
-
-        }
-
-        // Return the response with the request data
+    // Check if the request exists
+    if (!$request) {
         return response()->json([
-            'status' => 200,
-            'message' => 'Request found',
-            'data' => $request
-        ], 200);
+            'status' => 404,
+            'message' => 'Request not found'
+        ], 404);
     }
+
+    // Initialize the array to hold keywords
+    $arr = [];
+
+    // Check if Keywords field exists and is not null
+    if (!is_null($request->Keywords)) {
+        $keywords = $request->Keywords;
+        array_push($arr, $keywords);
+        $request->Keywords = $arr;
+    } else {
+        $request->Keywords = $arr; // Assign empty array if Keywords is null
+    }
+
+    // Return the response with the request data
+    return response()->json([
+        'status' => 200,
+        'message' => 'Request found',
+        'data' => $request
+    ], 200);
+}
 
     public function update(Request $request, $id)
     {
@@ -178,5 +213,55 @@ class RequestController extends Controller
         }
     }
 
+    public function previousevent($subscriberId)
+    {
+        // Fetch the latest request for the given SubscriberId where Statusid is '6', ordered by creation date
+        $completedRequest = RequestModel::where('SubscriberId', $subscriberId)
+                                        ->where('Statusid', 6)
+                                        ->latest()
+                                        ->first();
 
+        // Check if a completed request was found
+        if ($completedRequest) {
+            return response()->json([
+                'status' => 200,
+                'data' => $completedRequest
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No Completed Request Found for this Subscriber'
+            ], 404);
+        }
+    }
+
+    public function activeEvent($subscriberId)
+{
+    // Get the current time
+    $currentTime = now()->toTimeString();
+    
+    // Fetch the latest active event for the given SubscriberId
+    $activeEvent = RequestModel::where('SubscriberId', $subscriberId)
+        ->where('Statusid', 1)
+        ->whereRaw('? BETWEEN TIME(EventStartTime) AND TIME(EventEndTime)', [$currentTime]) // Check if the current time is between the event's start and end time
+        ->latest()
+        ->first();
+    
+    // Check if an active event was found
+    if ($activeEvent) {
+        return response()->json([
+            'status' => 200,
+            'data' => $activeEvent
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 404,
+            'message' => 'No Active Event Found for this Subscriber'
+        ], 404);
+    }
+}
+
+
+
+    
 }
