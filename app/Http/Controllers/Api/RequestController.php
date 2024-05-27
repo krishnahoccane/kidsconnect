@@ -261,6 +261,49 @@ class RequestController extends Controller
     }
 }
 
+public function upcomingEvent($subscriberId)
+{
+    // Get the current date and time
+    $currentDateTime = now();
+
+    // Fetch the upcoming event for the given SubscriberId
+    $upcomingEvent = RequestModel::where('SubscriberId', $subscriberId)
+        ->where('Statusid', 3)
+        ->where(function ($query) use ($currentDateTime) {
+            // Check for events starting in the future
+            $query->where('EventStartDate', '>', $currentDateTime->toDateString())
+                ->orWhere(function ($query) use ($currentDateTime) {
+                    $query->where('EventStartDate', '=', $currentDateTime->toDateString())
+                        ->where('EventStartTime', '>', $currentDateTime->toTimeString());
+                });
+        })
+        ->where(function ($query) use ($currentDateTime) {
+            // Exclude events that have already ended
+            $query->where('EventEndDate', '>', $currentDateTime->toDateString())
+                ->orWhere(function ($query) use ($currentDateTime) {
+                    $query->where('EventEndDate', '=', $currentDateTime->toDateString())
+                        ->where('EventEndTime', '<', $currentDateTime->toTimeString());
+                });
+        })
+        ->orderBy('EventStartDate')
+        ->orderBy('EventStartTime')
+        ->first();
+
+    // Check if an upcoming event was found
+    if ($upcomingEvent) {
+        return response()->json([
+            'status' => 200,
+            'data' => $upcomingEvent
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 404,
+            'message' => 'No Upcoming Event Found for this Subscriber'
+        ], 404);
+    }
+}
+
+
 
 
     
