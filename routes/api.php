@@ -141,6 +141,7 @@ Route::put('requests/FavOrNot/{event_id}', [RequestController::class, 'FavOrNot'
 
 Route::get('previousevent/{subscriberId}', [RequestController::class, 'previousevent']);
 Route::get('activeEvent/{subscriberId}', [RequestController::class, 'activeEvent']);
+Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
 
 //for Favorate events
 Route::get('favoriteevents', [RequestFavoriteController::class, 'index']);

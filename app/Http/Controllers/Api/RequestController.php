@@ -53,25 +53,29 @@ class RequestController extends Controller
 
         // Create a new request instance with the provided data
         $newRequest = RequestModel::create([
-            'Subject' => $request->Subject,
             'SubscriberId' => $subscriberId,
-            'SubscribersKidId' => $request->SubschildId,
-            'RequestFor' => $request->RequestFor,
-            'EventFrom' => $request->EventFrom,
-            'EventTo' => $request->EventTo,
+            'SubscribersKidId' => $request->SubscribersKidId,
+            'EventName' => $request->EventName,
+            'EventType' => $request->EventType,
+            'EventFor' => $request->EventFor,
+            'EventStartDate' => $request->EventStartDate,
+            'EventEndDate' => $request->EventEndDate,
+            'EventStartTime' => $request->EventStartTime,
+            'EventEndTime' => $request->EventEndTime,
             'Keywords' => $request->Keywords,
-            'RecordType' => $status->name, // Assuming you want to use the name of the status
-            'Statusid' => $status->id, // Assuming you also want to store the status ID
+            'RecordType' => $request->RecordType,
+            'Statusid' => $status->id,
             'LocationType' => $request->LocationType,
-            'Location' => $request->Location,
-            'PickDropInfo' => $request->PickDropInfo,
-            'SpecialNotes' => $request->SpecialNotes,
+            'EventLocation' => $request->EventLocation,
+            'EventInfo' => $request->EventInfo,
+            'PickupLocation' => $request->PickupLocation,
+            'DropLocation' => $request->DropLocation,
             'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
             'ActivityType' => $request->ActivityType,
             'areGroupMemberVisible' => $request->areGroupMemberVisible,
             'IsGroupChat' => $request->IsGroupChat,
             'CreatedBy' => $subscriberId,
-            'UpdatedBy' => $subscriberId
+            'UpdatedBy' => $subscriberId// Assuming this should be updated
         ]);
 
         // Return the response based on whether the request was successful
@@ -179,23 +183,28 @@ class RequestController extends Controller
 
         // Update the request instance with the provided data
         $existingRequest->update([
-            'Subject' => $request->Subject,
             'SubscriberId' => $request->SubscriberId,
-            'SubschildId' => $request->SubschildId,
-            'RequestFor' => $request->RequestFor,
-            'EventFrom' => $request->EventFrom,
-            'EventTo' => $request->EventTo,
+            'SubscribersKidId' => $request->SubscribersKidId,
+            'EventName' => $request->EventName,
+            'EventType' => $request->EventType,
+            'EventFor' => $request->EventFor,
+            'EventStartDate' => $request->EventStartDate,
+            'EventEndDate' => $request->EventEndDate,
+            'EventStartTime' => $request->EventStartTime,
+            'EventEndTime' => $request->EventEndTime,
             'Keywords' => $request->Keywords,
-            'RecordType' => $status->name,
+            'RecordType' => $request->RecordType,
             'Statusid' => $status->id,
             'LocationType' => $request->LocationType,
-            'Location' => $request->Location,
-            'PickDropInfo' => $request->PickDropInfo,
-            'SpecialNotes' => $request->SpecialNotes,
+            'EventLocation' => $request->EventLocation,
+            'EventInfo' => $request->EventInfo,
+            'PickupLocation' => $request->PickupLocation,
+            'DropLocation' => $request->DropLocation,
             'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
             'ActivityType' => $request->ActivityType,
             'areGroupMemberVisible' => $request->areGroupMemberVisible,
             'IsGroupChat' => $request->IsGroupChat,
+            'CreatedBy' => $request->SubscriberId,
             'UpdatedBy' => $request->SubscriberId // Assuming this should be updated
         ]);
 
@@ -263,40 +272,6 @@ class RequestController extends Controller
     }
 
 
-    public function updateToFav(Request $request, $event_id)
-    {
-        // Find the existingEvent by its ID
-        $existingEvent = RequestModel::find($event_id);
-
-        // Check if the Event exists
-        if (!$existingEvent) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Request not found'
-            ], 404);
-        } else {
-
-
-            $existingEvent->update([
-
-                'isEventFav' => $request->isEventFav,
-                // 'UpdatedBy' => $request->SubscriberId // Assuming this should be updated
-            ]);
-            if ($existingEvent) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Event Updated As Favorite',
-                    'data' => $existingEvent
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Failed to update Event As Favorite'
-                ], 500);
-            }
-        }
-
-    }
 
 
     public function FavOrNot(Request $request, $event_id)
