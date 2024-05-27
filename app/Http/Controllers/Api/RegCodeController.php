@@ -74,7 +74,7 @@ class RegCodeController extends Controller
     {
         $entryVerificationCode = $request->input('code');
         $verifyingCode = RegCodes::where('code_number', $entryVerificationCode)->first();
-
+        
         if ($verifyingCode) {
             return response()->json([
                 'status' => 200,
