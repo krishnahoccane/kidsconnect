@@ -103,7 +103,6 @@ class subscriberLoginController extends Controller
                 $subscriber->phoneNumber = null;
                 // Add other necessary fields here from $request if needed
                 $subscriber->save();
-
                 return response()->json([
                     'status' => 200,
                     'message' => 'Subscriber created successfully with email.',
