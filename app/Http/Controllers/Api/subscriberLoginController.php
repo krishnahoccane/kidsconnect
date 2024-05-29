@@ -103,7 +103,6 @@ class subscriberLoginController extends Controller
                 $subscriber->phoneNumber = null;
                 // Add other necessary fields here from $request if needed
                 $subscriber->save();
-
                 return response()->json([
                     'status' => 200,
                     'message' => 'Subscriber created successfully with email.',
@@ -123,10 +122,11 @@ class subscriberLoginController extends Controller
                 ], 200);
             } else {
                 // Create subscriber record with phone number.
-                $this->createSubscriberData($request, null, $entryCodeId, $phoneNumber);
+                $subscriber = $this->createSubscriberData($request, null, $entryCodeId, $phoneNumber);
                 return response()->json([
                     'status' => 201,
                     'message' => 'Subscriber created successfully with phone number.',
+                    'data' => $subscriber
                 ], 201);
             }
         }
@@ -198,6 +198,7 @@ class subscriberLoginController extends Controller
                 'BirthYear' => $request->input('BirthYear'),
                 'Gender' => $request->input('Gender'),
                 'PhoneNumber' => $request->input('PhoneNumber'),
+                'Email' => $request->input('Email'),
                 'About' => $request->input('About'),
                 'Address' => $request->input('Address'),
                 'City' => $request->input('City'),

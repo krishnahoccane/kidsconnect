@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\RequestModel;
 use App\Models\defaultStatus;
 use App\Models\subscriberlogins;
+use App\Models\subscribersKidModel;
 use App\Models\subscribersModel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -62,7 +63,7 @@ class RequestController extends Controller
             'EventEndDate' => $request->EventEndDate,
             'EventStartTime' => $request->EventStartTime,
             'EventEndTime' => $request->EventEndTime,
-            'Keywords' => $request->Keywords,
+            'Keywords' => $serializedKeywords,
             'RecordType' => $request->RecordType,
             'Statusid' => $status->id,
             'LocationType' => $request->LocationType,
@@ -125,24 +126,24 @@ class RequestController extends Controller
     }
 
     public function getRequestList($subscriberId)
-{
-    // Fetch all requests for the given SubscriberId
-    $requestList = RequestModel::where('SubscriberId', $subscriberId)
-        ->get();
+    {
+        // Fetch all requests for the given SubscriberId
+        $requestList = RequestModel::where('SubscriberId', $subscriberId)
+            ->get();
 
-    // Check if any requests were found
-    if ($requestList->isNotEmpty()) {
-        return response()->json([
-            'status' => 200,
-            'data' => $requestList
-        ], 200);
-    } else {
-        return response()->json([
-            'status' => 404,
-            'message' => 'No Requests Found for this Subscriber'
-        ], 404);
+        // Check if any requests were found
+        if ($requestList->isNotEmpty()) {
+            return response()->json([
+                'status' => 200,
+                'data' => $requestList
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No Requests Found for this Subscriber'
+            ], 404);
+        }
     }
-}
 
 
     // public function show($id)
@@ -245,39 +246,65 @@ class RequestController extends Controller
     }
 
     public function previousEvent($subscriberId)
-{
-    // Fetch all completed requests for the given SubscriberId where Statusid is '6', ordered by creation date
-    $completedRequests = RequestModel::where('SubscriberId', $subscriberId)
-        ->where('Statusid', 6)
-        ->latest()
-        ->get();
-
-    // Check if any completed requests were found
-    if ($completedRequests->isNotEmpty()) {
-        return response()->json([
-            'status' => 200,
-            'data' => $completedRequests
-        ], 200);
-    } else {
-        return response()->json([
-            'status' => 404,
-            'message' => 'No Completed Requests Found for this Subscriber'
-        ], 404);
+    {
+        // Fetch all completed requests for the given SubscriberId where Statusid is '6', ordered by creation date
+        $completedRequests = RequestModel::where('SubscriberId', $subscriberId)
+            ->where('Statusid', 6)
+            ->latest()
+            ->get();
+    
+        // Get subscriber details
+        $subscriberIdGet = subscriberlogins::where('id', $subscriberId)
+            ->select('FirstName', 'ProfileImage')
+            ->first();
+    
+        // Prepare the response data
+        $responseData = $completedRequests->map(function($request) use ($subscriberIdGet) {
+            $subscriberKidId = $request->SubscribersKidId;
+            $subscriberKidIdGet = subscribersKidModel::where('id', $subscriberKidId)
+                ->select('FirstName', 'ProfileImage')
+                ->first();
+    
+            $requestData = $request->toArray();
+            $requestData['SubscriberData'] = [
+                'subscriber' => $subscriberIdGet->FirstName,
+                'profileImage' => $subscriberIdGet->ProfileImage,
+            ];
+            $requestData['SubscribersKidData'] = [
+                'subscriberKid' => $subscriberKidIdGet->FirstName,
+                'profileImageKid' => $subscriberKidIdGet->ProfileImage,
+            ];
+    
+            return $requestData;
+        });
+    
+        // Check if any completed requests were found
+        if ($completedRequests->isNotEmpty()) {
+            return response()->json([
+                'status' => 200,
+                'data' => $responseData
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No completed requests found'
+            ], 404);
+        }
     }
-}
+    
 
     public function activeEvent($subscriberId)
     {
         // Get the current datetime
         $currentDateTime = now();
-    
+
         // Fetch the latest active event for the given SubscriberId
         $activeEvent = RequestModel::where('SubscriberId', $subscriberId)
             ->where('Statusid', 1)
             ->whereRaw('? BETWEEN CONCAT(EventStartDate, " ", TIME(EventStartTime)) AND CONCAT(EventEndDate, " ", TIME(EventEndTime))', [$currentDateTime])
             ->latest()
             ->first();
-    
+
         // Check if an active event was found
         if ($activeEvent) {
             return response()->json([
@@ -291,7 +318,7 @@ class RequestController extends Controller
             ], 404);
         }
     }
-    
+
 
 
 

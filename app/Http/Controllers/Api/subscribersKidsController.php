@@ -62,12 +62,23 @@ class subscribersKidsController extends Controller
         ], 200);
     }
     public function create(Request $request)
-    {
+{
+    // Check if the request has a profile image file
+    if ($request->hasFile('ProfileImage')) {
+        // Upload and save the profile image
+        $profileImage = $request->file('ProfileImage');
+        $path = 'uploads/profiles/';
+        $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+        $profileImage->move($path, $fileName);
+        $profileImagePath = $path . $fileName;
+    } else {
+        // If no profile image is provided, keep the existing profile image path
+        $profileImagePath = null;
+    }
 
-        $subKids = subscribersKidModel::all();
-        
-
-        $subKids = subscribersKidModel::firstOrCreate([
+    // Create or update the subscriber kid model
+    $subKid = subscribersKidModel::firstOrCreate(
+        [
             'FirstName' => $request->FirstName,
             'LastName' => $request->LastName,
             'Email' => $request->Email,
@@ -77,26 +88,27 @@ class subscribersKidsController extends Controller
             'Password' => $request->Password,
             'About' => $request->About,
             'Address' => $request->Address,
-            'ProfileImage' => $request->ProfileImage,
             'Keywords' => $request->Keywords,
             'LoginType' => $request->LoginType,
-            'MainSubscriberId' => $request->MainSubscriberId
-        ]);
-      
-        if ($subKids->wasRecentlyCreated) {
-            return response()->json([
-                'status' => 200,
-                'message' => 'Kids Profile Created Successfully',
-                'data'=>$subKids
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 403,
-                'message' => 'Kids Profile Already Exists'
-            ], 403);
-        }
+            'MainSubscriberId' => 1
+        ],
+        ['ProfileImage' => $profileImagePath] // Update profile image if exists
+    );
 
+    // Check if the subscriber kid model was recently created
+    if ($subKid->wasRecentlyCreated) {
+        return response()->json([
+            'status' => 200,
+            'message' => 'Kid\'s Profile Created Successfully',
+            'data' => $subKid
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 403,
+            'message' => 'Kid\'s Profile Already Exists'
+        ], 403);
     }
+}
 
     public function show($id)
     {
