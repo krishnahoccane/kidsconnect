@@ -123,10 +123,11 @@ class subscriberLoginController extends Controller
                 ], 200);
             } else {
                 // Create subscriber record with phone number.
-                $this->createSubscriberData($request, null, $entryCodeId, $phoneNumber);
+                $subscriber = $this->createSubscriberData($request, null, $entryCodeId, $phoneNumber);
                 return response()->json([
                     'status' => 201,
                     'message' => 'Subscriber created successfully with phone number.',
+                    'data' => $subscriber
                 ], 201);
             }
         }
