@@ -94,40 +94,18 @@ class RequestController extends Controller
     }
 
 
-    // public function show($id)
-    // {
-    //     // Find the request by its ID
-    //     $request = RequestModel::find($id);
-    //     $arr = [];
-    //     $keywords = $request['Keywords'];
-
-    //     array_push($arr, $keywords);
-
-    //     $request['Keywords'] = $arr;
-
-    //     array_push($arr, $request['Keywords']);
-
-    //     // Check if the request exists
-    //     if (!$request) {
-    //         return response()->json([
-    //             'status' => 404,
-    //             'message' => 'Request not found'
-    //         ], 404);
-
-    //     }
-
-    //     // Return the response with the request data
-    //     return response()->json([
-    //         'status' => 200,
-    //         'message' => 'Request found',
-    //         'data' => $request
-    //     ], 200);
-    // }
-
     public function show($id)
     {
         // Find the request by its ID
         $request = RequestModel::find($id);
+        $arr = [];
+        $keywords = $request['Keywords'];
+
+        array_push($arr, $keywords);
+
+        $request['Keywords'] = $arr;
+
+        array_push($arr, $request['Keywords']);
 
         // Check if the request exists
         if (!$request) {
@@ -135,18 +113,7 @@ class RequestController extends Controller
                 'status' => 404,
                 'message' => 'Request not found'
             ], 404);
-        }
 
-        // Initialize the array to hold keywords
-        $arr = [];
-
-        // Check if Keywords field exists and is not null
-        if (!is_null($request->Keywords)) {
-            $keywords = $request->Keywords;
-            array_push($arr, $keywords);
-            $request->Keywords = $arr;
-        } else {
-            $request->Keywords = $arr; // Assign empty array if Keywords is null
         }
 
         // Return the response with the request data
@@ -156,6 +123,60 @@ class RequestController extends Controller
             'data' => $request
         ], 200);
     }
+
+    public function getRequestList($subscriberId)
+{
+    // Fetch all requests for the given SubscriberId
+    $requestList = RequestModel::where('SubscriberId', $subscriberId)
+        ->get();
+
+    // Check if any requests were found
+    if ($requestList->isNotEmpty()) {
+        return response()->json([
+            'status' => 200,
+            'data' => $requestList
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 404,
+            'message' => 'No Requests Found for this Subscriber'
+        ], 404);
+    }
+}
+
+
+    // public function show($id)
+    // {
+    //     // Find the request by its ID
+    //     $request = RequestModel::find($id);
+
+    //     // Check if the request exists
+    //     if (!$request) {
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => 'Request not found'
+    //         ], 404);
+    //     }
+
+    //     // Initialize the array to hold keywords
+    //     $arr = [];
+
+    //     // Check if Keywords field exists and is not null
+    //     if (!is_null($request->Keywords)) {
+    //         $keywords = $request->Keywords;
+    //         array_push($arr, $keywords);
+    //         $request->Keywords = $arr;
+    //     } else {
+    //         $request->Keywords = $arr; // Assign empty array if Keywords is null
+    //     }
+
+    //     // Return the response with the request data
+    //     return response()->json([
+    //         'status' => 200,
+    //         'message' => 'Request found',
+    //         'data' => $request
+    //     ], 200);
+    // }
 
     public function update(Request $request, $id)
     {
@@ -223,40 +244,40 @@ class RequestController extends Controller
         }
     }
 
-    public function previousevent($subscriberId)
-    {
-        // Fetch the latest request for the given SubscriberId where Statusid is '6', ordered by creation date
-        $completedRequest = RequestModel::where('SubscriberId', $subscriberId)
-            ->where('Statusid', 6)
-            ->latest()
-            ->first();
+    public function previousEvent($subscriberId)
+{
+    // Fetch all completed requests for the given SubscriberId where Statusid is '6', ordered by creation date
+    $completedRequests = RequestModel::where('SubscriberId', $subscriberId)
+        ->where('Statusid', 6)
+        ->latest()
+        ->get();
 
-        // Check if a completed request was found
-        if ($completedRequest) {
-            return response()->json([
-                'status' => 200,
-                'data' => $completedRequest
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No Completed Request Found for this Subscriber'
-            ], 404);
-        }
+    // Check if any completed requests were found
+    if ($completedRequests->isNotEmpty()) {
+        return response()->json([
+            'status' => 200,
+            'data' => $completedRequests
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 404,
+            'message' => 'No Completed Requests Found for this Subscriber'
+        ], 404);
     }
+}
 
     public function activeEvent($subscriberId)
     {
-        // Get the current time
-        $currentTime = now()->toTimeString();
-
+        // Get the current datetime
+        $currentDateTime = now();
+    
         // Fetch the latest active event for the given SubscriberId
         $activeEvent = RequestModel::where('SubscriberId', $subscriberId)
             ->where('Statusid', 1)
-            ->whereRaw('? BETWEEN TIME(EventStartTime) AND TIME(EventEndTime)', [$currentTime]) // Check if the current time is between the event's start and end time
+            ->whereRaw('? BETWEEN CONCAT(EventStartDate, " ", TIME(EventStartTime)) AND CONCAT(EventEndDate, " ", TIME(EventEndTime))', [$currentDateTime])
             ->latest()
             ->first();
-
+    
         // Check if an active event was found
         if ($activeEvent) {
             return response()->json([
@@ -270,6 +291,7 @@ class RequestController extends Controller
             ], 404);
         }
     }
+    
 
 
 

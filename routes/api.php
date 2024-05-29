@@ -137,6 +137,7 @@ Route::post('requests', [RequestController::class, 'create']);
 Route::get('requests/{id}', [RequestController::class, 'show']);
 Route::put('requests/{id}', [RequestController::class, 'update']);
 Route::put('requests/FavOrNot/{event_id}', [RequestController::class, 'FavOrNot']);
+Route::get('requests/subscriber/{id}', [RequestController::class,'getRequestList']);
 
 
 Route::get('previousevent/{subscriberId}', [RequestController::class, 'previousevent']);
