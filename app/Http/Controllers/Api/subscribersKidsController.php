@@ -90,7 +90,7 @@ class subscribersKidsController extends Controller
             'Address' => $request->Address,
             'Keywords' => $request->Keywords,
             'LoginType' => $request->LoginType,
-            'MainSubscriberId' => 1
+            'MainSubscriberId' => $request->MainSubscriberId
         ],
         ['ProfileImage' => $profileImagePath] // Update profile image if exists
     );
