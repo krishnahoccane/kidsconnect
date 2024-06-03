@@ -170,7 +170,7 @@ class subscriberLoginController extends Controller
                 $profileImagePath = $path . $fileName;
             } else {
                 // If no profile image is provided, keep the existing profile image path
-                $profileImagePath = null;
+                $profileImagePath = $subscriber->ProfileImage;
             }
 
             // Update the subscriber's profile fields with the new values

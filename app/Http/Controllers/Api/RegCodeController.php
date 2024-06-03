@@ -15,7 +15,7 @@ class RegCodeController extends Controller
     {
 
         if ($id) {
-            $regCode_data_individual = RegCodes::where('id', $id)->get();
+            $regCode_data_individual = RegCodes::where('user_id', $id)->get();
 
             // $subscriberUserIndividual = subscriberlogins::find($id);
 

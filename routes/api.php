@@ -103,7 +103,7 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::get('subscribersKids/{id?}', [subscribersKidsController::class, 'index']);
     Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
     Route::get('subscriberkidsdata/{subscriberId}', [subscribersKidsController::class, 'getKidsBySubscriberId']);
-    Route::get('subscriberpetdata/{subscriberId}', [petController::class, 'getKidsBySubscriberId']);
+    Route::put('updatekid/{subscriberId}', [subscribersKidsController::class,'update']);
 
 
     // subscribers Contacts with Kids
