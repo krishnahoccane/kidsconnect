@@ -193,6 +193,7 @@ class subscriberLoginController extends Controller
                 'Keywords' => $request->input('Keywords'),
                 'LoginType' => "2",
                 'RoleId' => $request->input('RoleId'),
+                'MainSubscriberId' => $subscriber->id,
             ]);
             // Return a success response
 
