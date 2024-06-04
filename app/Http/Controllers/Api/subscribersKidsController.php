@@ -46,21 +46,52 @@ class subscribersKidsController extends Controller
     }
 
 
+    // public function getKidsBySubscriberId($subscriberId)
+    // {
+    //     // Retrieve kid data based on subscriber ID
+    //     $kidMainSubId = subscribersKidModel::where('MainSubscriberId', $subscriberId)->get();
+    //     if ($kidMainSubId->isEmpty()) {
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => 'No kids found for the given subscriber ID'
+    //         ], 404);
+    //     }
+    //     return response()->json([
+    //         'status' => 200,
+    //         'data' => $kidMainSubId
+    //     ], 200);
+    // }
+
     public function getKidsBySubscriberId($subscriberId)
-    {
-        // Retrieve kid data based on subscriber ID
-        $kidMainSubId = subscribersKidModel::where('MainSubscriberId', $subscriberId)->get();
-        if ($kidMainSubId->isEmpty()) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No kids found for the given subscriber ID'
-            ], 404);
-        }
+{
+    // Retrieve the main subscriber ID for the given subscriber ID
+    $subscriber = subscriberlogins::where('id', $subscriberId)->first();
+    
+    if (!$subscriber) {
         return response()->json([
-            'status' => 200,
-            'data' => $kidMainSubId
-        ], 200);
+            'status' => 404,
+            'message' => 'Subscriber not found'
+        ], 404);
     }
+
+    $mainSubscriberId = $subscriber->MainSubscriberId;
+    
+    // Retrieve kid data based on main subscriber ID
+    $kidMainSubId = subscribersKidModel::where('MainSubscriberId', $mainSubscriberId)->get();
+    
+    if ($kidMainSubId->isEmpty()) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'No kids found for the given subscriber ID'
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => 200,
+        'data' => $kidMainSubId
+    ], 200);
+}
+
     public function create(Request $request)
 {
     // Check if the request has a profile image file
