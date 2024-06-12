@@ -45,13 +45,6 @@ class subscriberLoginController extends Controller
         $entryCodeId = $request->EntryCode;
         $phoneNumber = $request->phoneNumber;
 
-        // If both email and phone number are missing, return an error response.
-        // if (empty($email) && empty($phoneNumber)) {
-        //     return response()->json([
-        //         'status' => 400,
-        //         'message' => 'Email or phone number is required.',
-        //     ], 400);
-        // }
 
         if (!empty($email)) {
             // Check if a record with the given email exists.
@@ -63,12 +56,14 @@ class subscriberLoginController extends Controller
                     'data' => $emailExist
                 ], 200);
             } else {
-                $ref_inv_by = RegCodes::where('code_number', $entryCodeId)->select('id', 'user_id')->first();
+                $ref_inv_by = RegCodes::where('code_number', $entryCodeId)->select('id', 'user_id', 'code_type_id')->first();
                 $subscriber = new subscriberlogins();
                 $subscriber->Email = $email;
                 $subscriber->Ref_Inv_By = $ref_inv_by ? $ref_inv_by->id : null;
                 $subscriber->phoneNumber = null;
-                $subscriber->MainsubscriberId = $ref_inv_by ? $ref_inv_by->user_id: null;
+                $subscriber->MainsubscriberId = $ref_inv_by ? $ref_inv_by->user_id : null;
+                $subscriber->Entry_code_type = $ref_inv_by ? $ref_inv_by->code_type_id : null;
+
                 // Add other necessary fields here from $request if needed
                 $subscriber->save();
 
@@ -91,12 +86,14 @@ class subscriberLoginController extends Controller
                 ], 200);
             } else {
                 // Create subscriber record with phone number.
-                $ref_inv_by = RegCodes::where('code_number', $entryCodeId)->select('id', 'user_id')->first();
+                $ref_inv_by = RegCodes::where('code_number', $entryCodeId)->select('id', 'user_id', 'code_type_id')->first();
+
                 $subscriber = new subscriberlogins();
                 $subscriber->Email = null;
                 $subscriber->Ref_Inv_By = $ref_inv_by ? $ref_inv_by->id : null;
-                $subscriber->MainsubscriberId = $ref_inv_by ? $ref_inv_by->user_id: null;
+                $subscriber->MainsubscriberId = $ref_inv_by ? $ref_inv_by->user_id : null;
                 $subscriber->phoneNumber = $phoneNumber;
+                $subscriber->Entry_code_type = $ref_inv_by ? $ref_inv_by->code_type_id : null;
                 // Add other necessary fields here from $request if needed
                 $subscriber->save();
 
@@ -114,9 +111,6 @@ class subscriberLoginController extends Controller
             'message' => 'An unexpected error occurred.',
         ], 500);
     }
-
-
-
 
 
     public function createSubscriberData(Request $request, $email, $entryCodeId, $phoneNumber)
@@ -150,8 +144,6 @@ class subscriberLoginController extends Controller
             ], 500);
         }
     }
-
-
 
     public function update(Request $request, $id)
     {
@@ -193,13 +185,11 @@ class subscriberLoginController extends Controller
                 'Keywords' => $request->input('Keywords'),
                 'LoginType' => "2",
                 'RoleId' => $request->input('RoleId'),
-                'MainSubscriberId' => $subscriber->id,
+                'MainSubscriberId' => $subscriber->MainSubscriberId,
             ]);
             // Return a success response
 
             if ($subscriber) {
-
-
                 $entryRefType = 1;
                 $Refcode = $this->generateUniqueCode();
                 $entryInvType = 2;
@@ -222,9 +212,6 @@ class subscriberLoginController extends Controller
                     //     'data' => $subEntryData
                     // ]);
                 }
-
-
-
                 return response()->json([
                     'status' => 200,
                     'message' => 'Profile updated successfully',
@@ -247,6 +234,64 @@ class subscriberLoginController extends Controller
     }
 
 
+    // Searching code
+
+    public function search(Request $request)
+    {
+        // Retrieve search parameter
+        $searchTerm = $request->query('searchTerm');
+
+        // Check if search term is provided
+        if (!$searchTerm) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Search term is required'
+            ], 400);
+        }
+
+        // Build the query
+        $query = subscriberlogins::query();
+
+        $query->where(function ($q) use ($searchTerm) {
+            $q->where('PhoneNumber', 'like', '%' . $searchTerm . '%')
+                ->orWhere('Email', 'like', '%' . $searchTerm . '%')
+                ->orWhere('FirstName', 'like', '%' . $searchTerm . '%');
+
+        });
+
+        // Execute the query
+        $results = $query->get();
+
+        // Check if results found
+        if ($results->isEmpty()) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No matching records found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => $results
+        ], 200);
+    }
+
+
+    public function FamilyData($mainSubscriberId)
+    {
+        // Find the main subscriber
+        $mainSubscriber = SubscriberLogins::where('MainSubscriberId', $mainSubscriberId)->get();
+
+        if (!$mainSubscriber) {
+            return response()->json(['message' => 'Main subscriber not found'], 404);
+        }
+
+        // Find kids associated with the main subscriber
+        $kids = SubscribersKidModel::where('MainSubscriberId', $mainSubscriberId)->get();
+
+        // Return data
+        return response()->json(['main_subscriber' => $mainSubscriber, 'kids' => $kids], 200);
+    }
     //Created Accounts by Main Subscriber
     public function maincreatedaccount($subscriberId = Null)
     {
@@ -412,9 +457,6 @@ class subscriberLoginController extends Controller
             }
         }
     }
-
-
-
     public function show($id)
     {
         // Find the subscriber login by ID
@@ -438,12 +480,14 @@ class subscriberLoginController extends Controller
                         $mainSubscriberId = $regCode->user_id;
                         $userDetails = subscriberlogins::where('Ref_Inv_By', $mainId)->get();
                         $getMainSubscriber = subscriberlogins::where('MainSubscriberId', $mainSubscriberId)->get();
+                        $kidData = subscribersKidModel::where('MainSubscriberId', $mainSubscriberId)->get();
                         if ($userDetails) {
                             return response()->json([
                                 'status' => 200,
                                 'loginUserData' => $sub_login,
                                 'SecondaryData' => $userDetails,
-                                'MainSubsciberData' => $subscriberDetails
+                                'MainSubsciberData' => $subscriberDetails,
+                                'KidData' => $kidData
                             ], 200);
                         } else {
                             return response()->json([
@@ -584,14 +628,10 @@ class subscriberLoginController extends Controller
 
     }
 
-
-
-
     private function generateUniqueCode()
     {
         // Generate a random 4-digit code
         $code = str_pad(mt_rand(10000, 99999), 5, '0', STR_PAD_LEFT);
-
 
         // Check if the code already exists in the database
         $existingCode = RegCodes::where('code_number', $code)->exists();

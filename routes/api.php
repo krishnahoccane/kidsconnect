@@ -8,7 +8,6 @@ use App\Http\Middleware\AuthenticateApi;
 use App\Http\Controllers\Api\imageUpload;
 use App\Http\Controllers\Api\subContacts;
 use App\Http\Controllers\Api\AddSecondary;
-use App\Http\Controllers\Api\petController;
 use App\Http\Controllers\Api\ResetPassword;
 use App\Http\Controllers\Api\Authcontroller;
 use App\Http\Controllers\Api\adminController;
@@ -58,7 +57,6 @@ Route::delete('roles/{id}', [rolesController::class, 'delete']);
 
 //** For Admin side */
 Route::get('subscriber', [subscriberController::class, 'index']);// For Admin
-//** */
 
 // Route::post('subscriber', [subscriberController::class, 'create']);// Not _using _now
 Route::post('subscriberloginsData', [subscriberLoginController::class, 'create']);
@@ -111,6 +109,12 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::get('subcontacts/subscriberId/{subscriberId}/{id?}', [subContacts::class, 'getSubContactedData']);
     Route::get('subcontacts/contactedId/{contactedId}/{id?}', [subContacts::class, 'getContactedData']);
     Route::post('subcontacts', [subContacts::class, 'store']);
+
+    // Search route
+
+    Route::get('subscriber/search', [subscriberLoginController::class, 'search']);
+    Route::get('subscriberFamily/family-data/{mainSubscriberId}', [subscriberLoginController::class,'FamilyData']);
+
 
 // });
 
