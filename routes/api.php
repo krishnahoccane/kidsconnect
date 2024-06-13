@@ -67,7 +67,6 @@ Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
 Route::get('appDevices', [appDevicehangleController::class, 'show']);
 Route::post('appDevices', [appDevicehangleController::class, 'DeviceValidate']);
 
-
 //** For Entry Code Type */
 // ** Fetching the Device ID's  **//
 Route::get('codetype', [CodeTypescontroller::class, 'index']);
@@ -80,12 +79,9 @@ Route::get('regcodedata/{id}/userid/{user_id}', [RegCodeController::class, 'show
 Route::post('verify', [RegCodeController::class, 'verify']);
 Route::get('verify/{entryId}/{sub_login}', [RegCodeController::class, 'verifyAndCreate'])->name('verifyAndCreate');
 
-
-
 //secondary person CRUD
 Route::get('addsecondary', [AddSecondary::class, 'index']);
 Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
-
 
 // Subscriber Authentication API
 // Route::middleware([AuthenticateApi::class])->group(function () {
@@ -98,11 +94,11 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::get('mainSecondary/{id?}', [subscriberLoginController::class, 'mainSecondary']);
 
     // Subscriberskids  ( Create, View, Update, Delete)
+    Route::get('subscriberkidAll',[subscribersKidsController::class, 'KidAlldata']);
     Route::get('subscribersKids/{id?}', [subscribersKidsController::class, 'index']);
     Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
     Route::get('subscriberkidsdata/{subscriberId}', [subscribersKidsController::class, 'getKidsBySubscriberId']);
     Route::put('updatekid/{subscriberId}', [subscribersKidsController::class,'update']);
-
 
     // subscribers Contacts with Kids
     Route::get('subcontacts/{id?}', [subContacts::class, 'index']);
@@ -111,7 +107,6 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::post('subcontacts', [subContacts::class, 'store']);
 
     // Search route
-
     Route::get('subscriber/search', [subscriberLoginController::class, 'search']);
     Route::get('subscriberFamily/family-data/{mainSubscriberId}', [subscriberLoginController::class,'FamilyData']);
 
@@ -132,8 +127,11 @@ Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
 
 // For Request Sent To
 Route::get('requestsent', [RequestSentController::class, 'index']);
-
 Route::post('requestsent', [RequestSentController::class, 'store']);
+Route::get('request-sent/{id}', [RequestSentController::class, 'show']);
+Route::get('get-by-request-to-id/{requestToId}', [RequestSentController::class, 'getByRequestToId']);
+
+Route::get('previousEvents/{subscriberId}', [RequestSentController::class, 'showPreviousEvents']);
 
 // For Request
 Route::get('requests', [RequestController::class, 'index']);
@@ -143,8 +141,7 @@ Route::put('requests/{id}', [RequestController::class, 'update']);
 Route::put('requests/FavOrNot/{event_id}', [RequestController::class, 'FavOrNot']);
 Route::get('requests/subscriber/{id}', [RequestController::class,'getRequestList']);
 
-
-Route::get('previousevent/{subscriberId}', [RequestController::class, 'previousevent']);
+// Route::get('previousevent/{subscriberId}', [RequestController::class, 'previousevent']);
 Route::get('activeEvent/{subscriberId}', [RequestController::class, 'activeEvent']);
 Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
 
@@ -152,9 +149,6 @@ Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingE
 Route::get('favoriteevents', [RequestFavoriteController::class, 'index']);
 Route::get('favoriteevents/{sub_id}', [RequestFavoriteController::class, 'show']);
 Route::put('favoriteevents/{evn_id}', [RequestFavoriteController::class, 'makeFav']);
-
-
-
 
 // For Request Chat
 Route::post('requestchat', [RequestChatController::class, 'index']);
@@ -164,7 +158,6 @@ Route::get('defaultStatus', [defalutStatusController::class, 'index']);
 Route::post('defaultStatus', [defalutStatusController::class, 'create']);
 Route::get('defaultStatus/{id}', [defalutStatusController::class, 'show']);
 Route::put('defaultStatus/{id}/edit', [defalutStatusController::class, 'update']);
-
 
 // For Admin users
 Route::get('adminUsers', [adminController::class, 'showAdminUsers']);

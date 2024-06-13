@@ -4,24 +4,58 @@ namespace App\Http\Controllers\API;
 
 use App\Models\RequestModel;
 use App\Models\defaultStatus;
+use App\Models\RequestSentTo;
 use App\Models\subscriberlogins;
 use App\Models\subscribersKidModel;
 use App\Models\subscribersModel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 
 class RequestController extends Controller
 {
+
     public function index()
     {
-        //
-        $requset = RequestModel::all();
-        if ($requset->count() > 0) {
+        $requests = DB::table('EventRequests')
+            ->join('subscribers_kids', 'EventRequests.SubscribersKidId', '=', 'subscribers_kids.id')
+            ->join('subscriber_logins as creator', 'EventRequests.CreatedBy', '=', 'creator.id')
+            ->select(
+                'EventRequests.*',
+                'subscribers_kids.FirstName as KidFirstName',
+                'subscribers_kids.LastName as KidLastName',
+                'subscribers_kids.Email as KidEmail',
+                'subscribers_kids.Dob as KidDob',
+                'subscribers_kids.Gender as KidGender',
+                'subscribers_kids.ProfileImage as KidProfileImage',
+                'subscribers_kids.About as KidAbout',
+                'subscribers_kids.RoleId as KidRoleId',
+                'subscribers_kids.Keywords as KidKeywords',
+                
+                'creator.FirstName as CreatedByName',
+                'creator.LastName as CreatedByLastName',
+                'creator.Email as CreatedByEmail',
+                'creator.PhoneNumber as CreatedByPhoneNumber',
+                'creator.ProfileImage as CreatedByProfileImage',
+                'creator.About as CreatedByAbout',
+                'creator.BirthYear as CreatedByBirthYear',
+                'creator.Gender as CreatedByGender',
+                'creator.Address as CreatedByAddress',
+                'creator.City as CreatedByCity',
+                'creator.State as CreatedByState',
+                'creator.Zipcode as CreatedByZipcode',
+                'creator.Country as CreatedByCountry',
+                'creator.ProfileImage as CreatedByProfileImage'
+            )
+            ->get();
+    
+        if ($requests->count() > 0) {
             return response()->json([
                 'status' => 200,
-                'data' => $requset
+                'data' => $requests
             ], 200);
         } else {
             return response()->json([
@@ -30,8 +64,7 @@ class RequestController extends Controller
             ], 404);
         }
     }
-
-
+  
     public function create(Request $request)
     {
         // Retrieve the status based on the provided Statusid
@@ -53,31 +86,31 @@ class RequestController extends Controller
         $serializedKeywords = json_encode($keywords);
 
         // Create a new request instance with the provided data
-        $newRequest = RequestModel::create([
-            'SubscriberId' => $subscriberId,
-            'SubscribersKidId' => $request->SubscribersKidId,
-            'EventName' => $request->EventName,
-            'EventType' => $request->EventType,
-            'EventFor' => $request->EventFor,
-            'EventStartDate' => $request->EventStartDate,
-            'EventEndDate' => $request->EventEndDate,
-            'EventStartTime' => $request->EventStartTime,
-            'EventEndTime' => $request->EventEndTime,
-            'Keywords' => $serializedKeywords,
-            'RecordType' => $request->RecordType,
-            'Statusid' => $status->id,
-            'LocationType' => $request->LocationType,
-            'EventLocation' => $request->EventLocation,
-            'EventInfo' => $request->EventInfo,
-            'PickupLocation' => $request->PickupLocation,
-            'DropLocation' => $request->DropLocation,
-            'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
-            'ActivityType' => $request->ActivityType,
-            'areGroupMemberVisible' => $request->areGroupMemberVisible,
-            'IsGroupChat' => $request->IsGroupChat,
-            'CreatedBy' => $subscriberId,
-            'UpdatedBy' => $subscriberId// Assuming this should be updated
-        ]);
+            $newRequest = RequestModel::create([
+                'SubscriberId' => $subscriberId, //req
+                'SubscribersKidId' => $request->SubscribersKidId, //req
+                'EventName' => $request->EventName, // req
+                'EventType' => $request->EventType, //--
+                'EventFor' => $request->EventFor, //--
+                'EventStartDate' => $request->EventStartDate, // req
+                'EventEndDate' => $request->EventEndDate, //req
+                'EventStartTime' => $request->EventStartTime, //req
+                'EventEndTime' => $request->EventEndTime, //req
+                'Keywords' => $serializedKeywords, //req
+                'RecordType' => $request->RecordType, 
+                'Statusid' => $status->id,
+                'LocationType' => $request->LocationType,
+                'EventLocation' => $request->EventLocation,
+                'EventInfo' => $request->EventInfo,
+                'PickupLocation' => $request->PickupLocation,
+                'DropLocation' => $request->DropLocation,
+                'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
+                'ActivityType' => $request->ActivityType,
+                'areGroupMemberVisible' => $request->areGroupMemberVisible,
+                'IsGroupChat' => $request->IsGroupChat,
+                'CreatedBy' => $subscriberId,
+                'UpdatedBy' => $subscriberId// Assuming this should be updated
+            ]);
 
         // Return the response based on whether the request was successful
         if ($newRequest) {
@@ -304,9 +337,15 @@ class RequestController extends Controller
             ->whereRaw('? BETWEEN CONCAT(EventStartDate, " ", TIME(EventStartTime)) AND CONCAT(EventEndDate, " ", TIME(EventEndTime))', [$currentDateTime])
             ->latest()
             ->first();
+            // $eventSubscriberId = $activeEvent->SubscriberId;
+
+            $eventMembers = RequestSentTo::where('RequestFromId', $subscriberId);
 
         // Check if an active event was found
         if ($activeEvent) {
+
+
+
             return response()->json([
                 'status' => 200,
                 'data' => $activeEvent

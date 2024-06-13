@@ -19,9 +19,12 @@ class RequestSentTo extends Model
         'ReceiverStatusDate',
         'ReceiverFeedBack',
         'RecFeedbackDate',
+        'EventReqStatus',
+        'EventReqStatusDate',
         'SenderFeedBack',
         'SenderFeedBackDate',
-        'StatusId'
+        'StatusId',
+        'UpdatedBy'
 
     ];
 

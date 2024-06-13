@@ -11,7 +11,24 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class subscribersKidsController extends Controller
 {
-    //
+    
+    public function KidAlldata()
+    {
+
+        $Allkid = subscribersKidModel::all();
+
+        if ($Allkid) {
+            return response()->json([
+                'status' => 200,
+                'data' => $Allkid
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 403,
+                'message' => "No Data Found"
+            ], 403);
+        }
+    }
     public function index($id = null)
     {
         if ($id !== null) {
