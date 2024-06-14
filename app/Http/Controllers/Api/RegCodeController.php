@@ -92,8 +92,6 @@ class RegCodeController extends Controller
     {
         $subEntryData = subscriberlogins::find($sub_login);
         
-
-
         $entryRefType = 1;
         $Refcode = $this->generateUniqueCode();
         $entryInvType = 2;

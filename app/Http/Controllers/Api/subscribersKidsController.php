@@ -11,7 +11,24 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class subscribersKidsController extends Controller
 {
-    //
+    
+    public function KidAlldata()
+    {
+
+        $Allkid = subscribersKidModel::all();
+
+        if ($Allkid) {
+            return response()->json([
+                'status' => 200,
+                'data' => $Allkid
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 403,
+                'message' => "No Data Found"
+            ], 403);
+        }
+    }
     public function index($id = null)
     {
         if ($id !== null) {
@@ -92,7 +109,7 @@ class subscribersKidsController extends Controller
     ], 200);
 }
 
-    public function create(Request $request)
+public function create(Request $request)
 {
     // Check if the request has a profile image file
     if ($request->hasFile('ProfileImage')) {
@@ -103,44 +120,36 @@ class subscribersKidsController extends Controller
         $profileImage->move($path, $fileName);
         $profileImagePath = $path . $fileName;
     } else {
-        // If no profile image is provided, keep the existing profile image path
+        // If no profile image is provided, set profileImagePath to null
         $profileImagePath = null;
     }
 
-    // Create or update the subscriber kid model
-    $subKid = subscribersKidModel::firstOrCreate(
-        [
-            'FirstName' => $request->FirstName,
-            'LastName' => $request->LastName,
-            'Email' => $request->Email,
-            'Dob' => $request->Dob,
-            'Gender' => $request->Gender,
-            'PhoneNumber' => $request->PhoneNumber,
-            'Password' => $request->Password,
-            'About' => $request->About,
-            'Address' => $request->Address,
-            'Keywords' => $request->Keywords,
-            'LoginType' => $request->LoginType,
-            'MainSubscriberId' => $request->MainSubscriberId
-        ],
-        ['ProfileImage' => $profileImagePath] // Update profile image if exists
-    );
+    // Hash the password
+    $hashedPassword = bcrypt($request->Password);
 
-    // Check if the subscriber kid model was recently created
-    if ($subKid->wasRecentlyCreated) {
-        return response()->json([
-            'status' => 200,
-            'message' => 'Kid\'s Profile Created Successfully',
-            'data' => $subKid
-        ], 200);
-    } else {
-        return response()->json([
-            'status' => 403,
-            'message' => 'Kid\'s Profile Already Exists'
-        ], 403);
-    }
+    // Create a new subscriber kid model
+    $subKid = subscribersKidModel::create([
+        'Email' => $request->Email,
+        'FirstName' => $request->FirstName,
+        'LastName' => $request->LastName,
+        'Dob' => $request->Dob,
+        'Gender' => $request->Gender,
+        'PhoneNumber' => $request->PhoneNumber,
+        'Password' => $hashedPassword,
+        'About' => $request->About,
+        'Address' => $request->Address,
+        'Keywords' => $request->Keywords,
+        'LoginType' => $request->LoginType,
+        'ProfileImage' => $profileImagePath,
+        'MainSubscriberId' => $request->MainSubscriberId
+    ]);
+
+    return response()->json([
+        'status' => 200,
+        'message' => 'Kid\'s Profile Created Successfully',
+        'data' => $subKid
+    ], 200);
 }
-
     public function show($id)
     {
         // Find the subscriber kid by its ID
@@ -214,73 +223,4 @@ class subscribersKidsController extends Controller
         'data' => $subKid
     ], 200);
 }
-
-
-
-//     public function update(Request $request, $id)
-// {
-//     // Find the subscriber kid by its ID
-//     $subKid = SubscribersKidModel::find($id);
-
-//     // Check if the subscriber kid exists
-//     if (!$subKid) {
-//         return response()->json([
-//             'status' => 404,
-//             'message' => 'Subscriber Kid Profile not found'
-//         ], 404);
-//     }
-
-//     // Check if the request has a profile image file
-//     if ($request->hasFile('ProfileImage')) {
-//         // Upload and save the profile image
-//         $profileImage = $request->file('ProfileImage');
-//         $path = 'uploads/profiles/';
-//         $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-//         $profileImage->move($path, $fileName);
-//         $profileImagePath = $path . $fileName;
-
-//         // Update the subscriber kid instance with the provided data including the profile image path
-//         $subKid->update([
-//             'FirstName' => $request->input('FirstName'),
-//             'LastName' => $request->input('LastName'),
-//             'Dob' => $request->input('Dob'),
-//             'Gender' => $request->input('Gender'),
-//             'About' => $request->input('About'),
-//             'Address' => $request->input('Address'),
-//             'City' => $request->input('City'),
-//             'State' => $request->input('State'),
-//             'Zipcode' => $request->input('Zipcode'),
-//             'Country' => $request->input('Country'),
-//             'ProfileImage' => $profileImagePath,
-//             'Keywords' => $request->input('Keywords'),
-//             'LoginType' => $request->input('LoginType'),
-//             'MainSubscriberId' => $request->input('MainSubscriberId'),
-//         ]);
-//     } else {
-//         // If no profile image is provided, update the subscriber kid instance with other provided data
-//         $subKid->update([
-//             'FirstName' => $request->input('FirstName'),
-//             'LastName' => $request->input('LastName'),
-//             'Dob' => $request->input('Dob'),
-//             'Gender' => $request->input('Gender'),
-//             'About' => $request->input('About'),
-//             'Address' => $request->input('Address'),
-//             'City' => $request->input('City'),
-//             'State' => $request->input('State'),
-//             'Zipcode' => $request->input('Zipcode'),
-//             'Country' => $request->input('Country'),
-//             'Keywords' => $request->input('Keywords'),
-//             'LoginType' => $request->input('LoginType'),
-//             'MainSubscriberId' => $request->input('MainSubscriberId'),
-//         ]);
-//     }
-
-//     // Return the response based on whether the subscriber kid was successfully updated
-//     return response()->json([
-//         'status' => 200,
-//         'message' => 'Subscriber Kid Profile Updated Successfully',
-//         'data' => $subKid
-//     ], 200);
-// }
-
 }

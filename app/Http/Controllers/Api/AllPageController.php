@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\pages;
 
-
-
 class AllPageController extends Controller
 {
     /**
@@ -19,18 +17,17 @@ class AllPageController extends Controller
         //
         $page = pages::all();
 
-        if($page->count() > 0){
+        if ($page->count() > 0) {
             return response()->json([
-                'status'=>200,
-                'data'=>$page
-            ],200);
-        }else{
+                'status' => 200,
+                'data' => $page
+            ], 200);
+        } else {
             return response()->json([
-                'status'=>403,
-                'message'=>'No Data Found'
-            ],403);
+                'status' => 403,
+                'message' => 'No Data Found'
+            ], 403);
         }
-        
     }
 
     /**
@@ -38,27 +35,25 @@ class AllPageController extends Controller
      */
     public function store(Request $request)
     {
-      
-            $pages = pages::firstOrCreate([
-                
-                'Pagetitle' => $request->Pagetitle,
-                'Pagecontent'=> $request->PageContent
-            ]);
 
-            if ($pages->wasRecentlyCreated) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'About Inserted successfully',
-                    'data' => $pages
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 409,
-                    'message' => 'About already exists'
-                ], 409);
-            }
-        
-    
+        $pages = pages::firstOrCreate([
+
+            'Pagetitle' => $request->Pagetitle,
+            'Pagecontent' => $request->PageContent
+        ]);
+
+        if ($pages->wasRecentlyCreated) {
+            return response()->json([
+                'status' => 200,
+                'message' => $request->Pagetitle . ' Inserted successfully',
+                'data' => $pages
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 409,
+                'message' => $request->Pagetitle . ' already exists'
+            ], 409);
+        }
     }
 
     /**
@@ -86,28 +81,27 @@ class AllPageController extends Controller
      */
     public function update(Request $request, string $id)
     {
-            $page_content = pages::find($id);
-            
+        $page_content = pages::find($id);
 
-            if ($page_content) {
+        if ($page_content) {
 
-                $page_content->update([
-                    'id' => $request->aboutId,
-                    'Pagecontent'=> $request->Pagecontent
-                ]);
+            $page_content->update([
+                'id' => $request->aboutId,
+                'Pagecontent' => $request->Pagecontent
+            ]);
 
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'About is Updated successfully',
-                    'data' => $page_content
-                ], 200);
+            return response()->json([
+                'status' => 200,
+                'message' => $request->Pagetitle . ' is Updated successfully',
+                'data' => $page_content
+            ], 200);
 
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'No data found'
-                ], 404);
-            }
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No data found'
+            ], 404);
+        }
 
     }
 
@@ -123,12 +117,12 @@ class AllPageController extends Controller
                 'status' => 403,
                 'message' => "Requested Id Data NotFound"
             ], 403);
-        } 
+        }
 
         $page->delete();
 
-        return response()->json(['message' => 'About deleted successfully'],200);
+        return response()->json(['message' => 'About deleted successfully'], 200);
 
     }
-    
+
 }
