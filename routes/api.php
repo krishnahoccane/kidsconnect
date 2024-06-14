@@ -129,9 +129,13 @@ Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
 Route::get('requestsent', [RequestSentController::class, 'index']);
 Route::post('requestsent', [RequestSentController::class, 'store']);
 Route::get('request-sent/{id}', [RequestSentController::class, 'show']);
-Route::get('get-by-request-to-id/{requestToId}', [RequestSentController::class, 'getByRequestToId']);
+Route::get('requestlist/{requestToId}', [RequestSentController::class, 'getByRequestToId']);
+Route::get('sentrequests/{requestFromId}', [RequestSentController::class, 'getByRequestFromId']);
 
-Route::get('previousEvents/{subscriberId}', [RequestSentController::class, 'showPreviousEvents']);
+Route::put('requests/updatestatus/{id}', [RequestSentController::class, 'updatestatus']);
+Route::get('subscriber/{subscriberId}/previous-events', [RequestSentController::class, 'getPreviousEvents']);
+
+Route::get('previousEvents/{subscriberId}', [RequestSentController::class, 'previousEvent']);
 
 // For Request
 Route::get('requests', [RequestController::class, 'index']);
