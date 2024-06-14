@@ -54,17 +54,17 @@ class RequestController extends Controller
 
         // Create a new request instance with the provided data
         $newRequest = RequestModel::create([
-            'SubscriberId' => $subscriberId,
-            'SubscribersKidId' => $request->SubscribersKidId,
-            'EventName' => $request->EventName,
-            'EventType' => $request->EventType,
-            'EventFor' => $request->EventFor,
-            'EventStartDate' => $request->EventStartDate,
-            'EventEndDate' => $request->EventEndDate,
-            'EventStartTime' => $request->EventStartTime,
-            'EventEndTime' => $request->EventEndTime,
-            'Keywords' => $serializedKeywords,
-            'RecordType' => $request->RecordType,
+            'SubscriberId' => $subscriberId, //req
+            'SubscribersKidId' => $request->SubscribersKidId, //req
+            'EventName' => $request->EventName, // req
+            'EventType' => $request->EventType, //--
+            'EventFor' => $request->EventFor, //--
+            'EventStartDate' => $request->EventStartDate, // req
+            'EventEndDate' => $request->EventEndDate, //req
+            'EventStartTime' => $request->EventStartTime, //req
+            'EventEndTime' => $request->EventEndTime, //req
+            'Keywords' => $serializedKeywords, //req
+            'RecordType' => $request->RecordType, 
             'Statusid' => $status->id,
             'LocationType' => $request->LocationType,
             'EventLocation' => $request->EventLocation,
