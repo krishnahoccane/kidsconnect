@@ -149,11 +149,7 @@ Route::get('requests/subscriber/{id}', [RequestController::class,'getRequestList
 Route::get('activeEvent/{subscriberId}', [RequestController::class, 'activeEvent']);
 Route::post('activeEvent/{subscriberId}', [RequestController::class, 'activeEvent']);
 Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
-
 Route::get('autoUpdate', [RequestController::class, 'getEventDatesAutoUpdate']);
-
-
-
 
 //for Favorate events
 Route::get('favoriteevents', [RequestFavoriteController::class, 'index']);
