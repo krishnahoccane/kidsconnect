@@ -34,7 +34,7 @@ class RequestController extends Controller
                 'subscribers_kids.About as KidAbout',
                 'subscribers_kids.RoleId as KidRoleId',
                 'subscribers_kids.Keywords as KidKeywords',
-                
+
                 'creator.FirstName as CreatedByName',
                 'creator.LastName as CreatedByLastName',
                 'creator.Email as CreatedByEmail',
@@ -51,7 +51,7 @@ class RequestController extends Controller
                 'creator.ProfileImage as CreatedByProfileImage'
             )
             ->get();
-    
+
         if ($requests->count() > 0) {
             return response()->json([
                 'status' => 200,
@@ -64,7 +64,7 @@ class RequestController extends Controller
             ], 404);
         }
     }
-  
+
     public function create(Request $request)
     {
         // Retrieve the status based on the provided Statusid
@@ -86,31 +86,31 @@ class RequestController extends Controller
         $serializedKeywords = json_encode($keywords);
 
         // Create a new request instance with the provided data
-            $newRequest = RequestModel::create([
-                'SubscriberId' => $subscriberId, //req
-                'SubscribersKidId' => $request->SubscribersKidId, //req
-                'EventName' => $request->EventName, // req
-                'EventType' => $request->EventType, //--
-                'EventFor' => $request->EventFor, //--
-                'EventStartDate' => $request->EventStartDate, // req
-                'EventEndDate' => $request->EventEndDate, //req
-                'EventStartTime' => $request->EventStartTime, //req
-                'EventEndTime' => $request->EventEndTime, //req
-                'Keywords' => $serializedKeywords, //req
-                'RecordType' => $request->RecordType, 
-                'Statusid' => $status->id,
-                'LocationType' => $request->LocationType,
-                'EventLocation' => $request->EventLocation,
-                'EventInfo' => $request->EventInfo,
-                'PickupLocation' => $request->PickupLocation,
-                'DropLocation' => $request->DropLocation,
-                'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
-                'ActivityType' => $request->ActivityType,
-                'areGroupMemberVisible' => $request->areGroupMemberVisible,
-                'IsGroupChat' => $request->IsGroupChat,
-                'CreatedBy' => $subscriberId,
-                'UpdatedBy' => $subscriberId// Assuming this should be updated
-            ]);
+        $newRequest = RequestModel::create([
+            'SubscriberId' => $subscriberId,
+            'SubscribersKidId' => $request->SubscribersKidId,
+            'EventName' => $request->EventName,
+            'EventType' => $request->EventType,
+            'EventFor' => $request->EventFor,
+            'EventStartDate' => $request->EventStartDate,
+            'EventEndDate' => $request->EventEndDate,
+            'EventStartTime' => $request->EventStartTime,
+            'EventEndTime' => $request->EventEndTime,
+            'Keywords' => $serializedKeywords,
+            'RecordType' => $request->RecordType,
+            'Statusid' => $status->id,
+            'LocationType' => $request->LocationType,
+            'EventLocation' => $request->EventLocation,
+            'EventInfo' => $request->EventInfo,
+            'PickupLocation' => $request->PickupLocation,
+            'DropLocation' => $request->DropLocation,
+            'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
+            'ActivityType' => $request->ActivityType,
+            'areGroupMemberVisible' => $request->areGroupMemberVisible,
+            'IsGroupChat' => $request->IsGroupChat,
+            'CreatedBy' => $subscriberId,
+            'UpdatedBy' => $subscriberId// Assuming this should be updated
+        ]);
 
         // Return the response based on whether the request was successful
         if ($newRequest) {
@@ -285,19 +285,19 @@ class RequestController extends Controller
             ->where('Statusid', 6)
             ->latest()
             ->get();
-    
+
         // Get subscriber details
         $subscriberIdGet = subscriberlogins::where('id', $subscriberId)
             ->select('FirstName', 'ProfileImage')
             ->first();
-    
+
         // Prepare the response data
-        $responseData = $completedRequests->map(function($request) use ($subscriberIdGet) {
+        $responseData = $completedRequests->map(function ($request) use ($subscriberIdGet) {
             $subscriberKidId = $request->SubscribersKidId;
             $subscriberKidIdGet = subscribersKidModel::where('id', $subscriberKidId)
                 ->select('FirstName', 'ProfileImage')
                 ->first();
-    
+
             $requestData = $request->toArray();
             $requestData['SubscriberData'] = [
                 'subscriber' => $subscriberIdGet->FirstName,
@@ -307,10 +307,10 @@ class RequestController extends Controller
                 'subscriberKid' => $subscriberKidIdGet->FirstName,
                 'profileImageKid' => $subscriberKidIdGet->ProfileImage,
             ];
-    
+
             return $requestData;
         });
-    
+
         // Check if any completed requests were found
         if ($completedRequests->isNotEmpty()) {
             return response()->json([
@@ -324,7 +324,49 @@ class RequestController extends Controller
             ], 404);
         }
     }
+
+
+    public function getEventDatesAutoUpdate()
+    {
+        // Fetch all event data
+        $eventData = RequestModel::select('id', 'EventStartDate', 'EventEndDate', 'EventStartTime', 'EventEndTime', 'Statusid')->get();
     
+        // Define current date and time
+        $currentDateTime = now(); // Assuming you're using Carbon or similar for dates/times
+    
+        // Iterate through each event to determine its status
+        $eventData = $eventData->map(function($item) use ($currentDateTime) {
+            // Convert event start date/time to DateTime objects
+            $startDate = \Carbon\Carbon::parse($item->EventStartDate . ' ' . $item->EventStartTime);
+            $endDate = \Carbon\Carbon::parse($item->EventEndDate . ' ' . $item->EventEndTime);
+    
+            // Determine event status based on current date/time
+            if ($currentDateTime < $startDate) {
+                $item->Statusid = 'Upcoming';
+            } elseif ($currentDateTime >= $startDate && $currentDateTime <= $endDate) {
+                $item->Statusid = 'Ongoing';
+            } elseif ($currentDateTime > $endDate) {
+                $item->Statusid = 'Completed';
+            } else {
+                $item->Statusid = 'Unknown'; // Handle any edge cases
+            }
+    
+            // Optionally, you can remove the original date and time fields from the response
+            unset($item->EventStartDate);
+            unset($item->EventEndDate);
+            unset($item->EventStartTime);
+            unset($item->EventEndTime);
+    
+            return $item;
+        });
+    
+        // Return the event data with updated statuses
+        return response()->json([
+            'eventData' => $eventData,
+        ]);
+    }
+    
+
 
     public function activeEvent($subscriberId)
     {
@@ -337,15 +379,12 @@ class RequestController extends Controller
             ->whereRaw('? BETWEEN CONCAT(EventStartDate, " ", TIME(EventStartTime)) AND CONCAT(EventEndDate, " ", TIME(EventEndTime))', [$currentDateTime])
             ->latest()
             ->first();
-            // $eventSubscriberId = $activeEvent->SubscriberId;
+        // $eventSubscriberId = $activeEvent->SubscriberId;
 
-            $eventMembers = RequestSentTo::where('RequestFromId', $subscriberId);
+        $eventMembers = RequestSentTo::where('RequestFromId', $subscriberId);
 
         // Check if an active event was found
         if ($activeEvent) {
-
-
-
             return response()->json([
                 'status' => 200,
                 'data' => $activeEvent
