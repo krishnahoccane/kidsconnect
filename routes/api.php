@@ -130,11 +130,10 @@ Route::get('requestsent', [RequestSentController::class, 'index']);
 Route::post('requestsent', [RequestSentController::class, 'store']);
 Route::get('request-sent/{id}', [RequestSentController::class, 'show']);
 Route::get('requestlist/{requestToId}', [RequestSentController::class, 'getByRequestToId']);
-Route::get('sentrequests/{requestFromId}', [RequestSentController::class, 'getByRequestFromId']);
-
+Route::get('sentrequests/{requestFromId}', [RequestSentController::class, 'getRequestsByRequestFromId']);
 Route::put('requests/updatestatus/{id}', [RequestSentController::class, 'updatestatus']);
-Route::get('subscriber/{subscriberId}/previous-events', [RequestSentController::class, 'getPreviousEvents']);
 
+Route::get('subscriber/{subscriberId}/previous-events', [RequestSentController::class, 'getPreviousEvents']);
 Route::get('previousEvents/{subscriberId}', [RequestSentController::class, 'previousEvent']);
 
 // For Request

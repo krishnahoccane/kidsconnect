@@ -35,8 +35,5 @@ class subscribersKidModel extends Model
         'AccessApprovedBy'
     ];
 
-    // public function eventRequests()
-    // {
-    //     return $this->hasMany(RequestModel::class, 'SubscribersKidId');
-    // }
+    
 }

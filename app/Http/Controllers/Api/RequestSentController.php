@@ -60,9 +60,6 @@ class RequestSentController extends Controller
             'StatusId' => $request->StatusId,
             'UpdatedBy' => $request->UpdatedBy,
 
-
-
-
         ]);
 
         // Return the response based on whether the request was successful
@@ -80,51 +77,220 @@ class RequestSentController extends Controller
         }
     }
 
-    public function getByRequestToId(Request $request, $requestToId)
-    {
-
-        $findLoginId = RequestSentTo::where('RequestToId',$requestToId)->get();
-        $loginUserReqeuestId = $findLoginId->pluck('RequestId');
+    // public function getByRequestToId(Request $request, $requestToId)
+    // {
+    //     $findLoginId = RequestSentTo::where('RequestToId',$requestToId)->get();
+    //     $loginUserReqeuestId = $findLoginId->pluck('RequestId');
         
-        $requestData = RequestModel::where('id',$loginUserReqeuestId)->get();
-        $getSubscriberId = $requestData->pluck('SubscriberId');
-        $getSubscriberKidId = $requestData->pluck('SubscribersKidId');
+    //     $requestData = RequestModel::where('id',$loginUserReqeuestId)->get();
+    //     $getSubscriberId = $requestData->pluck('SubscriberId');
+    //     $getSubscriberKidId = $requestData->pluck('SubscribersKidId');
 
-        $subscriberData = subscriberlogins::where('id',$getSubscriberId)->get();
-        $subscriberKid = subscribersKidModel::where('id',$getSubscriberKidId)->get();
-
-
-        if ($findLoginId) {
-            return response()->json([
-                'status' => 200,
-                'RequestData' => $requestData,
-                'SubscriberData'=>$subscriberData,
-                'KidsData'=>$subscriberKid
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No data found for the specified RequestToId'
-            ], 404);
-        }
+    //     $subscriberData = subscriberlogins::where('id',$getSubscriberId)->get();
+    //     $subscriberKid = subscribersKidModel::where('id',$getSubscriberKidId)->get();
 
 
-        // $requestToId = $request->input('RequestToId');
+    //     if ($findLoginId) {
+    //         return response()->json([
+    //             'status' => 200,
+    //             'RequestData' => $requestData,
+    //             'SubscriberData'=>$subscriberData,
+    //             'KidsData'=>$subscriberKid
+    //         ], 200);
+    //     } else {
+    //         return response()->json([
+    //             'status' => 404,
+    //             'message' => 'No data found for the specified RequestToId'
+    //         ], 404);
+    //     }
+    // }
 
-        // $requestSentTo = RequestSentTo::find($requestToId);
-
-        // if ($requestSentTo->count() > 0) {
-        //     return response()->json([
-        //         'status' => 200,
-        //         'data' => $requestSentTo['RequestId']
-        //     ], 200);
-        // } else {
-        //     return response()->json([
-        //         'status' => 404,
-        //         'message' => 'No data found for the specified RequestToId'
-        //     ], 404);
-        // }
+    public function getByRequestToId(Request $request, $requestToId)
+{
+    // Find the RequestSentTo entries where RequestToId matches
+    $findLoginId = RequestSentTo::where('RequestToId', $requestToId)->get();
+    if ($findLoginId->isEmpty()) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'No data found for the specified RequestToId'
+        ], 404);
     }
+
+    // Get Request IDs from the found entries
+    $loginUserRequestIds = $findLoginId->pluck('RequestId');
+
+    // Fetch Request data
+    $requestData = RequestModel::whereIn('id', $loginUserRequestIds)->get();
+
+    // Get Subscriber and SubscriberKid IDs
+    $getSubscriberIds = $requestData->pluck('SubscriberId')->unique();
+    $getSubscriberKidIds = $requestData->pluck('SubscribersKidId')->unique();
+
+    // Fetch Subscriber and SubscriberKid data
+    $subscribers = subscriberlogins::whereIn('id', $getSubscriberIds)->get();
+    $kids = subscribersKidModel::whereIn('id', $getSubscriberKidIds)->get();
+
+    // Structure the response data
+    $data = [];
+
+    foreach ($findLoginId as $login) {
+        $request = $requestData->where('id', $login->RequestId)->first();
+        
+        // Find Subscriber data
+        $subscriber = $subscribers->where('id', $request->SubscriberId)->first();
+        
+        // Find Kid data
+        $kid = $kids->where('id', $request->SubscribersKidId)->first();
+        
+        if ($request && $subscriber && $kid) {
+            // Fetch details of the RequestToId itself (Kid details)
+            $requestToIdDetails = subscribersKidModel::find($requestToId); // Assuming 'Kid' model has 'MainSubscriberId' field
+            if (!$requestToIdDetails) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Details not found for the specified RequestToId'
+                ], 404);
+            }
+
+            // Fetch primary parent details of the Kid based on MainSubscriberId
+            $primaryParentDetails = subscriberlogins::find($requestToIdDetails->MainSubscriberId);
+            if (!$primaryParentDetails) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Primary parent details not found for the specified RequestToId'
+                ], 404);
+            }
+
+            // Fetch all secondary parents for all kids associated with the same MainSubscriberId
+            $secondaryParents = subscriberlogins::where('MainSubscriberId', $requestToIdDetails->MainSubscriberId)
+                                                 ->where('id', '<>', $primaryParentDetails->id)
+                                                 ->get();
+
+            // Prepare data for response
+            $kidData = [
+                'Request' => $request,
+                'RequestDetails' => [
+                    'RequestFromId' => $login->RequestFromId,
+                    'RequestToId' => $login->RequestToId,
+                    'ReceiverStatus' => $login->Receiverstatus,
+                    'ReceiverStatusDate' => $login->ReceiverStatusDate,
+                    'RequestCreatedOn' => $login->created_at,
+                    'RequestUpdatedBy' => $login->UpdatedBy
+                ],
+                'RequestToIdDetails' => [
+                    'Kid' => $requestToIdDetails,
+                    'PrimaryParent' => $primaryParentDetails,
+                    'SecondaryParents' => $secondaryParents, // Include all secondary parents here
+                ],
+                'Subscriber' => $subscriber,
+                'Kid' => $kid,
+                
+            ];
+
+            $data[] = $kidData;
+        }
+    }
+
+    return response()->json([
+        'status' => 200,
+        'data' => $data
+    ], 200);
+}
+
+
+public function getRequestsByRequestFromId(Request $request, $requestFromId)
+{
+    // Find the RequestSentTo entries where RequestFromId matches
+    $findRequests = RequestSentTo::where('RequestFromId', $requestFromId)->get();
+    if ($findRequests->isEmpty()) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'No data found for the specified RequestFromId'
+        ], 404);
+    }
+
+    // Get Request IDs from the found entries
+    $requestIds = $findRequests->pluck('RequestId');
+
+    // Fetch Request data
+    $requestData = RequestModel::whereIn('id', $requestIds)->get();
+
+    // Get Subscriber and SubscriberKid IDs
+    $getSubscriberIds = $requestData->pluck('SubscriberId')->unique();
+    $getSubscriberKidIds = $requestData->pluck('SubscribersKidId')->unique();
+
+    // Fetch Subscriber and SubscriberKid data
+    $subscribers = subscriberlogins::whereIn('id', $getSubscriberIds)->get();
+    $kids = subscribersKidModel::whereIn('id', $getSubscriberKidIds)->get();
+
+    // Structure the response data
+    $data = [];
+
+    foreach ($findRequests as $requestEntry) {
+        $request = $requestData->where('id', $requestEntry->RequestId)->first();
+        
+        // Find Subscriber data
+        $subscriber = $subscribers->where('id', $request->SubscriberId)->first();
+        
+        // Find Kid data
+        $kid = $kids->where('id', $request->SubscribersKidId)->first();
+        
+        if ($request && $subscriber && $kid) {
+            // Fetch details of the RequestToId itself (Kid details)
+            $requestToIdDetails = subscribersKidModel::find($requestEntry->RequestToId);
+            if (!$requestToIdDetails) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Details not found for the specified RequestToId'
+                ], 404);
+            }
+
+            // Fetch primary parent details of the Kid based on MainSubscriberId
+            $primaryParentDetails = subscriberlogins::find($requestToIdDetails->MainSubscriberId);
+            if (!$primaryParentDetails) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Primary parent details not found for the specified RequestToId'
+                ], 404);
+            }
+
+            // Fetch all secondary parents for all kids associated with the same MainSubscriberId
+            $secondaryParents = subscriberlogins::where('MainSubscriberId', $requestToIdDetails->MainSubscriberId)
+                                                 ->where('id', '<>', $primaryParentDetails->id)
+                                                 ->get();
+
+            // Prepare data for response
+            $kidData = [
+                'Request' => $request,
+                'RequestDetails' => [
+                    'RequestFromId' => $requestEntry->RequestFromId,
+                    'RequestToId' => $requestEntry->RequestToId,
+                    'ReceiverStatus' => $requestEntry->Receiverstatus,
+                    'ReceiverStatusDate' => $requestEntry->ReceiverStatusDate,
+                    'RequestCreatedOn' => $requestEntry->created_at,
+                    'RequestUpdatedBy' => $requestEntry->UpdatedBy
+                ],
+                'RequestToIdDetails' => [
+                    'Kid' => $requestToIdDetails,
+                    'PrimaryParent' => $primaryParentDetails,
+                    'SecondaryParents' => $secondaryParents, // Include all secondary parents here
+                ],
+                'Subscriber' => $subscriber,
+                'Kid' => $kid,
+                
+            ];
+
+            $data[] = $kidData;
+        }
+    }
+
+    return response()->json([
+        'status' => 200,
+        'data' => $data
+    ], 200);
+}
+
+    
 
 
     public function getByRequestFromId($requestFromId)
@@ -214,93 +380,7 @@ class RequestSentController extends Controller
         ], 200);
     }
 
-    public function getPreviousEvents(Request $request)
-    {
-        $requestId = $request->RequestId;
-        $requestToId = $request->RequestToId;
-        $requestFromId = $request->RequestFromId;
-        $currentDateTime = Carbon::now(); // Get the current date and time
-
-        // Fetch the details with joins
-        $events = DB::table('request_sent_to')
-            ->join('EventRequests', 'request_sent_to.RequestId', '=', 'EventRequests.id')
-            ->join('subscribers_kids as from_kid', 'request_sent_to.RequestFromId', '=', 'from_kid.id')
-            ->join('subscribers_kids as to_kid', 'request_sent_to.RequestToId', '=', 'to_kid.id')
-            ->join('subscriber_logins as from_parent', 'from_kid.MainSubscriberId', '=', 'from_parent.id')
-            ->join('subscriber_logins as to_parent', 'to_kid.MainSubscriberId', '=', 'to_parent.id')
-            ->where('request_sent_to.RequestId', $requestId)
-            ->where('request_sent_to.RequestToId', $requestToId)
-            ->where('request_sent_to.RequestFromId', $requestFromId)
-            ->where('EventRequests.StatusId', 6) // Check if status is 6
-            ->where(function ($query) use ($currentDateTime) {
-                $query->where('EventRequests.EventEndDate', '<', $currentDateTime->toDateString())
-                    ->orWhere(function ($query) use ($currentDateTime) {
-                        $query->where('EventRequests.EventEndDate', '=', $currentDateTime->toDateString())
-                            ->where('EventRequests.EventEndTime', '<', $currentDateTime->toTimeString());
-                    });
-            })
-            ->select(
-                'request_sent_to.*',
-                'EventRequests.EventName',
-                'EventRequests.EventType',
-                'EventRequests.EventStartDate',
-                'EventRequests.EventEndDate',
-                'EventRequests.EventStartTime',
-                'EventRequests.EventEndTime',
-                'EventRequests.EventLocation',
-                'EventRequests.EventInfo',
-                'from_kid.FirstName as FromKidFirstName',
-                'from_kid.LastName as FromKidLastName',
-                'from_kid.Email as FromKidEmail',
-                'from_kid.Dob as FromKidDob',
-                'from_kid.Gender as FromKidGender',
-                'from_kid.ProfileImage as FromKidProfileImage',
-                'from_kid.About as FromKidAbout',
-                'from_kid.RoleId as FromKidRoleId',
-                'from_kid.Keywords as FromKidKeywords',
-                'from_kid.Address as FromKidAddress',
-                'from_kid.City as FromKidCity',
-                'from_kid.State as FromKidState',
-                'from_kid.Country as FromKidCountry',
-                'from_kid.ZipCode as FromKidZipCode',
-                'to_kid.FirstName as ToKidFirstName',
-                'to_kid.LastName as ToKidLastName',
-                'to_kid.Email as ToKidEmail',
-                'to_kid.Dob as ToKidDob',
-                'to_kid.Gender as ToKidGender',
-                'to_kid.ProfileImage as ToKidProfileImage',
-                'to_kid.About as ToKidAbout',
-                'to_kid.RoleId as ToKidRoleId',
-                'to_kid.Keywords as ToKidKeywords',
-                'to_kid.Address as ToKidAddress',
-                'to_kid.City as ToKidCity',
-                'to_kid.State as ToKidState',
-                'to_kid.Country as ToKidCountry',
-                'to_kid.ZipCode as ToKidZipCode',
-                'from_parent.FirstName as FromParentFirstName',
-                'from_parent.LastName as FromParentLastName',
-                'from_parent.Email as FromParentEmail',
-                'from_parent.PhoneNumber as FromParentPhoneNumber',
-                'to_parent.FirstName as ToParentFirstName',
-                'to_parent.LastName as ToParentLastName',
-                'to_parent.Email as ToParentEmail',
-                'to_parent.PhoneNumber as ToParentPhoneNumber'
-            )
-            ->get();
-
-        if ($events->count() > 0) {
-            return response()->json([
-                'status' => 200,
-                'data' => $events
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No data found for the specified parameters'
-            ], 404);
-        }
-    }
-
+   
 
 
 }
