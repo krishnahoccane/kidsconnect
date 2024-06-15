@@ -13,10 +13,13 @@ class UpdateEventStatuses extends Command
 
     public function handle()
     {
-        $eventData = RequestModel::select('id', 'EventStartDate', 'EventEndDate', 'EventStartTime', 'EventEndTime', 'Statusid')->get();
-        $currentDateTime = now();
+        $eventData = RequestModel::select('id', 'EventStartDate', 'EventEndDate', 'EventStartTime', 'EventEndTime')->get();
+
+        // Define current date and time
+        $currentDateTime = now(); // Assuming you're using Carbon or similar for dates/times
 
         foreach ($eventData as $item) {
+            // Convert event start date/time to Carbon objects
             $startDate = Carbon::parse($item->EventStartDate . ' ' . $item->EventStartTime);
             $endDate = Carbon::parse($item->EventEndDate . ' ' . $item->EventEndTime);
 
@@ -34,6 +37,8 @@ class UpdateEventStatuses extends Command
             RequestModel::where('id', $item->id)->update(['Statusid' => $statusId]);
         }
 
-        $this->info('Event statuses updated successfully.');
+        return response()->json([
+            'message' => 'Event statuses updated successfully.',
+        ]);
     }
 }
