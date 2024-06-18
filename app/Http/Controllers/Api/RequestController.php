@@ -330,42 +330,216 @@ class RequestController extends Controller
     {
         // Fetch all event data
         $eventData = RequestModel::select('id', 'EventStartDate', 'EventEndDate', 'EventStartTime', 'EventEndTime', 'Statusid')->get();
-    
+
         // Define current date and time
         $currentDateTime = now(); // Assuming you're using Carbon or similar for dates/times
-    
+
         // Iterate through each event to determine its status
-        $eventData = $eventData->map(function($item) use ($currentDateTime) {
+        $eventData = $eventData->map(function ($item) use ($currentDateTime) {
             // Convert event start date/time to DateTime objects
             $startDate = \Carbon\Carbon::parse($item->EventStartDate . ' ' . $item->EventStartTime);
             $endDate = \Carbon\Carbon::parse($item->EventEndDate . ' ' . $item->EventEndTime);
-    
+
             // Determine event status based on current date/time
             if ($currentDateTime < $startDate) {
-                $item->Statusid = 'Upcoming';
+                // $item->Statusid = 'Upcoming';
+                $item->update(['Statusid' => 11]);
             } elseif ($currentDateTime >= $startDate && $currentDateTime <= $endDate) {
-                $item->Statusid = 'Ongoing';
+                // $item->Statusid = 'Ongoing';
+                $item->update(['Statusid' => 1]);
             } elseif ($currentDateTime > $endDate) {
-                $item->Statusid = 'Completed';
+                // $item->Statusid = 'Completed';
+                $item->update(['Statusid' => 6]);
             } else {
-                $item->Statusid = 'Unknown'; // Handle any edge cases
+                // $item->Statusid = 'Unknown';
+                $item->update(['Statusid' => 3]); // Handle any edge cases
             }
-    
+
             // Optionally, you can remove the original date and time fields from the response
             unset($item->EventStartDate);
             unset($item->EventEndDate);
             unset($item->EventStartTime);
             unset($item->EventEndTime);
-    
+
             return $item;
         });
-    
+
         // Return the event data with updated statuses
         return response()->json([
             'eventData' => $eventData,
         ]);
     }
-    
+
+
+    // //active events fetch
+    public function Eventsftech($string)
+    {
+
+        if ($string == "active") {
+            $statusId = 1;
+            $activeEvents = RequestModel::where('Statusid', $statusId)->get();
+
+            // Initialize an empty array to store the modified events
+            $modifiedActiveEvents = [];
+
+            foreach ($activeEvents as $event) {
+                // Fetch subscriber data for each event
+                $subscriberData = subscriberlogins::where('id', $event->SubscriberId)->select('FirstName', 'ProfileImage')->first();
+                // Fetch subscriber's kid data for each event
+                $kidData = subscribersKidModel::where('id', $event->SubscribersKidId)->select('FirstName', 'ProfileImage')->first();
+
+                // Add subscriber data and kid data to the event
+                $event->subscriberData = [
+                    'SubscriberId' => $event->SubscriberId,
+                    'FirstName' => $subscriberData->FirstName,
+                    'ProfileImage' => $subscriberData->ProfileImage
+                ];
+                $event->kiddata = [
+                    'SubscribersKidId' => $event->SubscribersKidId,
+                    'FirstName' => $kidData->FirstName,
+                    'ProfileImage' => $kidData->ProfileImage
+                ];
+
+                // Add the modified event to the array
+                $modifiedActiveEvents[] = $event;
+            }
+
+            $fetchingEventInternalData = RequestSentTo::where('RequestId', $activeEvents->pluck('id'))->get();
+
+
+            $modifiedEventsData = [];
+
+            foreach ($fetchingEventInternalData as $eventdata) {
+                // Fetch subscriber data for each event
+                $requestFromId = subscriberlogins::where('id', $eventdata->RequestFromId)->select('id', 'FirstName', 'ProfileImage')->first();
+                // Fetch subscriber's kid data for each event
+                $requestToId = subscribersKidModel::where('id', $eventdata->RequestToId)->select('id', 'FirstName', 'ProfileImage')->first();
+
+                // Add subscriber data and kid data to the event
+                $eventdata->requestFromId = [
+                    'SubscriberId' => $eventdata->id,
+                    'FirstName' => $requestFromId->FirstName,
+                    'ProfileImage' => $requestFromId->ProfileImage
+                ];
+                $eventdata->requestToId = [
+                    'SubscribersKidId' => $eventdata->id,
+                    'FirstName' => $requestToId->FirstName,
+                    'ProfileImage' => $requestToId->ProfileImage
+                ];
+
+                // Add the modified event to the array
+                $modifiedEventsData[] = $eventdata;
+            }
+
+            if (!$activeEvents->isEmpty()) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => [
+                        'activeEvents' => $modifiedActiveEvents
+                    ],
+                    'EventInternalData' => $modifiedEventsData
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "There are no active events available for now"
+                ], 404);
+            }
+        } elseif ($string == "upcoming") {
+            $statusId = 11;
+            $upcomingEvents = RequestModel::where('Statusid', $statusId)->get();
+
+            $fetchingEventDetails = [];
+
+            foreach ($upcomingEvents as $eventData) {
+                $eventIdData = RequestSentTo::where('RequestId', $eventData->id)->select('RequestFromId', 'RequestToId')->get();
+                $eventIdDataWithSubscriber = $eventIdData->map(function ($event) {
+                    $requestFromIdData = subscriberlogins::where('id', $event->RequestFromId)
+                        ->select('id', 'FirstName', 'ProfileImage')
+                        ->first();
+
+                    $requestToIdData = subscribersKidModel::where('id',$event->RequestToId)
+                    ->select('id', 'FirstName', 'ProfileImage')
+                        ->first();
+
+                    return [
+                        'RequestFromIdData' => $requestFromIdData,
+                        'RequestToIdData' => $requestToIdData
+
+                    ];
+                });
+                $fetchingEventDetails[] = [
+                    'event' => $eventData,
+                    'eventIdData' => $eventIdDataWithSubscriber
+                ];
+            }
+
+
+            if (!$upcomingEvents->isEmpty()) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $fetchingEventDetails,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "There are no upcoming events available for now"
+                ], 404);
+            }
+        } elseif ($string == "completed") {
+            $statusId = 6;
+            $activeEvents = RequestModel::where('Statusid', $statusId)->get();
+
+            if (!$activeEvents->isEmpty()) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $activeEvents
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "There are no completed events available for now"
+                ], 404);
+            }
+        } elseif ($string == "pending") {
+            $statusId = 3;
+            $activeEvents = RequestModel::where('Statusid', $statusId)->get();
+
+            if (!$activeEvents->isEmpty()) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $activeEvents
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "There are no pending events available for now"
+                ], 404);
+            }
+        } else {
+            $Events = RequestModel::all();
+
+            if ($Events->count() > 1) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $Events
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => "There are no events available for now"
+                ], 404);
+            }
+        }
+
+
+
+
+    }
+
+
+
+
 
 
     public function activeEvent($subscriberId)
@@ -489,7 +663,7 @@ class RequestController extends Controller
             ], 500);
         }
     }
-    
+
 
 
 }

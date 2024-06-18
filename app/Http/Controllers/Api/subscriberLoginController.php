@@ -235,58 +235,58 @@ class subscriberLoginController extends Controller
 
 
     public function search(Request $request)
-{
-    // Retrieve search parameter
-    $searchTerm = $request->query('searchTerm');
+    {
+        // Retrieve search parameter
+        $searchTerm = $request->query('searchTerm');
 
-    // Check if search term is provided
-    if (!$searchTerm) {
+        // Check if search term is provided
+        if (!$searchTerm) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Search term is required'
+            ], 400);
+        }
+
+        // Build the query for subscriberlogins table
+        $subscriberQuery = subscriberlogins::query();
+
+        $subscriberQuery->where(function ($q) use ($searchTerm) {
+            $q->where('PhoneNumber', 'like', '%' . $searchTerm . '%')
+                ->orWhere('Email', 'like', '%' . $searchTerm . '%')
+                ->orWhere('FirstName', 'like', '%' . $searchTerm . '%');
+        });
+
+        // Execute the query for subscriberlogins
+        $subscriberResults = $subscriberQuery->get();
+
+        // Build the query for the subscriber_kid table
+        $kidQuery = subscribersKidModel::query();
+
+        $kidQuery->where(function ($q) use ($searchTerm) {
+            $q->where('PhoneNumber', 'like', '%' . $searchTerm . '%')
+                ->orWhere('Email', 'like', '%' . $searchTerm . '%')
+                ->orWhere('FirstName', 'like', '%' . $searchTerm . '%');
+        });
+
+        // Execute the query for subscriber_kid
+        $kidResults = $kidQuery->get();
+
+        // Merge the results
+        $combinedResults = $subscriberResults->merge($kidResults);
+
+        // Check if results found
+        if ($combinedResults->isEmpty()) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No matching records found'
+            ], 404);
+        }
+
         return response()->json([
-            'status' => 400,
-            'message' => 'Search term is required'
-        ], 400);
+            'status' => 200,
+            'data' => $combinedResults
+        ], 200);
     }
-
-    // Build the query for subscriberlogins table
-    $subscriberQuery = subscriberlogins::query();
-
-    $subscriberQuery->where(function ($q) use ($searchTerm) {
-        $q->where('PhoneNumber', 'like', '%' . $searchTerm . '%')
-            ->orWhere('Email', 'like', '%' . $searchTerm . '%')
-            ->orWhere('FirstName', 'like', '%' . $searchTerm . '%');
-    });
-
-    // Execute the query for subscriberlogins
-    $subscriberResults = $subscriberQuery->get();
-
-    // Build the query for the subscriber_kid table
-    $kidQuery = subscribersKidModel::query();
-
-    $kidQuery->where(function ($q) use ($searchTerm) {
-        $q->where('PhoneNumber', 'like', '%' . $searchTerm . '%')
-            ->orWhere('Email', 'like', '%' . $searchTerm . '%')
-            ->orWhere('FirstName', 'like', '%' . $searchTerm . '%');
-    });
-
-    // Execute the query for subscriber_kid
-    $kidResults = $kidQuery->get();
-
-    // Merge the results
-    $combinedResults = $subscriberResults->merge($kidResults);
-
-    // Check if results found
-    if ($combinedResults->isEmpty()) {
-        return response()->json([
-            'status' => 404,
-            'message' => 'No matching records found'
-        ], 404);
-    }
-
-    return response()->json([
-        'status' => 200,
-        'data' => $combinedResults
-    ], 200);
-}
 
 
     public function FamilyData($mainSubscriberId)
@@ -476,52 +476,63 @@ class subscriberLoginController extends Controller
 
         // Check if subscriber login was found
         if ($sub_login) {
-            $fetchingEntryId = $sub_login->id;
-            $mainsubscriberfromref = $sub_login->MainSubscriberId;
-            $subscriberDetails = $this->getMainSubscriber($mainsubscriberfromref);
-            $regCodes = RegCodes::where('user_id', $fetchingEntryId)->get();
+            $fetchingEntryId = $sub_login->id;//loged in id - given id ex: 4
+            $mainsubscriberfromref = $sub_login->MainSubscriberId; // getting mainsubscriber for 4 main subscriber is 2
+            $subscriberDetails = $this->getMainSubscriber($mainsubscriberfromref); // getting details of main subscriber id
+            $regCodes = RegCodes::where('user_id', $fetchingEntryId)->get(); // fetching the regcodes for 4
 
-            // Check if RegCodes entries were found
-            if ($regCodes->isNotEmpty()) {
-                // Iterate through each regCode
-                foreach ($regCodes as $regCode) {
-                    $checkingCodeType = $regCode->code_type_id;
 
-                    if ($checkingCodeType == 2) {
-                        $mainId = $regCode->id;
-                        $mainSubscriberId = $regCode->user_id;
-                        $userDetails = subscriberlogins::where('Ref_Inv_By', $mainId)->get();
-                        $getMainSubscriber = subscriberlogins::where('MainSubscriberId', $mainSubscriberId)->get();
-                        $kidData = subscribersKidModel::where('MainSubscriberId', $mainSubscriberId)->get();
-                        if ($userDetails) {
+            if ($subscriberDetails->count() > 1) { // getting if main subscriber is exits
+                // Check if RegCodes entries were found
+                if ($regCodes->isNotEmpty()) { // checking the regcodes are empty or not
+                    // Iterate through each regCode
+                    foreach ($regCodes as $regCode) {
+                        $checkingCodeType = $regCode->code_type_id; // here fetching the code_type_id - for 4 it is - 1 and 2
+
+                        if ($checkingCodeType == 2) { // checking it should be 2
+                            $mainId = $regCode->id;//12 // if the codetype is 2 then capturing the id - for 4 - it is 12
+                            $mainSubscriberId = $regCode->user_id;//4 // capturing the user-id also for 4 its 4
+
+                            $gettingMainsubId = subscriberlogins::where('id', $mainSubscriberId)->select('id', 'MainSubscriberId')->first();
+
+                            $forfindingkid = $gettingMainsubId->MainSubscriberId; //
+
+                            if ($forfindingkid === 1) {
+                                $forfindid = subscribersKidModel::where('MainSubscriberId', $mainSubscriberId)->get();
+                            } else {
+                                $forfindid = subscribersKidModel::where('MainSubscriberId', $forfindingkid)->get();
+
+                            }
+
+                            $userDetails = subscriberlogins::where('Ref_Inv_By', $mainId)->get(); // checking the 12 in ref_inv_by in subscriber logins 
+
+                            $secondaryData = $userDetails->count() >= 1 ? $userDetails : "There are no secondary users";
+
                             return response()->json([
                                 'status' => 200,
                                 'loginUserData' => $sub_login,
-                                'SecondaryData' => $userDetails,
+                                'SecondaryData' => $secondaryData,
                                 'MainSubsciberData' => $subscriberDetails,
-                                'KidData' => $kidData
+                                'KidData' => $forfindid,
+                                // 'findmethod' => $findmethod
                             ], 200);
-                        } else {
-                            return response()->json([
-                                'status' => 404,
-                                'message' => "User details not found."
-                            ], 404);
                         }
                     }
-                }
 
-                // If no regCode with code_type_id 2 was found
-                return response()->json([
-                    'status' => 202,
-                    'message' => "No Secondary Data Available"
-                ], 202);
-            } else {
-                // No RegCodes entries found
-                return response()->json([
-                    'status' => 404,
-                    'message' => "RegCode not found."
-                ], 404);
+                    // If no regCode with code_type_id 2 was found
+                    return response()->json([
+                        'status' => 202,
+                        'message' => "No Secondary Data Available"
+                    ], 202);
+                } else {
+                    // No RegCodes entries found
+                    return response()->json([
+                        'status' => 404,
+                        'message' => "RegCode not found."
+                    ], 404);
+                }
             }
+
         } else {
             // No subscriber login entry found
             return response()->json([
