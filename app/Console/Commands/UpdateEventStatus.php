@@ -51,6 +51,6 @@ class UpdateEventStatus extends Command
             }
         });
         
-        \Log::info('Event Status Updated Successfully');
+        // \Log::info('Event Status Updated Successfully');
     }
 }
