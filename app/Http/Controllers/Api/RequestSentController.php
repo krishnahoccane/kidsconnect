@@ -289,6 +289,7 @@ public function getRequestsByRequestFromId(Request $request, $requestFromId)
     
             // Update the receiver status and receiver status date
             $requestSentTo->Receiverstatus = $request->Receiverstatus;
+            $requestSentTo->UpdatedBy = $request->UpdatedBy;
             $requestSentTo->ReceiverStatusDate = Carbon::now(); // Set to current date and time
             $requestSentTo->save();
     
