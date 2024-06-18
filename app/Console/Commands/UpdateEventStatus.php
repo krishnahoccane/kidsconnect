@@ -6,19 +6,28 @@ use Illuminate\Console\Command;
 use App\Models\RequestModel;
 use Carbon\Carbon;
 
-class UpdateEventStatuses extends Command
+class UpdateEventStatus extends Command
 {
-    protected $signature = 'events:update-statuses';
-    protected $description = 'Update event statuses based on current date and time';
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'event:statusUpdate';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
 
+    /**
+     * Execute the console command.
+     */
     public function handle()
     {
-        // Fetch all event data
+        //
         $eventData = RequestModel::select('id', 'EventStartDate', 'EventEndDate', 'EventStartTime', 'EventEndTime', 'Statusid')->get();
 
         // Define current date and time
@@ -41,7 +50,7 @@ class UpdateEventStatuses extends Command
                 $item->update(['Statusid' => 3]);
             }
         });
-
-        $this->info('Event statuses have been updated successfully.');
+        
+        \Log::info('Event Status Updated Successfully');
     }
 }
