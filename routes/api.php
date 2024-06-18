@@ -146,6 +146,7 @@ Route::delete('requests/{id}', [RequestController::class, 'destroy']);
 
 Route::get('previousEvents/{subscriberId}', [RequestController::class, 'previousEvent']);
 Route::get('activeEvent/{subscriberId}', [RequestController::class, 'ActiveEvent']);
+Route::get('events/{string}', [RequestController::class, 'Eventsftech']);
 Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
 Route::get('autoUpdate', [RequestController::class, 'getEventDatesAutoUpdate']);
 
