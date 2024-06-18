@@ -11,7 +11,40 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class subscribersKidsController extends Controller
 {
-    
+    public function showKidParent($kidId)
+    {
+        // Find the kid by ID
+        $kid = subscribersKidModel::find($kidId);
+
+        // Check if the kid exists
+        if (!$kid) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Kid not found'
+            ], 404);
+        }
+
+        // Fetch primary parent
+        $primaryParent = subscriberlogins::where('id', $kid->MainSubscriberId)->first();
+
+        // Fetch secondary parents
+        $secondaryParents = subscriberlogins::where('MainSubscriberId', $kid->MainSubscriberId)
+            ->where('id', '!=', $primaryParent->id)
+            ->get();
+
+        // Prepare response data
+        $response = [
+            'Kid' => $kid,
+            'PrimaryParent' => $primaryParent,
+            'SecondaryParents' => $secondaryParents
+        ];
+
+        return response()->json([
+            'status' => 200,
+            'data' => $response
+        ], 200);
+    }
+
     public function KidAlldata()
     {
 
@@ -63,52 +96,51 @@ class subscribersKidsController extends Controller
     }
 
 
-    // public function getKidsBySubscriberId($subscriberId)
-    // {
-    //     // Retrieve kid data based on subscriber ID
-    //     $kidMainSubId = subscribersKidModel::where('MainSubscriberId', $subscriberId)->get();
-    //     if ($kidMainSubId->isEmpty()) {
-    //         return response()->json([
-    //             'status' => 404,
-    //             'message' => 'No kids found for the given subscriber ID'
-    //         ], 404);
-    //     }
-    //     return response()->json([
-    //         'status' => 200,
-    //         'data' => $kidMainSubId
-    //     ], 200);
-    // }
-
     public function getKidsBySubscriberId($subscriberId)
-{
-    // Retrieve the main subscriber ID for the given subscriber ID
-    $subscriber = subscriberlogins::where('id', $subscriberId)->first();
-    
-    if (!$subscriber) {
+    {
+        // Retrieve kid data based on subscriber ID
+        $kidMainSubId = subscribersKidModel::where('MainSubscriberId', $subscriberId)->get();
+        if ($kidMainSubId->isEmpty()) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No kids found for the given subscriber ID'
+            ], 404);
+        }
         return response()->json([
-            'status' => 404,
-            'message' => 'Subscriber not found'
-        ], 404);
+            'status' => 200,
+            'data' => $kidMainSubId
+        ], 200);
     }
 
-    $mainSubscriberId = $subscriber->MainSubscriberId;
+//     public function getKidsBySubscriberId($subscriberId)
+// {
+//     // Retrieve the main subscriber ID for the given subscriber ID
+//     $subscriber = subscriberlogins::where('MainSubscriberId', $subscriberId)->first();
     
-    // Retrieve kid data based on main subscriber ID
-    $kidMainSubId = subscribersKidModel::where('MainSubscriberId', $mainSubscriberId)->get();
+//     if (!$subscriber) {
+//         return response()->json([
+//             'status' => 404,
+//             'message' => 'Subscriber not found'
+//         ], 404);
+//     }
+
+//     $mainSubscriberId = $subscriber->MainSubscriberId;
     
-    if ($kidMainSubId->isEmpty()) {
-        return response()->json([
-            'status' => 404,
-            'message' => 'No kids found for the given subscriber ID'
-        ], 404);
-    }
+//     // Retrieve kid data based on main subscriber ID
+//     $kidMainSubId = subscribersKidModel::where('MainSubscriberId', $mainSubscriberId)->get();
+    
+//     if ($kidMainSubId->isEmpty()) {
+//         return response()->json([
+//             'status' => 404,
+//             'message' => 'No kids found for the given subscriber ID'
+//         ], 404);
+//     }
 
-    return response()->json([
-        'status' => 200,
-        'data' => $kidMainSubId
-    ], 200);
-}
-
+//     return response()->json([
+//         'status' => 200,
+//         'data' => $kidMainSubId
+//     ], 200);
+// }
 public function create(Request $request)
 {
     // Check if the request has a profile image file
