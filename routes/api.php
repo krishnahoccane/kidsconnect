@@ -143,6 +143,8 @@ Route::get('requests/{id}', [RequestController::class, 'show']);
 Route::put('requests/{id}', [RequestController::class, 'update']);
 Route::put('requests/FavOrNot/{event_id}', [RequestController::class, 'FavOrNot']);
 Route::get('requests/subscriber/{id}', [RequestController::class,'getRequestList']);
+Route::delete('requests/{id}', [RequestController::class, 'destroy']);
+
 
 // Route::get('previousevent/{subscriberId}', [RequestController::class, 'previousevent']);
 Route::get('activeEvent/{subscriberId}', [RequestController::class, 'activeEvent']);

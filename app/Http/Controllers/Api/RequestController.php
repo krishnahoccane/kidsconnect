@@ -463,7 +463,32 @@ class RequestController extends Controller
 
     }
 
+    public function destroy($id)
+    {
+        // Find the request by its ID
+        $existingRequest = RequestModel::find($id);
 
+        // Check if the request exists
+        if (!$existingRequest) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Request not found'
+            ], 404);
+        }
+
+        // Attempt to delete the request
+        if ($existingRequest->delete()) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Request deleted successfully'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to delete request'
+            ], 500);
+        }
+    }
     
 
 

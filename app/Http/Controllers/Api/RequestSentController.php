@@ -202,6 +202,8 @@ public function getRequestsByRequestFromId(Request $request, $requestFromId)
 {
     // Find the RequestSentTo entries where RequestFromId matches
     $findRequests = RequestSentTo::where('RequestFromId', $requestFromId)->get();
+    
+    // Check if no data found
     if ($findRequests->isEmpty()) {
         return response()->json([
             'status' => 404,
@@ -223,7 +225,7 @@ public function getRequestsByRequestFromId(Request $request, $requestFromId)
     $subscribers = subscriberlogins::whereIn('id', $getSubscriberIds)->get();
     $kids = subscribersKidModel::whereIn('id', $getSubscriberKidIds)->get();
 
-    // Structure the response data
+    // Structure the response data as an array
     $data = [];
 
     foreach ($findRequests as $requestEntry) {

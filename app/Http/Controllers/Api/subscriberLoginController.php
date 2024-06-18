@@ -234,47 +234,59 @@ class subscriberLoginController extends Controller
     }
 
 
-    // Searching code
-
     public function search(Request $request)
-    {
-        // Retrieve search parameter
-        $searchTerm = $request->query('searchTerm');
+{
+    // Retrieve search parameter
+    $searchTerm = $request->query('searchTerm');
 
-        // Check if search term is provided
-        if (!$searchTerm) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'Search term is required'
-            ], 400);
-        }
-
-        // Build the query
-        $query = subscriberlogins::query();
-
-        $query->where(function ($q) use ($searchTerm) {
-            $q->where('PhoneNumber', 'like', '%' . $searchTerm . '%')
-                ->orWhere('Email', 'like', '%' . $searchTerm . '%')
-                ->orWhere('FirstName', 'like', '%' . $searchTerm . '%');
-
-        });
-
-        // Execute the query
-        $results = $query->get();
-
-        // Check if results found
-        if ($results->isEmpty()) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No matching records found'
-            ], 404);
-        }
-
+    // Check if search term is provided
+    if (!$searchTerm) {
         return response()->json([
-            'status' => 200,
-            'data' => $results
-        ], 200);
+            'status' => 400,
+            'message' => 'Search term is required'
+        ], 400);
     }
+
+    // Build the query for subscriberlogins table
+    $subscriberQuery = subscriberlogins::query();
+
+    $subscriberQuery->where(function ($q) use ($searchTerm) {
+        $q->where('PhoneNumber', 'like', '%' . $searchTerm . '%')
+            ->orWhere('Email', 'like', '%' . $searchTerm . '%')
+            ->orWhere('FirstName', 'like', '%' . $searchTerm . '%');
+    });
+
+    // Execute the query for subscriberlogins
+    $subscriberResults = $subscriberQuery->get();
+
+    // Build the query for the subscriber_kid table
+    $kidQuery = subscribersKidModel::query();
+
+    $kidQuery->where(function ($q) use ($searchTerm) {
+        $q->where('PhoneNumber', 'like', '%' . $searchTerm . '%')
+            ->orWhere('Email', 'like', '%' . $searchTerm . '%')
+            ->orWhere('FirstName', 'like', '%' . $searchTerm . '%');
+    });
+
+    // Execute the query for subscriber_kid
+    $kidResults = $kidQuery->get();
+
+    // Merge the results
+    $combinedResults = $subscriberResults->merge($kidResults);
+
+    // Check if results found
+    if ($combinedResults->isEmpty()) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'No matching records found'
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => 200,
+        'data' => $combinedResults
+    ], 200);
+}
 
 
     public function FamilyData($mainSubscriberId)
