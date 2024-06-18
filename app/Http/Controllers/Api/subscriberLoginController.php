@@ -41,76 +41,88 @@ class subscriberLoginController extends Controller
 
     public function create(Request $request)
     {
-        $email = $request->Email;
-        $entryCodeId = $request->EntryCode;
-        $phoneNumber = $request->phoneNumber;
-
-
-        if (!empty($email)) {
-            // Check if a record with the given email exists.
-            $emailExist = subscriberlogins::where('Email', $email)->first();
-            if ($emailExist) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Email already exists.',
-                    'data' => $emailExist
-                ], 200);
-            } else {
-                $ref_inv_by = RegCodes::where('code_number', $entryCodeId)->select('id', 'user_id', 'code_type_id')->first();
-                $subscriber = new subscriberlogins();
-                $subscriber->Email = $email;
-                $subscriber->Ref_Inv_By = $ref_inv_by ? $ref_inv_by->id : null;
-                $subscriber->phoneNumber = null;
-                $subscriber->MainsubscriberId = $ref_inv_by ? $ref_inv_by->user_id : null;
-                $subscriber->Entry_code_type = $ref_inv_by ? $ref_inv_by->code_type_id : null;
-
-                // Add other necessary fields here from $request if needed
-                $subscriber->save();
-
-                return response()->json([
-                    'status' => 201,
-                    'message' => 'Subscriber created successfully with email.',
-                    'data' => $subscriber
-                ], 201);
+        try {
+            $email = $request->Email;
+            $entryCodeId = $request->EntryCode;
+            $phoneNumber = $request->phoneNumber;
+    
+            if (!empty($email)) {
+                // Check if a record with the given email exists.
+                $emailExist = subscriberlogins::where('Email', $email)->first();
+                if ($emailExist) {
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Email already exists.',
+                        'data' => $emailExist
+                    ], 200);
+                } else {
+                    $ref_inv_by = RegCodes::where('code_number', $entryCodeId)->select('id', 'user_id', 'code_type_id')->first();
+                    $subscriber = new subscriberlogins();
+                    $subscriber->Email = $email;
+                    $subscriber->Ref_Inv_By = $ref_inv_by ? $ref_inv_by->id : null;
+                    $subscriber->phoneNumber = null;
+                    $subscriber->MainsubscriberId = $ref_inv_by ? $ref_inv_by->user_id : null;
+                    $subscriber->Entry_code_type = $ref_inv_by ? $ref_inv_by->code_type_id : null;
+    
+                    // Add other necessary fields here from $request if needed
+                    $subscriber->save();
+    
+                    return response()->json([
+                        'status' => 201,
+                        'message' => 'Subscriber created successfully with email.',
+                        'data' => $subscriber
+                    ], 201);
+                }
             }
-        }
-
-        if (!empty($phoneNumber)) {
-            // Check if a record with the given phone number exists.
-            $phoneNumberExist = subscriberlogins::where('phoneNumber', $phoneNumber)->first();
-            if ($phoneNumberExist) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Phone number already exists.',
-                    'data' => $phoneNumberExist,
-                ], 200);
-            } else {
-                // Create subscriber record with phone number.
-                $ref_inv_by = RegCodes::where('code_number', $entryCodeId)->select('id', 'user_id', 'code_type_id')->first();
-
-                $subscriber = new subscriberlogins();
-                $subscriber->Email = null;
-                $subscriber->Ref_Inv_By = $ref_inv_by ? $ref_inv_by->id : null;
-                $subscriber->MainsubscriberId = $ref_inv_by ? $ref_inv_by->user_id : null;
-                $subscriber->phoneNumber = $phoneNumber;
-                $subscriber->Entry_code_type = $ref_inv_by ? $ref_inv_by->code_type_id : null;
-                // Add other necessary fields here from $request if needed
-                $subscriber->save();
-
-                return response()->json([
-                    'status' => 201,
-                    'message' => 'Subscriber created successfully with phone number.',
-                    'data' => $subscriber
-                ], 201);
+    
+            if (!empty($phoneNumber)) {
+                // Check if a record with the given phone number exists.
+                $phoneNumberExist = subscriberlogins::where('phoneNumber', $phoneNumber)->first();
+                if ($phoneNumberExist) {
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Phone number already exists.',
+                        'data' => $phoneNumberExist,
+                    ], 200);
+                } else {
+                    // Create subscriber record with phone number.
+                    $ref_inv_by = RegCodes::where('code_number', $entryCodeId)->select('id', 'user_id', 'code_type_id')->first();
+    
+                    $subscriber = new subscriberlogins();
+                    $subscriber->Email = null;
+                    $subscriber->Ref_Inv_By = $ref_inv_by ? $ref_inv_by->id : null;
+                    $subscriber->MainsubscriberId = $ref_inv_by ? $ref_inv_by->user_id : null;
+                    $subscriber->phoneNumber = $phoneNumber;
+                    $subscriber->Entry_code_type = $ref_inv_by ? $ref_inv_by->code_type_id : null;
+                    // Add other necessary fields here from $request if needed
+                    $subscriber->save();
+    
+                    return response()->json([
+                        'status' => 201,
+                        'message' => 'Subscriber created successfully with phone number.',
+                        'data' => $subscriber
+                    ], 201);
+                }
             }
+    
+            // If both email and phone number are missing, return an error response.
+            return response()->json([
+                'status' => 400,
+                'message' => 'Email or phone number is required.',
+            ], 400);
+    
+        } catch (\Exception $e) {
+            // Log the exception message for debugging purposes
+            \Log::error('Error creating subscriber: '.$e->getMessage());
+    
+            return response()->json([
+                'status' => 500,
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage() // You can remove this in production for security reasons
+            ], 500);
         }
-
-        // Fallback response if something unexpected happens
-        return response()->json([
-            'status' => 500,
-            'message' => 'An unexpected error occurred.',
-        ], 500);
     }
+    
 
 
     public function createSubscriberData(Request $request, $email, $entryCodeId, $phoneNumber)

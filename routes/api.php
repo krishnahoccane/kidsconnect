@@ -94,6 +94,7 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::get('mainSecondary/{id?}', [subscriberLoginController::class, 'mainSecondary']);
 
     // Subscriberskids  ( Create, View, Update, Delete)
+    Route::get('parent/{kidId}', [subscribersKidsController::class, 'showKidParent']);
     Route::get('subscriberkidAll',[subscribersKidsController::class, 'KidAlldata']);
     Route::get('subscribersKids/{id?}', [subscribersKidsController::class, 'index']);
     Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
@@ -128,13 +129,11 @@ Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
 // For Request Sent To
 Route::get('requestsent', [RequestSentController::class, 'index']);
 Route::post('requestsent', [RequestSentController::class, 'store']);
-Route::get('request-sent/{id}', [RequestSentController::class, 'show']);
 Route::get('requestlist/{requestToId}', [RequestSentController::class, 'getByRequestToId']);
 Route::get('sentrequests/{requestFromId}', [RequestSentController::class, 'getRequestsByRequestFromId']);
 Route::put('requests/updatestatus/{id}', [RequestSentController::class, 'updatestatus']);
 
-Route::get('subscriber/{subscriberId}/previous-events', [RequestSentController::class, 'getPreviousEvents']);
-Route::get('previousEvents/{subscriberId}', [RequestSentController::class, 'previousEvent']);
+// Route::get('subscriber/{subscriberId}/previous-events', [RequestSentController::class, 'getPreviousEvents']);
 
 // For Request
 Route::get('requests', [RequestController::class, 'index']);
@@ -145,10 +144,8 @@ Route::put('requests/FavOrNot/{event_id}', [RequestController::class, 'FavOrNot'
 Route::get('requests/subscriber/{id}', [RequestController::class,'getRequestList']);
 Route::delete('requests/{id}', [RequestController::class, 'destroy']);
 
-
-// Route::get('previousevent/{subscriberId}', [RequestController::class, 'previousevent']);
-Route::get('activeEvent/{subscriberId}', [RequestController::class, 'activeEvent']);
-Route::post('activeEvent/{subscriberId}', [RequestController::class, 'activeEvent']);
+Route::get('previousEvents/{subscriberId}', [RequestController::class, 'previousEvent']);
+Route::get('activeEvent/{subscriberId}', [RequestController::class, 'ActiveEvent']);
 Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
 Route::get('autoUpdate', [RequestController::class, 'getEventDatesAutoUpdate']);
 
