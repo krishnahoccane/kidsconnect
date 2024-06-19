@@ -43,9 +43,6 @@ Route::post('password/reset/send-link', [ResetPassword::class, 'sendResetLinkEma
 Route::get('/reset-password', [ResetPassword::class, 'showResetPasswordForm'])->name('reset.password.show');
 Route::put('/reset-password', [ResetPassword::class, 'updatePassword'])->name('reset.password.update');
 
-// Route to reset password using OTP
-// Route::post('password/reset', [ResetPassword::class, 'reset']);
-
 // For Roles
 Route::get('roles', [rolesController::class, 'index']);
 Route::get('roles/{id}', [rolesController::class, 'show']);
@@ -57,8 +54,6 @@ Route::delete('roles/{id}', [rolesController::class, 'delete']);
 
 //** For Admin side */
 Route::get('subscriber', [subscriberController::class, 'index']);// For Admin
-
-// Route::post('subscriber', [subscriberController::class, 'create']);// Not _using _now
 Route::post('subscriberloginsData', [subscriberLoginController::class, 'create']);
 Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
 Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
@@ -67,11 +62,9 @@ Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
 Route::get('appDevices', [appDevicehangleController::class, 'show']);
 Route::post('appDevices', [appDevicehangleController::class, 'DeviceValidate']);
 
-//** For Entry Code Type */
 // ** Fetching the Device ID's  **//
 Route::get('codetype', [CodeTypescontroller::class, 'index']);
 // ** Fetching the Device ID's  **//
-
 
 // For Reg_code Data
 Route::get('regcodedata/{id}', [RegCodeController::class, 'index']);
@@ -84,7 +77,7 @@ Route::get('addsecondary', [AddSecondary::class, 'index']);
 Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
 
 // Subscriber Authentication API
-// Route::middleware([AuthenticateApi::class])->group(function () {
+Route::middleware([AuthenticateApi::class])->group(function () {
     // Subscribers  ( Create, View, Update, Delete)
     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
     Route::get('maincreatedAccounts/{subscriberId?}', [subscriberLoginController::class, 'maincreatedaccount']);
@@ -92,6 +85,7 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::put('subscriberlogins/{id}/edit', [subscriberLoginController::class, 'update']);
     Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'delete']);
     Route::get('mainSecondary/{id?}', [subscriberLoginController::class, 'mainSecondary']);
+    Route::delete('subscriberlogins/{id}', [subscriberLoginController::class, 'destroy']);
 
     // Subscriberskids  ( Create, View, Update, Delete)
     Route::get('parent/{kidId}', [subscribersKidsController::class, 'showKidParent']);
@@ -100,6 +94,8 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::post('subscribersKids', [subscribersKidsController::class, 'create']);
     Route::get('subscriberkidsdata/{subscriberId}', [subscribersKidsController::class, 'getKidsBySubscriberId']);
     Route::put('updatekid/{subscriberId}', [subscribersKidsController::class,'update']);
+    Route::delete('subscribersKids/{id}', [subscribersKidsController::class, 'destroy']);
+
 
     // subscribers Contacts with Kids
     Route::get('subcontacts/{id?}', [subContacts::class, 'index']);
@@ -111,83 +107,82 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::get('subscriber/search', [subscriberLoginController::class, 'search']);
     Route::get('subscriberFamily/family-data/{mainSubscriberId}', [subscriberLoginController::class,'FamilyData']);
 
+    // For Request Sent ALL API 
+    Route::get('requestsent', [RequestSentController::class, 'index']);
+    Route::post('requestsent', [RequestSentController::class, 'store']);
+    Route::get('requestlist/{requestToId}', [RequestSentController::class, 'getByRequestToId']);
+    Route::get('sentrequests/{requestFromId}', [RequestSentController::class, 'getRequestsByRequestFromId']);
+    Route::put('requests/updatestatus/{id}', [RequestSentController::class, 'updatestatus']);
+    Route::delete('requestsent/{id}', [RequestSentController::class, 'destroy']);
 
-// });
+    // For Request ALL API 
+    Route::get('requests', [RequestController::class, 'index']);
+    Route::post('requests', [RequestController::class, 'create']);
+    Route::get('requests/{id}', [RequestController::class, 'show']);
+    Route::put('requests/{id}', [RequestController::class, 'update']);
+    Route::put('requests/FavOrNot/{event_id}', [RequestController::class, 'FavOrNot']);
+    Route::get('requests/subscriber/{id}', [RequestController::class,'getRequestList']);
+    Route::delete('requests/{id}', [RequestController::class, 'destroy']);
 
-// Image uplaod testing
-Route::post('imageupload', [imageUpload::class, 'create']);
+    Route::get('previousEvents/{subscriberId}', [RequestController::class, 'previousEvent']);
+    Route::get('activeEvent/{subscriberId}', [RequestController::class, 'ActiveEvent']);
+    Route::get('events/{string}/{loginId}', [RequestController::class, 'Eventsftech']);
+    Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
+    Route::get('autoUpdate', [RequestController::class, 'getEventDatesAutoUpdate']);
 
-// For Subs Circles
-Route::post('subcircles', [SubsCirclesController::class, 'index']);
+    //for Favorate events
+    Route::get('favoriteevents', [RequestFavoriteController::class, 'index']);
+    Route::get('favoriteevents/{sub_id}', [RequestFavoriteController::class, 'show']);
+    Route::put('favoriteevents/{evn_id}', [RequestFavoriteController::class, 'makeFav']);
 
-// For Subs Circles Members
-Route::post('submembers', [SubsCirclesMemberController::class, 'index']);
+    // For Request Chat
+    Route::post('requestchat', [RequestChatController::class, 'index']);
 
-// For Subs Circles Permission
-Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
+    // For Status
+    Route::get('defaultStatus', [defalutStatusController::class, 'index']);
+    Route::post('defaultStatus', [defalutStatusController::class, 'create']);
+    Route::get('defaultStatus/{id}', [defalutStatusController::class, 'show']);
+    Route::put('defaultStatus/{id}/edit', [defalutStatusController::class, 'update']);
+    Route::delete('defaultStatus/{id}', [defalutStatusController::class, 'destroy']); // Add this line
 
-// For Request Sent To
-Route::get('requestsent', [RequestSentController::class, 'index']);
-Route::post('requestsent', [RequestSentController::class, 'store']);
-Route::get('requestlist/{requestToId}', [RequestSentController::class, 'getByRequestToId']);
-Route::get('sentrequests/{requestFromId}', [RequestSentController::class, 'getRequestsByRequestFromId']);
-Route::put('requests/updatestatus/{id}', [RequestSentController::class, 'updatestatus']);
+    // For Admin users
+    Route::get('adminUsers', [adminController::class, 'showAdminUsers']);
+    Route::get('adminUsers/{id}', [adminController::class, 'show']);
 
-// Route::get('subscriber/{subscriberId}/previous-events', [RequestSentController::class, 'getPreviousEvents']);
+    // For Admin about
+    Route::get('allPages', [AllPageController::class, 'index']);
+    Route::post('allPages', [AllPageController::class, 'store']);
+    Route::get('allPages/{id}', [AllPageController::class, 'show']);
+    Route::put('allPages/{id}/edit', [AllPageController::class, 'update']);
+    Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
 
-// For Request
-Route::get('requests', [RequestController::class, 'index']);
-Route::post('requests', [RequestController::class, 'create']);
-Route::get('requests/{id}', [RequestController::class, 'show']);
-Route::put('requests/{id}', [RequestController::class, 'update']);
-Route::put('requests/FavOrNot/{event_id}', [RequestController::class, 'FavOrNot']);
-Route::get('requests/subscriber/{id}', [RequestController::class,'getRequestList']);
-Route::delete('requests/{id}', [RequestController::class, 'destroy']);
+    // Mail Verification
+    Route::post('otpVerification', [subscriberMailOtpVerification::class, 'getInfoFromApp']);
+    Route::post('forgotPassword', [SubscriberMailOtpVerification::class, 'forgotpassword']);
 
-Route::get('previousEvents/{subscriberId}', [RequestController::class, 'previousEvent']);
-Route::get('activeEvent/{subscriberId}', [RequestController::class, 'ActiveEvent']);
-Route::get('events/{string}/{loginId}', [RequestController::class, 'Eventsftech']);
-Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
-Route::get('autoUpdate', [RequestController::class, 'getEventDatesAutoUpdate']);
+    // Banner Upload
+    Route::get('allBanners', [bannerController::class, 'index']);
+    Route::post('allBanners', [bannerController::class, 'store']);
+    Route::get('allBanners/{id}', [bannerController::class, 'show']);
+    Route::put('allBanners/{id}/edit', [bannerController::class, 'update']);
+    Route::delete('allBanners/{id}', [bannerController::class, 'destroy']);
+    Route::delete('allBanners', [bannerController::class, 'destroyall']);
 
-//for Favorate events
-Route::get('favoriteevents', [RequestFavoriteController::class, 'index']);
-Route::get('favoriteevents/{sub_id}', [RequestFavoriteController::class, 'show']);
-Route::put('favoriteevents/{evn_id}', [RequestFavoriteController::class, 'makeFav']);
+    // countries
+    Route::get('country-code', [CountryCodeController::class, 'index']);
 
-// For Request Chat
-Route::post('requestchat', [RequestChatController::class, 'index']);
+    // Image uplaod testing
+    Route::post('imageupload', [imageUpload::class, 'create']);
 
-// For Status
-Route::get('defaultStatus', [defalutStatusController::class, 'index']);
-Route::post('defaultStatus', [defalutStatusController::class, 'create']);
-Route::get('defaultStatus/{id}', [defalutStatusController::class, 'show']);
-Route::put('defaultStatus/{id}/edit', [defalutStatusController::class, 'update']);
+    // For Subs Circles
+    Route::post('subcircles', [SubsCirclesController::class, 'index']);
 
-// For Admin users
-Route::get('adminUsers', [adminController::class, 'showAdminUsers']);
-Route::get('adminUsers/{id}', [adminController::class, 'show']);
+    // For Subs Circles Members
+    Route::post('submembers', [SubsCirclesMemberController::class, 'index']);
 
-// For Admin about
-Route::get('allPages', [AllPageController::class, 'index']);
-Route::post('allPages', [AllPageController::class, 'store']);
-Route::get('allPages/{id}', [AllPageController::class, 'show']);
-Route::put('allPages/{id}/edit', [AllPageController::class, 'update']);
-Route::delete('allPages/{id}', [AllPageController::class, 'destroy']);
+    // For Subs Circles Permission
+    Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
+});
 
-// Mail Verification
-Route::post('otpVerification', [subscriberMailOtpVerification::class, 'getInfoFromApp']);
-Route::post('forgotPassword', [SubscriberMailOtpVerification::class, 'forgotpassword']);
-
-// Banner Upload
-Route::get('allBanners', [bannerController::class, 'index']);
-Route::post('allBanners', [bannerController::class, 'store']);
-Route::get('allBanners/{id}', [bannerController::class, 'show']);
-Route::put('allBanners/{id}/edit', [bannerController::class, 'update']);
-Route::delete('allBanners/{id}', [bannerController::class, 'destroy']);
-Route::delete('allBanners', [bannerController::class, 'destroyall']);
-
-// countries
-Route::get('country-code', [CountryCodeController::class, 'index']);
 
 

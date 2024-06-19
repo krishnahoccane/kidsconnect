@@ -45,6 +45,11 @@ class subscriberLoginController extends Controller
             $email = $request->Email;
             $entryCodeId = $request->EntryCode;
             $phoneNumber = $request->phoneNumber;
+            $password = "KidConnect@123";
+
+            // Hash the password before storing it
+             $hashedPassword = bcrypt($password);
+
     
             if (!empty($email)) {
                 // Check if a record with the given email exists.
@@ -63,7 +68,7 @@ class subscriberLoginController extends Controller
                     $subscriber->phoneNumber = null;
                     $subscriber->MainsubscriberId = $ref_inv_by ? $ref_inv_by->user_id : null;
                     $subscriber->Entry_code_type = $ref_inv_by ? $ref_inv_by->code_type_id : null;
-    
+                    $subscriber->password = $hashedPassword;
                     // Add other necessary fields here from $request if needed
                     $subscriber->save();
     
@@ -94,6 +99,7 @@ class subscriberLoginController extends Controller
                     $subscriber->MainsubscriberId = $ref_inv_by ? $ref_inv_by->user_id : null;
                     $subscriber->phoneNumber = $phoneNumber;
                     $subscriber->Entry_code_type = $ref_inv_by ? $ref_inv_by->code_type_id : null;
+                    $subscriber->password = $hashedPassword;
                     // Add other necessary fields here from $request if needed
                     $subscriber->save();
     
@@ -688,6 +694,24 @@ class subscriberLoginController extends Controller
         $subscriberDetails = subscriberlogins::find($id);
 
         return $subscriberDetails;
+    }
+
+    public function destroy($id)
+    {
+        $allstatus = subscriberlogins::find($id);
+
+        if ($allstatus) {
+            $allstatus->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Record deleted successfully'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No Subscriber found'
+            ], 404);
+        }
     }
 
 }

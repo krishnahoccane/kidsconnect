@@ -109,5 +109,22 @@ class defalutStatusController extends Controller
         }
     }
 
+    public function destroy($id)
+    {
+        $allstatus = defaultStatus::find($id);
+
+        if ($allstatus) {
+            $allstatus->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Record deleted successfully'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No status found'
+            ], 404);
+        }
+    }
 
 }

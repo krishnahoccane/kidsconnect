@@ -43,8 +43,4 @@ class RequestModel extends Model
 
     ];
 
-    // public function subscriberKid()
-    // {
-    //     return $this->belongsTo(subscribersKidModel::class, 'SubscribersKidId');
-    // }
 }
