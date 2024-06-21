@@ -300,5 +300,22 @@ public function getRequestsByRequestFromId(Request $request, $requestFromId)
             ], 200);
         }
 
+        public function destroy($id)
+    {
+        $allstatus = RequestSentTo::find($id);
+
+        if ($allstatus) {
+            $allstatus->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Record deleted successfully'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No Request Sent found'
+            ], 404);
+        }
+    }
 
 }
