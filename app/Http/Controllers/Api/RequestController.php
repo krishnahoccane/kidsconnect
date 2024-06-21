@@ -724,35 +724,59 @@ class RequestController extends Controller
     }
 
 
+    //fetch recived events based on login 
+    // match login / kid id / 
+
+    // public function fetchRecEvent($string, $loginId){
+
+    //     $getLoginId = subscriber
+    // }
+
+
+
+
     // //active events fetch
+
     public function Eventsftech($string, $loginId)
     {
+        $statusIds = [
+            'active' => 1,
+            'pending' => 3,
+            'completed' => 6,
+            'upcoming' => 11
+        ];
 
-        if ($string == "active") {
-            $statusId = 1;
+        if ($string !== 'sent' && !isset($statusIds[$string])) {
+            return response()->json([
+                'status' => 400,
+                'message' => "Invalid event type"
+            ], 400);
+        }
 
-            $isSubscriber = RequestModel::where('SubscriberId', $loginId)->exists();
+        $isSubscriber = RequestModel::where('SubscriberId', $loginId)->exists();
 
-            if (!$isSubscriber) {
-                return response()->json([
-                    'status' => 401,
-                    'message' => "Logged-in User Invalid"
-                ], 401);
-            }
+        if (!$isSubscriber) {
+            return response()->json([
+                'status' => 401,
+                'message' => "Logged-in User Invalid"
+            ], 401);
+        }
 
-            // if ($isSubscriber == 1) {
-            //     return response()->json([
-            //         'status' => 200,
-            //         'message' => "Admin Don't Have Any Events"
-            //     ], 200);
-            // }
+        $fetchingEventDetails = [];
 
+        if ($string === 'sent') {
+            $statusTypes = ['active', 'pending', 'completed'];
+        } else {
+            $statusTypes = [$string];
+        }
 
-            $activeEvents = RequestModel::where('Statusid', $statusId)->where('SubscriberId', $loginId)->get();
+        foreach ($statusTypes as $statusType) {
+            $statusId = $statusIds[$statusType];
+            $events = RequestModel::where('Statusid', $statusId)->where('SubscriberId', $loginId)->get();
 
-            $fetchingEventDetails = [];
+            $eventDetails = [];
 
-            foreach ($activeEvents as $eventData) {
+            foreach ($events as $eventData) {
                 $eventIdData = RequestSentTo::where('RequestId', $eventData->id)
                     ->select('RequestFromId', 'RequestToId', 'UpdatedBy')
                     ->get();
@@ -779,224 +803,20 @@ class RequestController extends Controller
                     ];
                 });
 
-                $fetchingEventDetails[] = [
+                $eventDetails[] = [
                     'event' => $eventData,
                     'eventIdData' => $eventIdDataWithSubscriber
                 ];
             }
 
-            if (!$activeEvents->isEmpty()) {
-                return response()->json([
-                    'status' => 200,
-                    'data' => $fetchingEventDetails
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => "There are no active events available for now"
-                ], 404);
-            }
-        } elseif ($string == "upcoming") {// upcoming events
-            $statusId = 11;
-            $isSubscriber = RequestModel::where('SubscriberId', $loginId)->exists();
-
-            if (!$isSubscriber) {
-                return response()->json([
-                    'status' => 401,
-                    'message' => "Logged-in User Invalid"
-                ], 401);
-            }
-
-            // if ($isSubscriber == 1) {
-            //     return response()->json([
-            //         'status' => 200,
-            //         'message' => "Admin Don't Have Any Events"
-            //     ], 200);
-            // }
-
-
-            $upcomingEvents = RequestModel::where('Statusid', $statusId)->where('SubscriberId', $loginId)->get();
-
-            $fetchingEventDetails = [];
-
-            foreach ($upcomingEvents as $eventData) {
-                $eventIdData = RequestSentTo::where('RequestId', $eventData->id)->select('RequestFromId', 'RequestToId', 'UpdatedBy')->get();
-                $eventIdDataWithSubscriber = $eventIdData->map(function ($event) use ($eventData) {
-                    $Senderdata = subscriberlogins::where('id', $event->RequestFromId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $ReciveAccepteddata = subscriberlogins::where('id', $event->UpdatedBy)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $SenderdataSelected = subscribersKidModel::where('id', $eventData->SubscribersKidId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $requestToIdData = subscribersKidModel::where('id', $event->RequestToId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-
-                    return [
-                        'Senderdata' => $Senderdata,
-                        'Senderdataselected' => $SenderdataSelected,
-                        'Reciverddata' => $requestToIdData,
-                        'ReciveAccepteddata' => $ReciveAccepteddata
-
-                    ];
-                });
-                $fetchingEventDetails[] = [
-                    'event' => $eventData,
-                    'eventIdData' => $eventIdDataWithSubscriber
-                ];
-            }
-
-
-            if (!$upcomingEvents->isEmpty()) {
-                return response()->json([
-                    'status' => 200,
-                    'data' => $fetchingEventDetails,
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => "There are no upcoming events available for now"
-                ], 404);
-            }
-        } elseif ($string == "completed") {
-            $statusId = 6;
-            $isSubscriber = RequestModel::where('SubscriberId', $loginId)->exists();
-
-            if (!$isSubscriber) {
-                return response()->json([
-                    'status' => 401,
-                    'message' => "Logged-in User Invalid"
-                ], 401);
-            }
-            $completedEvents = RequestModel::where('Statusid', $statusId)->where('SubscriberId', $loginId)->get();
-
-            $fetchingEventDetails = [];
-
-            foreach ($completedEvents as $eventData) {
-                $eventIdData = RequestSentTo::where('RequestId', $eventData->id)->select('RequestFromId', 'RequestToId', 'UpdatedBy')->get();
-                $eventIdDataWithSubscriber = $eventIdData->map(function ($event) use ($eventData) {
-                    $Senderdata = subscriberlogins::where('id', $event->RequestFromId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $ReciveAccepteddata = subscriberlogins::where('id', $event->UpdatedBy)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $SenderdataSelected = subscribersKidModel::where('id', $eventData->SubscribersKidId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $requestToIdData = subscribersKidModel::where('id', $event->RequestToId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-
-                    return [
-                        'Senderdata' => $Senderdata,
-                        'Senderdataselected' => $SenderdataSelected,
-                        'Reciverddata' => $requestToIdData,
-                        'ReciveAccepteddata' => $ReciveAccepteddata
-
-                    ];
-                });
-                $fetchingEventDetails[] = [
-                    'event' => $eventData,
-                    'eventIdData' => $eventIdDataWithSubscriber
-                ];
-            }
-
-
-            if (!$completedEvents->isEmpty()) {
-                return response()->json([
-                    'status' => 200,
-                    'data' => $fetchingEventDetails,
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => "There are no completed events available for now"
-                ], 404);
-            }
-        } elseif ($string == "pending") {
-            $statusId = 3;
-            $isSubscriber = RequestModel::where('SubscriberId', $loginId)->exists();
-
-            if (!$isSubscriber) {
-                return response()->json([
-                    'status' => 401,
-                    'message' => "Logged-in User Invalid"
-                ], 401);
-            }
-            $pendingEvents = RequestModel::where('Statusid', $statusId)->where('SubscriberId', $loginId)->get();
-
-            $fetchingEventDetails = [];
-
-            foreach ($pendingEvents as $eventData) {
-                $eventIdData = RequestSentTo::where('RequestId', $eventData->id)->select('RequestFromId', 'RequestToId', 'UpdatedBy')->get();
-                $eventIdDataWithSubscriber = $eventIdData->map(function ($event) use ($eventData) {
-                    $Senderdata = subscriberlogins::where('id', $event->RequestFromId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $ReciveAccepteddata = subscriberlogins::where('id', $event->UpdatedBy)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $SenderdataSelected = subscribersKidModel::where('id', $eventData->SubscribersKidId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $requestToIdData = subscribersKidModel::where('id', $event->RequestToId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-
-                    return [
-                        'Senderdata' => $Senderdata,
-                        'Senderdataselected' => $SenderdataSelected,
-                        'Reciverddata' => $requestToIdData,
-                        'ReciveAccepteddata' => $ReciveAccepteddata
-
-                    ];
-                });
-                $fetchingEventDetails[] = [
-                    'event' => $eventData,
-                    'eventIdData' => $eventIdDataWithSubscriber
-                ];
-            }
-
-
-            if (!$pendingEvents->isEmpty()) {
-                return response()->json([
-                    'status' => 200,
-                    'data' => $fetchingEventDetails,
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => "There are no pending events available for now"
-                ], 404);
-            }
-        } else {
-            $Events = RequestModel::all();
-
-            if ($Events->count() > 1) {
-                return response()->json([
-                    'status' => 200,
-                    'data' => $Events
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => "There are no events available for now"
-                ], 404);
-            }
+            $fetchingEventDetails[$statusType] = $eventDetails;
         }
 
-
-
-
+        return response()->json([
+            'status' => 200,
+            'data' => $fetchingEventDetails
+        ], 200);
     }
-
-
-
-
 
 
     public function FavOrNot(Request $request, $event_id)

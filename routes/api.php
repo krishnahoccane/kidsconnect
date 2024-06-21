@@ -144,10 +144,12 @@ Route::put('requests/FavOrNot/{event_id}', [RequestController::class, 'FavOrNot'
 Route::get('requests/subscriber/{id}', [RequestController::class,'getRequestList']);
 Route::delete('requests/{id}', [RequestController::class, 'destroy']);
 
-Route::get('previousEvents/{subscriberId}', [RequestController::class, 'previousEvent']);
-Route::get('activeEvent/{subscriberId}', [RequestController::class, 'ActiveEvent']);
+// Route::get('previousEvents/{subscriberId}', [RequestController::class, 'previousEvent']);
+// Route::get('activeEvent/{subscriberId}', [RequestController::class, 'ActiveEvent']);
 Route::get('events/{string}/{loginId}', [RequestController::class, 'Eventsftech']);
-Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
+Route::get('events/{string}/{loginId}', [RequestController::class, 'fetchRecEvent']);
+
+// Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
 Route::get('autoUpdate', [RequestController::class, 'getEventDatesAutoUpdate']);
 
 //for Favorate events
