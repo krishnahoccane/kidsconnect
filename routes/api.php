@@ -1,6 +1,7 @@
 <?php
 
 // use cors;
+use App\Http\Controllers\Api\GlobalsearchController;
 use Illuminate\Http\Request;
 use App\Http\Middleware\Cors;
 use Illuminate\Support\Facades\Route;
@@ -104,6 +105,7 @@ Route::middleware([AuthenticateApi::class])->group(function () {
     Route::post('subcontacts', [subContacts::class, 'store']);
 
     // Search route
+    Route::get('globalsearch/{name}/{user?}',[GlobalsearchController::class, 'searchglobal']);
     Route::get('subscriber/search', [subscriberLoginController::class, 'search']);
     Route::get('subscriberFamily/family-data/{mainSubscriberId}', [subscriberLoginController::class,'FamilyData']);
 

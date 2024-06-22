@@ -744,10 +744,47 @@ class RequestController extends Controller
 
             $eventIdData = RequestModel::where('SubscriberId', $loginId)->get();
 
-            return response()->json([
-                'status' => 200,
-                'data' => $eventIdData
-            ], 200);
+            $eventDetails = [];
+
+                foreach ($eventIdData as $eventData) {
+                    $eventIdData = RequestSentTo::where('RequestId', $eventData->id)
+                        ->select('RequestFromId', 'RequestToId', 'UpdatedBy')
+                        ->get();
+
+                    $eventIdDataWithSubscriber = $eventIdData->map(function ($event) use ($eventData) {
+                        $Senderdata = subscriberlogins::where('id', $event->RequestFromId)
+                            ->select('id', 'FirstName', 'ProfileImage')
+                            ->first();
+                        $ReceiveAcceptedData = subscriberlogins::where('id', $event->UpdatedBy)
+                            ->select('id', 'FirstName', 'ProfileImage')
+                            ->first();
+                        $SenderdataSelected = subscribersKidModel::where('id', $eventData->SubscribersKidId)
+                            ->select('id', 'FirstName', 'ProfileImage')
+                            ->first();
+                        $ReceiverData = subscribersKidModel::where('id', $event->RequestToId)
+                            ->select('id', 'FirstName', 'ProfileImage')
+                            ->first();
+
+                        return [
+                            'SenderData' => $Senderdata,
+                            'SenderDataSelected' => $SenderdataSelected,
+                            'ReceiverData' => $ReceiverData,
+                            'ReceiveAcceptedData' => $ReceiveAcceptedData
+                        ];
+                    });
+
+                    $eventDetails[] = [
+                        'event' => $eventData,
+                        'eventIdData' => $eventIdDataWithSubscriber
+                    ];
+                }
+
+                return response()->json([
+                    'status' => 200,
+                    'data' => $eventDetails
+                ], 200);
+
+
 
         } else {
             $statusIds = [
