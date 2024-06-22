@@ -739,83 +739,100 @@ class RequestController extends Controller
 
     public function Eventsftech($string, $loginId)
     {
-        $statusIds = [
-            'active' => 1,
-            'pending' => 3,
-            'completed' => 6,
-            'upcoming' => 11
-        ];
 
-        if ($string !== 'sent' && !isset($statusIds[$string])) {
+        if ($string == "all") {
+
+            $eventIdData = RequestModel::where('SubscriberId', $loginId)->get();
+
             return response()->json([
-                'status' => 400,
-                'message' => "Invalid event type"
-            ], 400);
-        }
+                'status' => 200,
+                'data' => $eventIdData
+            ], 200);
 
-        $isSubscriber = RequestModel::where('SubscriberId', $loginId)->exists();
-
-        if (!$isSubscriber) {
-            return response()->json([
-                'status' => 401,
-                'message' => "Logged-in User Invalid"
-            ], 401);
-        }
-
-        $fetchingEventDetails = [];
-
-        if ($string === 'sent') {
-            $statusTypes = ['active', 'pending', 'completed'];
         } else {
-            $statusTypes = [$string];
-        }
+            $statusIds = [
+                'active' => 1,
+                'pending' => 3,
+                'completed' => 6,
+                'upcoming' => 11
+            ];
 
-        foreach ($statusTypes as $statusType) {
-            $statusId = $statusIds[$statusType];
-            $events = RequestModel::where('Statusid', $statusId)->where('SubscriberId', $loginId)->get();
 
-            $eventDetails = [];
-
-            foreach ($events as $eventData) {
-                $eventIdData = RequestSentTo::where('RequestId', $eventData->id)
-                    ->select('RequestFromId', 'RequestToId', 'UpdatedBy')
-                    ->get();
-
-                $eventIdDataWithSubscriber = $eventIdData->map(function ($event) use ($eventData) {
-                    $Senderdata = subscriberlogins::where('id', $event->RequestFromId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $ReceiveAcceptedData = subscriberlogins::where('id', $event->UpdatedBy)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $SenderdataSelected = subscribersKidModel::where('id', $eventData->SubscribersKidId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-                    $ReceiverData = subscribersKidModel::where('id', $event->RequestToId)
-                        ->select('id', 'FirstName', 'ProfileImage')
-                        ->first();
-
-                    return [
-                        'SenderData' => $Senderdata,
-                        'SenderDataSelected' => $SenderdataSelected,
-                        'ReceiverData' => $ReceiverData,
-                        'ReceiveAcceptedData' => $ReceiveAcceptedData
-                    ];
-                });
-
-                $eventDetails[] = [
-                    'event' => $eventData,
-                    'eventIdData' => $eventIdDataWithSubscriber
-                ];
+            if ($string !== 'sent' && !isset($statusIds[$string])) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => "Invalid event type"
+                ], 400);
             }
 
-            $fetchingEventDetails[$statusType] = $eventDetails;
+            $isSubscriber = RequestModel::where('SubscriberId', $loginId)->exists();
+
+            if (!$isSubscriber) {
+                return response()->json([
+                    'status' => 401,
+                    'message' => "Logged-in User Invalid"
+                ], 401);
+            }
+
+            $fetchingEventDetails = [];
+
+            if ($string === 'sent') {
+                $statusTypes = ['active', 'pending', 'completed'];
+            } else {
+                $statusTypes = [$string];
+            }
+
+            foreach ($statusTypes as $statusType) {
+                $statusId = $statusIds[$statusType];
+                $events = RequestModel::where('Statusid', $statusId)->where('SubscriberId', $loginId)->get();
+
+                $eventDetails = [];
+
+                foreach ($events as $eventData) {
+                    $eventIdData = RequestSentTo::where('RequestId', $eventData->id)
+                        ->select('RequestFromId', 'RequestToId', 'UpdatedBy')
+                        ->get();
+
+                    $eventIdDataWithSubscriber = $eventIdData->map(function ($event) use ($eventData) {
+                        $Senderdata = subscriberlogins::where('id', $event->RequestFromId)
+                            ->select('id', 'FirstName', 'ProfileImage')
+                            ->first();
+                        $ReceiveAcceptedData = subscriberlogins::where('id', $event->UpdatedBy)
+                            ->select('id', 'FirstName', 'ProfileImage')
+                            ->first();
+                        $SenderdataSelected = subscribersKidModel::where('id', $eventData->SubscribersKidId)
+                            ->select('id', 'FirstName', 'ProfileImage')
+                            ->first();
+                        $ReceiverData = subscribersKidModel::where('id', $event->RequestToId)
+                            ->select('id', 'FirstName', 'ProfileImage')
+                            ->first();
+
+                        return [
+                            'SenderData' => $Senderdata,
+                            'SenderDataSelected' => $SenderdataSelected,
+                            'ReceiverData' => $ReceiverData,
+                            'ReceiveAcceptedData' => $ReceiveAcceptedData
+                        ];
+                    });
+
+                    $eventDetails[] = [
+                        'event' => $eventData,
+                        'eventIdData' => $eventIdDataWithSubscriber
+                    ];
+                }
+
+                $fetchingEventDetails[$statusType] = $eventDetails;
+            }
+
+            return response()->json([
+                'status' => 200,
+                'data' => $fetchingEventDetails
+            ], 200);
         }
 
-        return response()->json([
-            'status' => 200,
-            'data' => $fetchingEventDetails
-        ], 200);
+
+
+
     }
 
 
