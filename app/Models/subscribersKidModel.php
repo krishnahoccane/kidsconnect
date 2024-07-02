@@ -12,6 +12,7 @@ class subscribersKidModel extends Model
     protected $table='subscribers_kids';
 
     protected $fillable=[
+        'chatId',
         'MainSubscriberId',
         'RoleId',
         'FirstName',

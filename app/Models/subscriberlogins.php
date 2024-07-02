@@ -20,6 +20,7 @@ class subscriberlogins extends AuthenticatableUser
     protected $primaryKey = "id";
 
     protected $fillable = [
+        'chatId',
         'DeviceId',
         'FirstName',
         'LastName',

@@ -167,6 +167,7 @@ class subscriberLoginController extends Controller
     {
         // Find the subscriber by ID
         $subscriber = SubscriberLogins::find($id);
+        $chatId = $request->input('chatId');
         $password = password_hash('Glansa@2024', PASSWORD_BCRYPT);
         // If the subscriber with the given ID exists
         if ($subscriber) {
@@ -185,6 +186,7 @@ class subscriberLoginController extends Controller
 
             // Update the subscriber's profile fields with the new values
             $subscriber->update([
+                'chatId'=>$request->$chatId,
                 // 'DeviceId' => $request->input('DeviceId'),
                 'FirstName' => $request->input('FirstName'),
                 'LastName' => $request->input('LastName'),

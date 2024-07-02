@@ -1,6 +1,7 @@
 <?php
 
 // use cors;
+use App\Http\Controllers\Api\GlobalsearchController;
 use Illuminate\Http\Request;
 use App\Http\Middleware\Cors;
 use Illuminate\Support\Facades\Route;
@@ -106,6 +107,7 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::post('subcontacts', [subContacts::class, 'store']);
 
     // Search route
+    Route::get('globalsearch/{name}/{user?}',[GlobalsearchController::class, 'searchglobal']);
     Route::get('subscriber/search', [subscriberLoginController::class, 'search']);
     Route::get('subscriberFamily/family-data/{mainSubscriberId}', [subscriberLoginController::class,'FamilyData']);
 
@@ -126,10 +128,10 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::get('requests/subscriber/{id}', [RequestController::class,'getRequestList']);
     Route::delete('requests/{id}', [RequestController::class, 'destroy']);
 
-    Route::get('previousEvents/{subscriberId}', [RequestController::class, 'previousEvent']);
-    Route::get('activeEvent/{subscriberId}', [RequestController::class, 'ActiveEvent']);
+    // Route::get('previousEvents/{subscriberId}', [RequestController::class, 'previousEvent']);
+    // Route::get('activeEvent/{subscriberId}', [RequestController::class, 'ActiveEvent']);
     Route::get('events/{string}/{loginId}', [RequestController::class, 'Eventsftech']);
-    Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
+    // Route::get('upcomingEvent/{subscriberId}', [RequestController::class, 'upcomingEvent']);
     Route::get('autoUpdate', [RequestController::class, 'getEventDatesAutoUpdate']);
 
     //for Favorate events

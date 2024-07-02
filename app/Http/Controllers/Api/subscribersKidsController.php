@@ -208,7 +208,7 @@ class subscribersKidsController extends Controller
     {
         // Find the subscriber kid by its ID
         $subKid = SubscribersKidModel::find($id);
-
+        $chatId = $request->input('chatId');
         // Check if the subscriber kid exists
         if (!$subKid) {
             return response()->json([
@@ -232,6 +232,7 @@ class subscribersKidsController extends Controller
 
         // Update the subscriber kid instance with the provided data including the profile image path
         $subKid->update([
+            'chatId'=>$request->$chatId,
             'FirstName' => $request->input('FirstName'),
             'LastName' => $request->input('LastName'),
             'Dob' => $request->input('Dob'),
