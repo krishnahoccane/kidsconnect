@@ -31,7 +31,7 @@ use App\Http\Controllers\Api\subscribersKidsController;
 use App\Http\Controllers\Api\SubsCirclesMemberController;
 use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use App\Http\Controllers\Api\SubsChildPermissionsController;
-// use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\fcmtokenController;
 use App\Http\Controllers\NotificationController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -188,6 +188,9 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
 
     Route::post('sendnotification', [NotificationController::class, 'sendFirebaseNotification']);
+    Route::post('loginToken', [fcmtokenController::class, 'loginToken']);
+    Route::post('logoutToken', [FcmtokenController::class, 'logoutToken']);
+
     // });
 
 
