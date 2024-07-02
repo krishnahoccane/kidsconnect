@@ -30,6 +30,8 @@ use App\Http\Controllers\Api\subscribersKidsController;
 use App\Http\Controllers\Api\SubsCirclesMemberController;
 use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use App\Http\Controllers\Api\SubsChildPermissionsController;
+// use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\NotificationController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -77,7 +79,7 @@ Route::get('addsecondary', [AddSecondary::class, 'index']);
 Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
 
 // Subscriber Authentication API
-Route::middleware([AuthenticateApi::class])->group(function () {
+// Route::middleware([AuthenticateApi::class])->group(function () {
     // Subscribers  ( Create, View, Update, Delete)
     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
     Route::get('maincreatedAccounts/{subscriberId?}', [subscriberLoginController::class, 'maincreatedaccount']);
@@ -182,7 +184,9 @@ Route::middleware([AuthenticateApi::class])->group(function () {
 
     // For Subs Circles Permission
     Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
-});
+
+    Route::post('sendnotification', [NotificationController::class, 'sendFirebaseNotification']);
+    // });
 
 
 

@@ -307,57 +307,70 @@ class subscriberLoginController extends Controller
     }
 
 
-    public function FamilyData($mainSubscriberId)
-    {
-        // Find the main subscriber
-        $mainSubscriber = SubscriberLogins::where('MainSubscriberId', $mainSubscriberId)->get();
-
-        if (!$mainSubscriber) {
-            return response()->json(['message' => 'Main subscriber not found'], 404);
-        }
-
-        // Find kids associated with the main subscriber
-        $kids = SubscribersKidModel::where('MainSubscriberId', $mainSubscriberId)->get();
-
-        // Return data
-        return response()->json(['main_subscriber' => $mainSubscriber, 'kids' => $kids], 200);
-    }
-    //Created Accounts by Main Subscriber
-    public function maincreatedaccount($subscriberId = Null)
-    {
-        if ($subscriberId) {
-            $subscriber = subscriberlogins::find($subscriberId);
-            $subscriberLoginData = subscriberlogins::where('IsMain', 0)->where('MainSubscriberId', $subscriberId)->get();
-
-            if ($subscriberLoginData->isEmpty()) {
-                return response()->json([
-                    'status' => 403,
-                    'message' => $subscriber['FirstName'] . ' Yet to add family profiles'
-                ], 404);
-            } else {
-                return response()->json([
-                    'status' => 200,
-                    'data' => $subscriberLoginData
-                ], 200);
-            }
-        } else {
-            // For example, return an error response indicating missing parameter
-            $subscriberLoginData = subscriberlogins::where('IsMain', 0)->get();
-
-            if ($subscriberLoginData->isEmpty()) {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'No Data Found'
-                ], 404);
-            } else {
-                return response()->json([
-                    'status' => 200,
-                    'data' => $subscriberLoginData
-                ], 200);
-            }
-        }
-    }
-
+   //Created Accounts by Main Subscriber
+   public function maincreatedaccount($subscriberId)
+   {
+       if ($subscriberId) {
+           // Fetch the main subscriber based on the provided $subscriberId
+           $subscriberlogin = subscriberlogins::find($subscriberId);
+   
+           if (!$subscriberlogin) {
+               return response()->json([
+                   'status' => 404,
+                   'message' => 'Subscriber not found.'
+               ], 404);
+           }
+   
+           // Determine if the logged-in user is a primary parent or a secondary parent
+           if ($subscriberlogin->RoleId === 1) {
+               // Logged-in user is a primary parent
+   
+               // Fetch secondary parents associated with the main subscriber
+               $secondaryParents = subscriberlogins::where('MainSubscriberId', $subscriberId)->get();
+   
+               // Fetch kids associated with the main subscriber
+               $kidProfiles = subscribersKidModel::where('MainSubscriberId', $subscriberId)->get();
+           } else {
+               // Logged-in user is a secondary parent
+   
+               // Fetch primary parent associated with the main subscriber
+               $primaryParent = subscriberlogins::find($subscriberlogin->MainSubscriberId);
+   
+               // Fetch secondary parents including the logged-in user
+               $secondaryParents = subscriberlogins::where('MainSubscriberId', $subscriberlogin->MainSubscriberId)->get();
+   
+               // Fetch kids associated with the main subscriber
+               $kidProfiles = subscribersKidModel::where('MainSubscriberId', $subscriberlogin->MainSubscriberId)->get();
+           }
+   
+           return response()->json([
+               'status' => 200,
+               'data' => [
+                   'mainSubscriber' => [
+                       'id' => $subscriberlogin->id,
+                       'firstName' => $subscriberlogin->FirstName,
+                       'lastName' => $subscriberlogin->LastName,
+                       'email' => $subscriberlogin->Email,
+                   ],
+                   'primaryParent' => isset($primaryParent) ? [
+                       'id' => $primaryParent->id,
+                       'firstName' => $primaryParent->FirstName,
+                       'lastName' => $primaryParent->LastName,
+                       'email' => $primaryParent->Email,
+                   ] : null,
+                   'secondaryParents' => $secondaryParents,
+                   'kids' => $kidProfiles,
+               ]
+           ], 200);
+       } else {
+           return response()->json([
+               'status' => 400,
+               'message' => 'Subscriber ID is required.'
+           ], 400);
+       }
+   }
+   
+    
 
 
     public function createAccounts(Request $request, int $id)

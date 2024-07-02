@@ -275,30 +275,36 @@ public function getRequestsByRequestFromId(Request $request, $requestFromId)
 
 
 
-    public function updatestatus(Request $request, $id)
-        {
-            // Find the request sent entry
-            $requestSentTo = RequestSentTo::find($id);
+public function updatestatus(Request $request, $id)
+{
+    // Find the request sent entry
+    $requestSentTo = RequestSentTo::find($id);
+
+    if (!$requestSentTo) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Request not found'
+        ], 404);
+    }
+
+    // Update the receiver status and receiver status date
+    $requestSentTo->Receiverstatus = $request->Receiverstatus;
+    $requestSentTo->UpdatedBy = $request->UpdatedBy;
+    $requestSentTo->ReceiverStatusDate = Carbon::now(); // Set to current date and time
     
-            if (!$requestSentTo) {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Request not found'
-                ], 404);
-            }
-    
-            // Update the receiver status and receiver status date
-            $requestSentTo->Receiverstatus = $request->Receiverstatus;
-            $requestSentTo->UpdatedBy = $request->UpdatedBy;
-            $requestSentTo->ReceiverStatusDate = Carbon::now(); // Set to current date and time
-            $requestSentTo->save();
-    
-            return response()->json([
-                'status' => 200,
-                'message' => 'Receiver status updated successfully',
-                'data' => $requestSentTo
-            ], 200);
-        }
+    // Check if status is denied (8)
+    if ($request->Receiverstatus == 8) {
+        $requestSentTo->ReceiverNotes = $request->ReceiverNotes;
+    }
+
+    $requestSentTo->save();
+
+    return response()->json([
+        'status' => 200,
+        'message' => 'Receiver status updated successfully',
+        'data' => $requestSentTo
+    ], 200);
+}
 
         public function destroy($id)
     {

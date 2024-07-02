@@ -27,7 +27,7 @@
                         </tbody>
                     </table>
                     <script>
-                        var url = "http://localhost:8000/api/adminUsers";
+                        var url = "https://kidsconnect.glansadigital.com/api/adminUsers";
 
                         $.ajax({
                             url: url,

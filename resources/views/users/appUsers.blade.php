@@ -14,11 +14,9 @@
                                 <th>RoleType</th>
                                 <th>Subscriber Name</th>
                                 <th>Subscriber Mail</th>
-                                {{-- <th>Status</th> --}}
                                 <th>Account Created On</th>
-                                {{-- <th>Approved Date</th> --}}
-                                {{-- <th>Approved By</th> --}}
-                                <th class="sorting_disabled">Actions</th>
+                                <th>Profile</th>
+                               <th class="sorting_disabled">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="datatable-subscriberLogin">
@@ -58,52 +56,61 @@
 
     // subscribers Data
     $.ajax({
-        url: "http://localhost:8000/api/subscriber",
-        method: "GET",
-        dataType: "json",
-        success: function(response) {
-            // Check if the 'data' key exists in the response
-            if (response.data) {
-                // Loop through the data and create table rows
-                $.each(response.data, function(index, item) {
-                    const createdAtDate = new Date(item.created_at);
-                    const approvedAtDate = new Date(item.ApprovedOn);
-                    const profileStatus = item.ProfileStatus;
-                    const roleName = callRoles(item.RoleId);
-                    const fullName = item.FirstName + ' ' + item.LastName;
-                    const statusName = callingStatus(profileStatus);
+    url: "https://kidsconnect.glansadigital.com/api/subscriberlogins",
+    method: "GET",
+    dataType: "json",
+    success: function(response) {
+        // Check if the 'data' key exists in the response
+        if (response.data) {
+            // Loop through the data and create table rows
+            $.each(response.data, function(index, item) {
+                // Extract profile image URL
+                const profileImage = item.ProfileImage;
 
-                    // Format the date components
-                    const formattedDateOfCreation =
-                        `${createdAtDate.getFullYear()}-${(createdAtDate.getMonth() + 1).toString().padStart(2, "0")}-${createdAtDate.getDate().toString().padStart(2, "0")}`;
-                    const formattedDateOfApprove =
-                        `${approvedAtDate.getFullYear()}-${(approvedAtDate.getMonth() + 1).toString().padStart(2, "0")}-${approvedAtDate.getDate().toString().padStart(2, "0")}`;
+                // Parse dates
+                const createdAtDate = new Date(item.created_at);
+                const approvedAtDate = new Date(item.ApprovedOn);
 
-                    const row = `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${roleName}</td>
-                        <td>${fullName}</td>
-                        <td>${item.Email}</td>
-                        <td>${formattedDateOfCreation}</td>
-                        
-                        <td>
-                            <a href="/userProfile/${item.id}"><button type="button" class="btn btn-primary">
-                                    <span class="ti-xs ti ti-eye me-1"></span>
-                                </button></a>
-                        </td>
-                    </tr>`;
-                    // Append the row to the table body
-                    $("#datatable-subscriberLogin").append(row);
-                });
-            } else {
-                console.error('Error: Unable to find "data" key in the API response');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error("Error fetching data from the API:", error);
-        },
-    });
+                // Get other details
+                const profileStatus = item.ProfileStatus;
+                const roleName = callRoles(item.RoleId);
+                const fullName = item.FirstName + ' ' + item.LastName;
+                const statusName = callingStatus(profileStatus);
+
+                // Format the date components
+                const formattedDateOfCreation =
+                    `${createdAtDate.getFullYear()}-${(createdAtDate.getMonth() + 1).toString().padStart(2, "0")}-${createdAtDate.getDate().toString().padStart(2, "0")}`;
+                const formattedDateOfApprove =
+                    `${approvedAtDate.getFullYear()}-${(approvedAtDate.getMonth() + 1).toString().padStart(2, "0")}-${approvedAtDate.getDate().toString().padStart(2, "0")}`;
+
+                // Create HTML for the table row
+                const row = `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${roleName}</td>
+                    <td>${fullName}</td>
+                    <td>${item.Email}</td>
+                    <td>${formattedDateOfCreation}</td>
+                    <td><img src="https://kidsconnect.glansadigital.com/${profileImage}" alt="Profile Image" class="rounded-circle" width="50" height="50"></td>
+                    <td>
+                        <a href="/userProfile/${item.id}"><button type="button" class="btn btn-primary">
+                            <span class="ti-xs ti ti-eye me-1"></span> View
+                        </button></a>
+                    </td>
+                </tr>`;
+
+                // Append the row to the table body
+                $("#datatable-subscriberLogin").append(row);
+            });
+        } else {
+            console.error('Error: Unable to find "data" key in the API response');
+        }
+    },
+    error: function(xhr, status, error) {
+        console.error("Error fetching data from the API:", error);
+    },
+});
+
 </script>
 
 @include('./layouts/web.footer')

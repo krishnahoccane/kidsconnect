@@ -35,7 +35,6 @@ class AllPageController extends Controller
      */
     public function store(Request $request)
     {
-
         $pages = pages::firstOrCreate([
 
             'Pagetitle' => $request->Pagetitle,
@@ -79,6 +78,7 @@ class AllPageController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    
     public function update(Request $request, string $id)
     {
         $page_content = pages::find($id);

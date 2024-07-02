@@ -1,6 +1,6 @@
 @include('./layouts/web.header')
 @php
-    if ($sub_login['RoleId'] === null) {
+    if ($sub_login['RoleId'] === 1) {
         $role = 'Father';
     } else {
         $role = 'Mother';
@@ -37,8 +37,8 @@
             </div> --}}
             <div class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center mb-4">
                 <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
-                    <img src="{{ asset('ui/assets/img/avatars/14.png') }}" alt="user image"
-                        class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img">
+                    <img src="https://kidsconnect.glansadigital.com/{{ $sub_login['ProfileImage'] }}" alt="user image"
+                        class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img" style="height: 100px;width:100px;">
                 </div>
                 <div class="flex-grow-1 mt-3 mt-sm-5">
                     <div
@@ -124,11 +124,11 @@
                                             <span>{{ $pStatus }}</span>
                                         </li>
 
-                                        <li class="d-flex align-items-center mb-3"><i
+                                        {{-- <li class="d-flex align-items-center mb-3"><i
                                                 class="ti ti-credit-card text-heading"></i><span
                                                 class="fw-medium mx-2 text-heading">SSN:</span>
                                             <span>{{ $sub_login['SSN'] }}</span>
-                                        </li>
+                                        </li> --}}
                                         <li class="d-flex align-items-center mb-3"><i
                                                 class="ti ti-login text-heading"></i><span
                                                 class="fw-medium mx-2 text-heading">Login type:</span>
@@ -623,45 +623,76 @@
     // Get the last part of the URL, which is the ID
     var userId = parts[parts.length - 1];
     $.ajax({
-        url: `http://localhost:8000/api/maincreatedAccounts/${userId}`,
-        method: "GET",
-        dataType: "json",
-        success: function(response) {
-            console.log(response);
-            // Check if data is available
-            if (response.data && response.data.length > 0) {
-                // Iterate through family members and dynamically populate the list
-                response.data.forEach(member => {
-                    // Create HTML for each family member
-                    const memberHTML = `
+    url: `https://kidsconnect.glansadigital.com/api/maincreatedAccounts/${userId}`,
+    method: "GET",
+    dataType: "json",
+    success: function(response) {
+        console.log(response);
+        if (response.status === 200) {
+            const mainSubscriber = response.data.mainSubscriber;
+            const secondaryParents = response.data.secondaryParents;
+            const kids = response.data.kids;
+
+            // Populate main subscriber details if needed
+            $('#mainSubscriberName').text(`${mainSubscriber.firstName} ${mainSubscriber.lastName}`);
+            $('#mainSubscriberEmail').text(mainSubscriber.email);
+
+            // Populate secondary parents
+            if (secondaryParents.length > 0) {
+                secondaryParents.forEach(parent => {
+                    const parentHTML = `
                     <li class="mb-3">
                         <div class="d-flex align-items-center">
-                            <div class="d-flex align-items-start">
-                                <div class="avatar me-2">
-                                    <img src="../${member.ProfileImage}" alt="Avatar" class="rounded-circle" />
-                                </div>
-                                <div class="me-2 ms-1">
-                                    <a href="/userProfile/${member.id}"><h6 class="mb-0">${member.FirstName} ${member.LastName}</h6></a>
-                                </div>
+                            <div class="avatar me-2">
+                                <img src="https://kidsconnect.glansadigital.com/${parent.ProfileImage}" alt="Avatar" class="rounded-circle" />
+                            </div>
+                            <div class="me-2 ms-1">
+                                <a href="/userProfile/${parent.id}"><h6 class="mb-0">${parent.FirstName} ${parent.LastName}</h6></a>
                             </div>
                             <div class="ms-auto">
-                                ${callRoles(member.RoleId)} <!-- Use callRoles function here -->
+                                ${callRoles(parent.RoleId)} <!-- Use callRoles function here -->
                             </div>
                         </div>
                     </li>
                     `;
-                    // Append the member HTML to the family members list
-                    $('#familyMembers').append(memberHTML);
+                    $('#familyMembers').append(parentHTML);
                 });
             } else {
-                // Handle case when no family members are available
-                $('#familyMembers').append('<li>No family members found.</li>');
+                $('#familyMembers').append('<li>No secondary parents found.</li>');
             }
-        },
-        error: function(xhr, status, error) {
-            console.error("Error fetching family members:", error);
-            var errorMessage = xhr.responseJSON.message; // Extract error message from response JSON
-            $('#familyMembers').append('<li>' + errorMessage + '</li>');
+
+            // Populate kids
+            if (kids.length > 0) {
+                kids.forEach(kid => {
+                    const kidHTML = `
+                    <li class="mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar me-2">
+                                <img src="https://kidsconnect.glansadigital.com/${kid.ProfileImage}" alt="Avatar" class="rounded-circle" />
+                            </div>
+                            <div class="me-2 ms-1">
+                                <a href="/userProfile/${kid.id}"><h6 class="mb-0">${kid.FirstName} ${kid.LastName}</h6></a>
+                            </div>
+                            <div class="ms-auto">
+                                ${callRoles(kid.RoleId)} <!-- Use callRoles function here -->
+                            </div>
+                        </div>
+                    </li>
+                    `;
+                    $('#familyMembers').append(kidHTML);
+                });
+            } else {
+                $('#familyMembers').append('<li>No kids found.</li>');
+            }
+        } else {
+            $('#familyMembers').append('<li>No family members found.</li>');
         }
-    });
+    },
+    error: function(xhr, status, error) {
+        console.error("Error fetching family members:", error);
+        var errorMessage = xhr.responseJSON.message; // Extract error message from response JSON
+        $('#familyMembers').append('<li>' + errorMessage + '</li>');
+    }
+});
+
 </script>

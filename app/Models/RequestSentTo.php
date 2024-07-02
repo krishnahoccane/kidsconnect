@@ -15,6 +15,7 @@ class RequestSentTo extends Model
         'RequestId',
         'RequestFromId',
         'RequestToId',
+        'ReceiverNotes',
         'Receiverstatus',
         'ReceiverStatusDate',
         'ReceiverFeedBack',

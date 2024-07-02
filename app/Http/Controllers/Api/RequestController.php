@@ -76,6 +76,8 @@ class RequestController extends Controller
             $eventRequest->EventRequest->EventLocation = $request->EventLocation;
             $eventRequest->EventRequest->RecordType = $request->RecordType;
             $eventRequest->EventRequest->EventInfo = $request->EventInfo;
+            $eventRequest->EventRequest->Status = $request->Status;
+            $eventRequest->EventRequest->LocationType = $request->LocationType;
             $eventRequest->EventRequest->created_at = $request->created_at;
             // Add more fields as needed
 
@@ -1061,6 +1063,7 @@ class RequestController extends Controller
 
     }
 
+    // for delete subscriber
     public function destroy($id)
     {
         // Find the request by its ID
