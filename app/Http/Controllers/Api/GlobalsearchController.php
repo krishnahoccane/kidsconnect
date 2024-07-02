@@ -20,9 +20,35 @@ class GlobalsearchController extends Controller
         if ($user === 'parent') {
             // Search in Subscriberlogin's firstname column
             $results = subscriberlogins::where('FirstName', 'LIKE', '%' . $name . '%')->get();
+
+            if (!$results->isEmpty()) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $results
+                ], 200);
+            }else{
+                return response()->json([
+                    'status' => 404,
+                    'message' => "Oops.. No Such Name Found"
+                ], 404);
+            }
+
+
+
         } elseif ($user === 'kid') {
             // Search in Subscriber_kid's Firstname column
             $results = subscribersKidModel::where('FirstName', 'LIKE', '%' . $name . '%')->get();
+            if (!$results->isEmpty()) {
+                return response()->json([
+                    'status' => 200,
+                    'data' => $results
+                ], 200);
+            }else{
+                return response()->json([
+                    'status' => 404,
+                    'message' => "Oops.. No Such Name Found"
+                ], 404);
+            }
         }
 
         // Return the results as JSON
