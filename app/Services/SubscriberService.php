@@ -11,38 +11,54 @@ class SubscriberService {
 
 
     public function showKidParent($kidId)
-    {
-        // Find the kid by ID
-        $kid = subscribersKidModel::find($kidId);
+{
+    // Find the kid by ID
+    $kid = SubscribersKidModel::find($kidId);
 
-        // Check if the kid exists
-        if (!$kid) {
-            return [
-                'status' => 404,
-                'message' => 'Kid not found'
-            ];
-        }
-
-        // Fetch primary parent
-        $primaryParent = subscriberlogins::where('id', $kid->MainSubscriberId)->first();
-
-        // Fetch secondary parents
-        $secondaryParents = subscriberlogins::where('MainSubscriberId', $kid->MainSubscriberId)
-            ->where('id', '!=', $primaryParent->id)
-            ->get();
-
-        // Prepare response data
-        $response = [
-            'Kid' => $kid,
-            'PrimaryParent' => $primaryParent,
-            'SecondaryParents' => $secondaryParents
-        ];
-
-        return [
-            'status' => 200,
-            'data' => $response
-        ];
+    // Check if the kid exists
+    if (!$kid) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Kid not found'
+        ], 404);
     }
+
+    // Fetch primary parent
+    $primaryParent = SubscriberLogins::where('id', $kid->MainSubscriberId)->first();
+
+    // Check if the primary parent exists
+    if (!$primaryParent) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Primary parent not found'
+        ], 404);
+    }
+
+    // Fetch secondary parents
+    $secondaryParents = SubscriberLogins::where('MainSubscriberId', $kid->MainSubscriberId)
+        ->where('id', '!=', $primaryParent->id)
+        ->get();
+
+    // Fetch siblings (other kids with the same MainSubscriberId)
+    $siblings = SubscribersKidModel::where('MainSubscriberId', $kid->MainSubscriberId)
+        ->where('id', '!=', $kid->id) // Exclude the current kid
+        ->get();
+
+    // Prepare response data including siblings and secondary parents
+    $response = [
+        'Kid' => $kid,
+        'PrimaryParent' => $primaryParent,
+        'SecondaryParents' => $secondaryParents,
+        'Siblings' => $siblings
+    ];
+
+    return response()->json([
+        'status' => 200,
+        'data' => $response
+    ], 200);
+}
+    
+    
 
     public function getSubscriberDetails($id) {
         $sub_login = subscriberlogins::find($id);

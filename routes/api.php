@@ -183,6 +183,7 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::post('subcircles', [SubsCirclesController::class, 'index']);
 
     // For Subs Circles Members
+    Route::get('allMember', [CircleMemberController::class,'allMember']);
     Route::post('circle/add-friend', [circleMemberController::class, 'addFriend']);
     Route::put('circle/accept-friend/{id}', [CircleMemberController::class, 'acceptFriend']);
     Route::get('friendlist/{id}', [CircleMemberController::class, 'getFriendList']);
