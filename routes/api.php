@@ -185,6 +185,7 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     // For Subs Circles Members
     Route::post('circle/add-friend', [circleMemberController::class, 'addFriend']);
     Route::put('circle/accept-friend/{id}', [CircleMemberController::class, 'acceptFriend']);
+    Route::get('friendlist/{id}', [CircleMemberController::class, 'getFriendList']);
 
     // For Subs Circles Permission
     Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);

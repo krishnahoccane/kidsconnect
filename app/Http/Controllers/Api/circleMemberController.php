@@ -7,10 +7,19 @@ use App\Http\Controllers\Controller;
 use App\Models\CircleMember;
 use App\Models\SubscriberLogins;
 use App\Models\SubscribersKidModel;
+use App\Services\SubscriberService;
 use Carbon\Carbon;
 
 class CircleMemberController extends Controller
 {
+
+    protected $subscriberService;
+
+    public function __construct(SubscriberService $subscriberService)
+    {
+        $this->subscriberService = $subscriberService;
+    }
+
     public function addFriend(Request $request)
     {
         $circleRequest = CircleMember::create([
@@ -29,20 +38,77 @@ class CircleMemberController extends Controller
         ], 200);
     }
 
+    public function getFriendList(Request $request, $id)
+    {
+        // Fetch friend requests where current user is sender
+        $sentRequests = CircleMember::where('senderId', $id)->where('status', 4)->get();
+
+        // Fetch friend requests where current user is receiver
+        $receivedRequests = CircleMember::where('receiverId', $id)->where('status', 4)->get();
+
+        $result = [];
+
+        // Process sent requests
+        foreach ($sentRequests as $friend) {
+            $profileType = $friend->profileType;
+            $receiverData = null;
+
+            if ($profileType === 'family') {
+                $receiverData = $this->subscriberService->getSubscriberDetails($friend->receiverId);
+            } elseif ($profileType === 'kid') {
+                $receiverData = $this->subscriberService->showKidParent($friend->receiverId);
+            }
+
+            $result[] = [
+                'id' => $friend->id,
+                'receiverId' => $friend->receiverId,
+                'profiletype' => $profileType,
+                'senderOrReceiver' => 'sender', // Indicate this is a sent request
+                'receiverData' => $receiverData,
+            ];
+        }
+
+        // Process received requests
+        foreach ($receivedRequests as $friend) {
+            $profileType = $friend->profileType;
+            $senderData = null;
+
+            if ($profileType === 'family') {
+                $senderData = $this->subscriberService->getSubscriberDetails($friend->senderId);
+            } elseif ($profileType === 'kid') {
+                $senderData = $this->subscriberService->showKidParent($friend->senderId);
+            }
+
+            // Check if the received request sender is not the current user
+            if ($friend->senderId != $id) {
+                $result[] = [
+                    'id' => $friend->id,
+                    'receiverId' => $friend->receiverId,
+                    'profiletype' => $profileType,
+                    'senderOrReceiver' => 'receiver', // Indicate this is a received request
+                    'senderData' => $senderData,
+                ];
+            }
+        }
+
+        return response()->json($result);
+    }
+
+
     public function acceptFriend(Request $request, $id)
     {
         $circleRequest = CircleMember::find($id);
-    
+
         if (!$circleRequest) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Friend request not found',
             ], 404);
         }
-    
+
         // Convert status to integer
         $status = (int) $request->status;
-    
+
         // Validate status against enum values
         if (!in_array($status, [3, 4, 8])) {
             return response()->json([
@@ -50,30 +116,30 @@ class CircleMemberController extends Controller
                 'message' => 'Invalid status value. Accepted values are 3, 4, 8.',
             ], 400);
         }
-    
+
         $circleRequest->update([
             'status' => $status,
             'updated_by' => $circleRequest->receiverId,
             'updated_at' => Carbon::now(),
         ]);
-    
+
         // Handle additional logic based on status if needed
         if ($status === 4) { // Assuming 4 represents 'accept'
             // Update circles for both sender and receiver
             $this->updateCircleForSenderAndReceiver($circleRequest->senderId, $circleRequest->receiverId);
         }
-    
+
         // Fetch updated circle members for both sender and receiver
         $updatedSenderCircleMembers = CircleMember::where('senderId', $circleRequest->senderId)
             ->where('status', 4) // Fetch only accepted members
             ->with('receiver') // Assuming 'receiver' is the relationship in CircleMember model
             ->get();
-    
+
         $updatedReceiverCircleMembers = CircleMember::where('senderId', $circleRequest->receiverId)
             ->where('status', 4) // Fetch only accepted members
             ->with('receiver') // Assuming 'receiver' is the relationship in CircleMember model
             ->get();
-    
+
         return response()->json([
             'status' => 200,
             'message' => 'Friend request updated successfully',
@@ -83,15 +149,15 @@ class CircleMemberController extends Controller
             ],
         ], 200);
     }
-    
+
     private function updateCircleForSenderAndReceiver($senderId, $receiverId)
     {
         // Fetch sender's families and kids
         $senderFamilies = $this->fetchFamiliesAndKids($senderId);
-    
+
         // Fetch receiver's families and kids
         $receiverFamilies = $this->fetchFamiliesAndKids($receiverId);
-    
+
         // Add sender's families and kids to receiver's circle
         foreach ($senderFamilies as $familyMember) {
             CircleMember::create([
@@ -103,7 +169,7 @@ class CircleMemberController extends Controller
                 'updated_by' => 'system',
             ]);
         }
-    
+
         // Add receiver's families and kids to sender's circle
         foreach ($receiverFamilies as $familyMember) {
             CircleMember::create([
@@ -116,15 +182,15 @@ class CircleMemberController extends Controller
             ]);
         }
     }
-    
+
     private function fetchFamiliesAndKids($userId)
     {
         $receiver = SubscriberLogins::find($userId);
-    
+
         if (!$receiver) {
             return []; // Handle appropriately if receiver not found
         }
-    
+
         // Fetch only the sender's families and kids
         if ($receiver->RoleId == 1) { // If the receiver is a primary parent
             $family = SubscriberLogins::where('MainSubscriberId', $receiver->id)->get();
@@ -134,9 +200,9 @@ class CircleMemberController extends Controller
             $family = SubscriberLogins::where('MainSubscriberId', $primaryParent->id)->get();
             $kids = SubscribersKidModel::where('MainSubscriberId', $primaryParent->id)->get();
         }
-    
+
         return $family->merge($kids); // Merge both family members and kids
     }
-    
+
 
 }
