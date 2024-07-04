@@ -76,7 +76,7 @@ class RequestController extends Controller
             $eventRequest->EventRequest->EventLocation = $request->EventLocation;
             $eventRequest->EventRequest->RecordType = $request->RecordType;
             $eventRequest->EventRequest->EventInfo = $request->EventInfo;
-            $eventRequest->EventRequest->Status = $request->Status;
+            $eventRequest->EventRequest->Statusid = $request->Statusid;
             $eventRequest->EventRequest->LocationType = $request->LocationType;
             $eventRequest->EventRequest->created_at = $request->created_at;
             // Add more fields as needed
@@ -231,104 +231,66 @@ class RequestController extends Controller
     }
 
 
-    // public function show($id)
-    // {
-    //     // Find the request by its ID
-    //     $request = RequestModel::find($id);
-
-    //     // Check if the request exists
-    //     if (!$request) {
-    //         return response()->json([
-    //             'status' => 404,
-    //             'message' => 'Request not found'
-    //         ], 404);
-    //     }
-
-    //     // Initialize the array to hold keywords
-    //     $arr = [];
-
-    //     // Check if Keywords field exists and is not null
-    //     if (!is_null($request->Keywords)) {
-    //         $keywords = $request->Keywords;
-    //         array_push($arr, $keywords);
-    //         $request->Keywords = $arr;
-    //     } else {
-    //         $request->Keywords = $arr; // Assign empty array if Keywords is null
-    //     }
-
-    //     // Return the response with the request data
-    //     return response()->json([
-    //         'status' => 200,
-    //         'message' => 'Request found',
-    //         'data' => $request
-    //     ], 200);
-    // }
 
     public function update(Request $request, $id)
-    {
-        // Find the request by its ID
-        $existingRequest = RequestModel::find($id);
+{
+    // Dump the request data to check if it is correct
+    // dd($request->all());
 
-        // Check if the request exists
-        if (!$existingRequest) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Request not found'
-            ], 404);
-        }
+    // Find the request by its ID
+    $existingRequest = RequestModel::find($id);
 
-        // Retrieve the status based on the provided Statusid
-        $status = DefaultStatus::find($request->Statusid);
-
-        // Ensure that status exists
-        if (!$status) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Status not found'
-            ], 404);
-        }
-
-        // Update the request instance with the provided data
-        $existingRequest->update([
-            'SubscriberId' => $request->SubscriberId,
-            'SubscribersKidId' => $request->SubscribersKidId,
-            'EventName' => $request->EventName,
-            'EventType' => $request->EventType,
-            'EventFor' => $request->EventFor,
-            'EventStartDate' => $request->EventStartDate,
-            'EventEndDate' => $request->EventEndDate,
-            'EventStartTime' => $request->EventStartTime,
-            'EventEndTime' => $request->EventEndTime,
-            'Keywords' => $request->Keywords,
-            'RecordType' => $request->RecordType,
-            'Statusid' => $status->id,
-            'LocationType' => $request->LocationType,
-            'EventLocation' => $request->EventLocation,
-            'EventInfo' => $request->EventInfo,
-            'PickupLocation' => $request->PickupLocation,
-            'DropLocation' => $request->DropLocation,
-            'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
-            'ActivityType' => $request->ActivityType,
-            'areGroupMemberVisible' => $request->areGroupMemberVisible,
-            'IsGroupChat' => $request->IsGroupChat,
-            'CreatedBy' => $request->SubscriberId,
-            'UpdatedBy' => $request->SubscriberId // Assuming this should be updated
-        ]);
-
-        // Return the response based on whether the request was successfully updated
-        if ($existingRequest) {
-            return response()->json([
-                'status' => 200,
-                'message' => 'Request updated successfully',
-                'data' => $existingRequest
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Failed to update request'
-            ], 500);
-        }
+    // Check if the request exists
+    if (!$existingRequest) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Request not found'
+        ], 404);
     }
+
+    // Update the request instance with the provided data
+    $existingRequest->update([
+        'SubscriberId' => $request->SubscriberId,
+        'SubscribersKidId' => $request->SubscribersKidId,
+        'EventName' => $request->EventName,
+        'EventType' => $request->EventType,
+        'EventFor' => $request->EventFor,
+        'EventStartDate' => $request->EventStartDate,
+        'EventEndDate' => $request->EventEndDate,
+        'EventStartTime' => $request->EventStartTime,
+        'EventEndTime' => $request->EventEndTime,
+        'Keywords' => $request->Keywords,
+        'RecordType' => $request->RecordType,
+        'LocationType' => $request->LocationType,
+        'EventLocation' => $request->EventLocation,
+        'EventInfo' => $request->EventInfo,
+        'PickupLocation' => $request->PickupLocation,
+        'DropLocation' => $request->DropLocation,
+        'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
+        'ActivityType' => $request->ActivityType,
+        'areGroupMemberVisible' => $request->areGroupMemberVisible,
+        'IsGroupChat' => $request->IsGroupChat,
+        'CreatedBy' => $request->SubscriberId,
+        'UpdatedBy' => $request->SubscriberId // Assuming this should be updated
+    ]);
+
+    // Return the response based on whether the request was successfully updated
+    if ($existingRequest) {
+        return response()->json([
+            'status' => 200,
+            'message' => 'Request updated successfully',
+            'data' => $existingRequest
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 500,
+            'message' => 'Failed to update request'
+        ], 500);
+    }
+}
+
+
+
 
     public function previousEvent(Request $request, $requestFromId)
     {

@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\subscriberMailOtpVerification;
 use App\Http\Controllers\Api\SubsChildPermissionsController;
 use App\Http\Controllers\Api\fcmtokenController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Api\circleMemberController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -182,7 +183,8 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::post('subcircles', [SubsCirclesController::class, 'index']);
 
     // For Subs Circles Members
-    Route::post('submembers', [SubsCirclesMemberController::class, 'index']);
+    Route::post('circle/add-friend', [circleMemberController::class, 'addFriend']);
+    Route::put('circle/accept-friend/{id}', [CircleMemberController::class, 'acceptFriend']);
 
     // For Subs Circles Permission
     Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
@@ -190,6 +192,8 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::post('sendnotification', [NotificationController::class, 'sendFirebaseNotification']);
     Route::post('loginToken', [fcmtokenController::class, 'loginToken']);
     Route::post('logoutToken', [FcmtokenController::class, 'logoutToken']);
+
+
 
     // });
 
