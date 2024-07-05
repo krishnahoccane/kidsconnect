@@ -148,6 +148,35 @@ public function getFriendList(Request $request, $id)
     }
 
 
+    public function getReceivedPendingRequests(Request $request, $id)
+    {
+        $pendingRequests = CircleMember::where('receiverId', $id)->where('status', 3)->get();
+
+        $result = [];
+
+        foreach ($pendingRequests as $request) {
+            $profileType = $request->profileType;
+            $senderData = null;
+
+            if ($profileType === 'parent') {
+                $senderData = $this->subscriberService->getSubscriberDetails($request->senderId);
+            } elseif ($profileType === 'kid') {
+                $senderData = $this->subscriberService->showKidParent($request->senderId);
+            }
+
+            $result[] = [
+                'id' => $request->id,
+                'senderId' => $request->senderId,
+                'profileType' => $profileType,
+                'senderData' => $senderData,
+            ];
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => $result
+        ], 200);
+    }
     
     
 }

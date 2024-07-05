@@ -187,6 +187,8 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::post('circle/add-friend', [circleMemberController::class, 'addFriend']);
     Route::put('circle/accept-friend/{id}', [CircleMemberController::class, 'acceptFriend']);
     Route::get('friendlist/{id}', [CircleMemberController::class, 'getFriendList']);
+    Route::get('circle-members/pending-requests/{id}', [CircleMemberController::class, 'getReceivedPendingRequests']);
+
 
     // For Subs Circles Permission
     Route::post('subpermission', [SubsChildPermissionsController::class, 'index']);
