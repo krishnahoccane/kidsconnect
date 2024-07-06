@@ -186,7 +186,7 @@ class subscriberLoginController extends Controller
 
             // Update the subscriber's profile fields with the new values
             $subscriber->update([
-                'chatId'=>$request->$chatId,
+                'chatId'=>$chatId,
                 // 'DeviceId' => $request->input('DeviceId'),
                 'FirstName' => $request->input('FirstName'),
                 'LastName' => $request->input('LastName'),

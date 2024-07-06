@@ -247,7 +247,7 @@ class subscribersKidsController extends Controller
 
         // Update the subscriber kid instance with the provided data including the profile image path
         $subKid->update([
-            'chatId'=>$request->$chatId,
+            'chatId'=>$chatId,
             'FirstName' => $request->input('FirstName'),
             'LastName' => $request->input('LastName'),
             'Dob' => $request->input('Dob'),
