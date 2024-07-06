@@ -176,29 +176,22 @@ class CircleMemberController extends Controller
     {
         $pendingRequests = CircleMember::where('receiverId', $id)->where('status', 3)->get();
 
+
         $result = [];
 
-        foreach ($pendingRequests as $request) {
-            $profileType = $request->profileType;
+        foreach ($pendingRequests as $pending) {
+            $profileType = $pending->profileType;
             $senderData = null;
 
-            if ($profileType === 'parent') {
-                $senderData = $this->subscriberService->getSubscriberDetails($request->senderId);
-                if (!$senderData) {
-                    Log::error('Subscriber details not found for ID: ' . $request->senderId);
-                    continue; // Skip processing this friend request
-                }
-            } elseif ($profileType === 'kid') {
-                $senderData = $this->subscriberService->showKidParent($request->senderId);
-                if (!$senderData) {
-                    Log::error('Kid details not found for ID: ' . $request->senderId);
-                    continue; // Skip processing this friend request
-                }
-            }
+            // if ($profileType === 'parent') {
+                $senderData = $this->subscriberService->getSubscriberDetails($pending->senderId);
+            // } elseif ($profileType === 'kid') {
+                // $senderData = $this->subscriberService->showKidParent($pending->senderId);
+            // }
 
             $result[] = [
-                'id' => $request->id,
-                'senderId' => $request->senderId,
+                'id' => $pending->id,
+                'senderId' => $pending->senderId,
                 'profileType' => $profileType,
                 'senderData' => $senderData,
             ];
