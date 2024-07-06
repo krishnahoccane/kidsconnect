@@ -48,9 +48,9 @@ class subscriberLoginController extends Controller
             $password = "KidConnect@123";
 
             // Hash the password before storing it
-             $hashedPassword = bcrypt($password);
+            $hashedPassword = bcrypt($password);
 
-    
+
             if (!empty($email)) {
                 // Check if a record with the given email exists.
                 $emailExist = subscriberlogins::where('Email', $email)->first();
@@ -71,7 +71,7 @@ class subscriberLoginController extends Controller
                     $subscriber->password = $hashedPassword;
                     // Add other necessary fields here from $request if needed
                     $subscriber->save();
-    
+
                     return response()->json([
                         'status' => 201,
                         'message' => 'Subscriber created successfully with email.',
@@ -79,7 +79,7 @@ class subscriberLoginController extends Controller
                     ], 201);
                 }
             }
-    
+
             if (!empty($phoneNumber)) {
                 // Check if a record with the given phone number exists.
                 $phoneNumberExist = subscriberlogins::where('phoneNumber', $phoneNumber)->first();
@@ -92,7 +92,7 @@ class subscriberLoginController extends Controller
                 } else {
                     // Create subscriber record with phone number.
                     $ref_inv_by = RegCodes::where('code_number', $entryCodeId)->select('id', 'user_id', 'code_type_id')->first();
-    
+
                     $subscriber = new subscriberlogins();
                     $subscriber->Email = null;
                     $subscriber->Ref_Inv_By = $ref_inv_by ? $ref_inv_by->id : null;
@@ -102,7 +102,7 @@ class subscriberLoginController extends Controller
                     $subscriber->password = $hashedPassword;
                     // Add other necessary fields here from $request if needed
                     $subscriber->save();
-    
+
                     return response()->json([
                         'status' => 201,
                         'message' => 'Subscriber created successfully with phone number.',
@@ -110,17 +110,17 @@ class subscriberLoginController extends Controller
                     ], 201);
                 }
             }
-    
+
             // If both email and phone number are missing, return an error response.
             return response()->json([
                 'status' => 400,
                 'message' => 'Email or phone number is required.',
             ], 400);
-    
+
         } catch (\Exception $e) {
             // Log the exception message for debugging purposes
-            \Log::error('Error creating subscriber: '.$e->getMessage());
-    
+            \Log::error('Error creating subscriber: ' . $e->getMessage());
+
             return response()->json([
                 'status' => 500,
                 'message' => 'An unexpected error occurred.',
@@ -128,7 +128,7 @@ class subscriberLoginController extends Controller
             ], 500);
         }
     }
-    
+
 
 
     public function createSubscriberData(Request $request, $email, $entryCodeId, $phoneNumber)
@@ -163,52 +163,59 @@ class subscriberLoginController extends Controller
         }
     }
 
+
     public function update(Request $request, $id)
     {
         // Find the subscriber by ID
         $subscriber = SubscriberLogins::find($id);
         $chatId = $request->input('chatId');
-        $password = password_hash('Glansa@2024', PASSWORD_BCRYPT);
+
         // If the subscriber with the given ID exists
         if ($subscriber) {
-            // Check if the request has a profile image file
-            if ($request->hasFile('ProfileImage')) {
-                // Upload and save the profile image
-                $profileImage = $request->file('ProfileImage');
-                $path = 'uploads/profiles/';
-                $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-                $profileImage->move($path, $fileName);
-                $profileImagePath = $path . $fileName;
+            // If only chatId is provided, update only chatId
+            if ($request->has('chatId') && count($request->all()) == 1) {
+                $subscriber->update([
+                    'chatId' => $chatId,
+                ]);
             } else {
-                // If no profile image is provided, keep the existing profile image path
-                $profileImagePath = $subscriber->ProfileImage;
+                // Check if the request has a profile image file
+                if ($request->hasFile('ProfileImage')) {
+                    // Upload and save the profile image
+                    $profileImage = $request->file('ProfileImage');
+                    $path = 'uploads/profiles/';
+                    $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+                    $profileImage->move($path, $fileName);
+                    $profileImagePath = $path . $fileName;
+                } else {
+                    // If no profile image is provided, keep the existing profile image path
+                    $profileImagePath = $subscriber->ProfileImage;
+                }
+
+                // Update the subscriber's profile fields with the new values
+                $subscriber->update([
+                    'chatId' => $chatId,
+                    'FirstName' => $request->input('FirstName', $subscriber->FirstName),
+                    'LastName' => $request->input('LastName', $subscriber->LastName),
+                    'BirthYear' => $request->input('BirthYear', $subscriber->BirthYear),
+                    'Gender' => $request->input('Gender', $subscriber->Gender),
+                    'PhoneNumber' => $request->input('PhoneNumber', $subscriber->PhoneNumber),
+                    'Email' => $request->input('Email', $subscriber->Email),
+                    'password' => $subscriber->password, // Password update is skipped here
+                    'About' => $request->input('About', $subscriber->About),
+                    'Address' => $request->input('Address', $subscriber->Address),
+                    'City' => $request->input('City', $subscriber->City),
+                    'State' => $request->input('State', $subscriber->State),
+                    'Zipcode' => $request->input('Zipcode', $subscriber->Zipcode),
+                    'Country' => $request->input('Country', $subscriber->Country),
+                    'ProfileImage' => $profileImagePath,
+                    'Keywords' => $request->input('Keywords', $subscriber->Keywords),
+                    'LoginType' => "2",
+                    'RoleId' => $request->input('RoleId', $subscriber->RoleId),
+                    'MainSubscriberId' => $subscriber->MainSubscriberId,
+                ]);
             }
 
-            // Update the subscriber's profile fields with the new values
-            $subscriber->update([
-                'chatId'=>$chatId,
-                // 'DeviceId' => $request->input('DeviceId'),
-                'FirstName' => $request->input('FirstName'),
-                'LastName' => $request->input('LastName'),
-                'BirthYear' => $request->input('BirthYear'),
-                'Gender' => $request->input('Gender'),
-                'PhoneNumber' => $request->input('PhoneNumber'),
-                'Email' => $request->input('Email'),
-                'password' => $password,
-                'About' => $request->input('About'),
-                'Address' => $request->input('Address'),
-                'City' => $request->input('City'),
-                'State' => $request->input('State'),
-                'Zipcode' => $request->input('Zipcode'),
-                'Country' => $request->input('Country'),
-                'ProfileImage' => $profileImagePath,
-                'Keywords' => $request->input('Keywords'),
-                'LoginType' => "2",
-                'RoleId' => $request->input('RoleId'),
-                'MainSubscriberId' => $subscriber->MainSubscriberId,
-            ]);
-            // Return a success response
-
+            // Update registration codes
             if ($subscriber) {
                 $entryRefType = 1;
                 $Refcode = $this->generateUniqueCode();
@@ -225,12 +232,6 @@ class subscriberLoginController extends Controller
                         'code_number' => $Invcode,
                         'user_id' => $id
                     ]);
-
-                    // return response()->json([
-                    //     'status' => 200,
-                    //     'message' => 'Thank you for registration',
-                    //     'data' => $subEntryData
-                    // ]);
                 }
                 return response()->json([
                     'status' => 200,
@@ -240,10 +241,9 @@ class subscriberLoginController extends Controller
             } else {
                 return response()->json([
                     'status' => 404,
-                    'message' => 'Profile update unsuccessfull.. Something went wrong'
+                    'message' => 'Profile update unsuccessful.. Something went wrong'
                 ], 404);
             }
-
         } else {
             // Return an error response if the subscriber with the given ID was not found
             return response()->json([
@@ -252,6 +252,7 @@ class subscriberLoginController extends Controller
             ], 404);
         }
     }
+
 
 
     public function search(Request $request)
@@ -309,70 +310,70 @@ class subscriberLoginController extends Controller
     }
 
 
-   //Created Accounts by Main Subscriber
-   public function maincreatedaccount($subscriberId)
-   {
-       if ($subscriberId) {
-           // Fetch the main subscriber based on the provided $subscriberId
-           $subscriberlogin = subscriberlogins::find($subscriberId);
-   
-           if (!$subscriberlogin) {
-               return response()->json([
-                   'status' => 404,
-                   'message' => 'Subscriber not found.'
-               ], 404);
-           }
-   
-           // Determine if the logged-in user is a primary parent or a secondary parent
-           if ($subscriberlogin->RoleId === 1) {
-               // Logged-in user is a primary parent
-   
-               // Fetch secondary parents associated with the main subscriber
-               $secondaryParents = subscriberlogins::where('MainSubscriberId', $subscriberId)->get();
-   
-               // Fetch kids associated with the main subscriber
-               $kidProfiles = subscribersKidModel::where('MainSubscriberId', $subscriberId)->get();
-           } else {
-               // Logged-in user is a secondary parent
-   
-               // Fetch primary parent associated with the main subscriber
-               $primaryParent = subscriberlogins::find($subscriberlogin->MainSubscriberId);
-   
-               // Fetch secondary parents including the logged-in user
-               $secondaryParents = subscriberlogins::where('MainSubscriberId', $subscriberlogin->MainSubscriberId)->get();
-   
-               // Fetch kids associated with the main subscriber
-               $kidProfiles = subscribersKidModel::where('MainSubscriberId', $subscriberlogin->MainSubscriberId)->get();
-           }
-   
-           return response()->json([
-               'status' => 200,
-               'data' => [
-                   'mainSubscriber' => [
-                       'id' => $subscriberlogin->id,
-                       'firstName' => $subscriberlogin->FirstName,
-                       'lastName' => $subscriberlogin->LastName,
-                       'email' => $subscriberlogin->Email,
-                   ],
-                   'primaryParent' => isset($primaryParent) ? [
-                       'id' => $primaryParent->id,
-                       'firstName' => $primaryParent->FirstName,
-                       'lastName' => $primaryParent->LastName,
-                       'email' => $primaryParent->Email,
-                   ] : null,
-                   'secondaryParents' => $secondaryParents,
-                   'kids' => $kidProfiles,
-               ]
-           ], 200);
-       } else {
-           return response()->json([
-               'status' => 400,
-               'message' => 'Subscriber ID is required.'
-           ], 400);
-       }
-   }
-   
-    
+    //Created Accounts by Main Subscriber
+    public function maincreatedaccount($subscriberId)
+    {
+        if ($subscriberId) {
+            // Fetch the main subscriber based on the provided $subscriberId
+            $subscriberlogin = subscriberlogins::find($subscriberId);
+
+            if (!$subscriberlogin) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Subscriber not found.'
+                ], 404);
+            }
+
+            // Determine if the logged-in user is a primary parent or a secondary parent
+            if ($subscriberlogin->RoleId === 1) {
+                // Logged-in user is a primary parent
+
+                // Fetch secondary parents associated with the main subscriber
+                $secondaryParents = subscriberlogins::where('MainSubscriberId', $subscriberId)->get();
+
+                // Fetch kids associated with the main subscriber
+                $kidProfiles = subscribersKidModel::where('MainSubscriberId', $subscriberId)->get();
+            } else {
+                // Logged-in user is a secondary parent
+
+                // Fetch primary parent associated with the main subscriber
+                $primaryParent = subscriberlogins::find($subscriberlogin->MainSubscriberId);
+
+                // Fetch secondary parents including the logged-in user
+                $secondaryParents = subscriberlogins::where('MainSubscriberId', $subscriberlogin->MainSubscriberId)->get();
+
+                // Fetch kids associated with the main subscriber
+                $kidProfiles = subscribersKidModel::where('MainSubscriberId', $subscriberlogin->MainSubscriberId)->get();
+            }
+
+            return response()->json([
+                'status' => 200,
+                'data' => [
+                    'mainSubscriber' => [
+                        'id' => $subscriberlogin->id,
+                        'firstName' => $subscriberlogin->FirstName,
+                        'lastName' => $subscriberlogin->LastName,
+                        'email' => $subscriberlogin->Email,
+                    ],
+                    'primaryParent' => isset($primaryParent) ? [
+                        'id' => $primaryParent->id,
+                        'firstName' => $primaryParent->FirstName,
+                        'lastName' => $primaryParent->LastName,
+                        'email' => $primaryParent->Email,
+                    ] : null,
+                    'secondaryParents' => $secondaryParents,
+                    'kids' => $kidProfiles,
+                ]
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Subscriber ID is required.'
+            ], 400);
+        }
+    }
+
+
     public function show($id)
     {
         // Find the subscriber login by ID
