@@ -13,7 +13,7 @@ class SubscriberService {
     public function showKidParent($kidId)
 {
     // Find the kid by ID
-    $kid = SubscribersKidModel::find($kidId);
+    $kid = SubscribersKidModel::find($kidId);//1
 
     // Check if the kid exists
     if (!$kid) {
