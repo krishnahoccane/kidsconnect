@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\subscribersKidModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CircleMember;
-use App\Models\SubscriberLogins;
+use App\Models\subscriberlogins;
 use Carbon\Carbon;
 use App\Services\SubscriberService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CircleMemberController extends Controller
@@ -93,79 +95,73 @@ class CircleMemberController extends Controller
     {
         // Fetch the current user and their main subscriber ID
         $currentUser = SubscriberLogins::find($id);
-    
+
         // Check if the current user is a secondary parent
         $mainSubscriberId = $currentUser && $currentUser->Entry_code_type == 2 ? $currentUser->MainSubscriberId : null;
-    
+
         // Check if the current user is a primary parent
         $secondaryIds = SubscriberLogins::where('MainSubscriberId', $id)->pluck('id')->toArray();
-    
+
         // Collect IDs for both primary and secondary parents
         $userIds = array_filter(array_merge([$id, $mainSubscriberId], $secondaryIds));
-    
-        // Log for debugging
-        \Log::info('User IDs for fetching friends: ', $userIds);
-    
-        // Fetch friend requests where current user or their primary/secondary parent is the sender
+
+        // Fetch friend requests where current user or their primary/secondary parent is the sender or receiver
         $sentRequests = CircleMember::whereIn('senderId', $userIds)->where('status', 4)->get();
-    
-        // Fetch friend requests where current user or their primary/secondary parent is the receiver
         $receivedRequests = CircleMember::whereIn('receiverId', $userIds)->where('status', 4)->get();
-    
-        // Log fetched data for debugging
-        \Log::info('Sent Requests: ', $sentRequests->toArray());
-        \Log::info('Received Requests: ', $receivedRequests->toArray());
-    
+
         $result = [];
-    
+
         // Process sent requests
         foreach ($sentRequests as $friend) {
             $profileType = $friend->profileType;
             $receiverData = null;
-    
+
             if ($profileType === 'parent') {
+                // Fetch receiver's family details
                 $receiverData = $this->subscriberService->getSubscriberDetails($friend->receiverId);
             } elseif ($profileType === 'kid') {
+                // Fetch receiver's family details
                 $receiverData = $this->subscriberService->showKidParent($friend->receiverId);
             }
-    
+
             $result[] = [
                 'id' => $friend->id,
                 'receiverId' => $friend->receiverId,
                 'profiletype' => $profileType,
-                'senderOrReceiver' => 'sender',
+                'senderOrReceiver' => 'sender', // For sent requests, always 'sender'
                 'receiverData' => $receiverData,
             ];
         }
-    
+
         // Process received requests
         foreach ($receivedRequests as $friend) {
             $profileType = $friend->profileType;
             $senderData = null;
-    
+
             if ($profileType === 'parent') {
+                // Fetch sender's family details
                 $senderData = $this->subscriberService->getSubscriberDetails($friend->senderId);
             } elseif ($profileType === 'kid') {
-                $senderData = $this->subscriberService->showKidParent($friend->senderId);
+                // Fetch sender's family details
+                $senderData = $this->subscriberService->getSubscriberDetails($friend->senderId);
             }
-    
+
             if (!in_array($friend->senderId, $userIds)) {
                 $result[] = [
                     'id' => $friend->id,
                     'receiverId' => $friend->receiverId,
                     'profiletype' => $profileType,
-                    'senderOrReceiver' => 'receiver',
+                    'senderOrReceiver' => 'receiver', // For received requests, always 'receiver'
                     'senderData' => $senderData,
                 ];
             }
         }
-    
+
         if (count($result) > 0) {
             return response()->json([
                 'data' => $result
             ], 200);
         } else {
-            \Log::info('No friends found for user IDs: ', $userIds);
             return response()->json([
                 'message' => 'No friends found'
             ], 200);
@@ -202,4 +198,42 @@ class CircleMemberController extends Controller
             'data' => $result
         ], 200);
     }
+    
+    public function getUnfriendList($userId)
+{
+    // Fetch all friends for the current user
+    $request = new Request(); // Create a new instance of Request
+    $friendList = $this->getFriendList($request, $userId);
+    $friends = collect($friendList->original['data']);
+
+    // Extract all friend IDs (both sender and receiver)
+    $friendIds = $friends->pluck('receiverId')->merge($friends->pluck('senderId'))->unique()->toArray();
+
+    // Fetch secondary profiles related to the main subscriber
+    $currentUser = subscriberlogins::find($userId);
+    $mainSubscriberId = $currentUser && $currentUser->Entry_code_type == 2 ? $currentUser->MainSubscriberId : $userId;
+    $secondarySubscriberIds = subscriberlogins::where('MainSubscriberId', $mainSubscriberId)
+                                             ->orWhere('id', $mainSubscriberId)
+                                             ->pluck('id')
+                                             ->toArray();
+
+    // Combine all friend IDs, sender IDs, and secondary IDs and ensure they are unique
+    $allFriendIds = array_unique(array_merge($friendIds, $secondarySubscriberIds));
+
+    // Fetch users who are not in the friend list and exclude the current user
+    $unfriendList = subscriberlogins::whereNotIn('id', $allFriendIds)
+                                    ->where('id', '!=', $userId) // Exclude the current user
+                                    ->get();
+
+    return response()->json([
+        'status' => 200,
+        'data' => $unfriendList
+    ]);
+}
+    
+    
+
+
+    
+
 }
