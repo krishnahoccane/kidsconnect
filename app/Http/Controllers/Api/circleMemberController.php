@@ -94,13 +94,13 @@ class CircleMemberController extends Controller
     public function getFriendList(Request $request, $id)
     {
         // Fetch the current user and their main subscriber ID
-        $currentUser = SubscriberLogins::find($id);
+        $currentUser = subscriberlogins::find($id);
 
         // Check if the current user is a secondary parent
         $mainSubscriberId = $currentUser && $currentUser->Entry_code_type == 2 ? $currentUser->MainSubscriberId : null;
 
         // Check if the current user is a primary parent
-        $secondaryIds = SubscriberLogins::where('MainSubscriberId', $id)->pluck('id')->toArray();
+        $secondaryIds = subscriberlogins::where('MainSubscriberId', $id)->pluck('id')->toArray();
 
         // Collect IDs for both primary and secondary parents
         $userIds = array_filter(array_merge([$id, $mainSubscriberId], $secondaryIds));
@@ -199,37 +199,68 @@ class CircleMemberController extends Controller
         ], 200);
     }
     
-    public function getUnfriendList($userId)
-{
-    // Fetch all friends for the current user
-    $request = new Request(); // Create a new instance of Request
-    $friendList = $this->getFriendList($request, $userId);
-    $friends = collect($friendList->original['data']);
-
-    // Extract all friend IDs (both sender and receiver)
-    $friendIds = $friends->pluck('receiverId')->merge($friends->pluck('senderId'))->unique()->toArray();
-
-    // Fetch secondary profiles related to the main subscriber
-    $currentUser = subscriberlogins::find($userId);
-    $mainSubscriberId = $currentUser && $currentUser->Entry_code_type == 2 ? $currentUser->MainSubscriberId : $userId;
-    $secondarySubscriberIds = subscriberlogins::where('MainSubscriberId', $mainSubscriberId)
-                                             ->orWhere('id', $mainSubscriberId)
-                                             ->pluck('id')
-                                             ->toArray();
-
-    // Combine all friend IDs, sender IDs, and secondary IDs and ensure they are unique
-    $allFriendIds = array_unique(array_merge($friendIds, $secondarySubscriberIds));
-
-    // Fetch users who are not in the friend list and exclude the current user
-    $unfriendList = subscriberlogins::whereNotIn('id', $allFriendIds)
-                                    ->where('id', '!=', $userId) // Exclude the current user
-                                    ->get();
-
-    return response()->json([
-        'status' => 200,
-        'data' => $unfriendList
-    ]);
-}
+    public function getNonFriendList(Request $request, $id)
+    {
+        // Fetch the current user and their main subscriber ID
+        $currentUser = subscriberlogins::find($id);
+    
+        // Check if the current user is a secondary parent
+        $mainSubscriberId = $currentUser && $currentUser->Entry_code_type == 2 ? $currentUser->MainSubscriberId : null;
+    
+        // Check if the current user is a primary parent
+        $secondaryIds = subscriberlogins::where('MainSubscriberId', $id)->pluck('id')->toArray();
+    
+        // Collect IDs for both primary and secondary parents
+        $userIds = array_filter(array_merge([$id, $mainSubscriberId], $secondaryIds));
+    
+        // Fetch friend requests where current user or their primary/secondary parent is the sender or receiver
+        $sentRequests = CircleMember::whereIn('senderId', $userIds)->where('status', 4)->pluck('receiverId')->toArray();
+        $receivedRequests = CircleMember::whereIn('receiverId', $userIds)->where('status', 4)->pluck('senderId')->toArray();
+    
+        // Merge all friend IDs
+        $friendIds = array_unique(array_merge($sentRequests, $receivedRequests));
+    
+        // Fetch family members' IDs including primary, secondary, and kids for each friend
+        $friendFamilyIds = [];
+        foreach ($friendIds as $friendId) {
+            $friendFamilyIds = array_merge($friendFamilyIds, $this->fetchFamilyMemberIds($friendId));
+        }
+    
+        // Exclude current user, friends, and their family members from non-friend list
+        $excludeIds = array_unique(array_merge($userIds, $friendIds, $friendFamilyIds));
+    
+        $nonFriendUsers = subscriberlogins::whereNotIn('id', $excludeIds)->get();
+        // $nonFriendKids = SubscribersKidModel::whereNotIn('MainSubscriberId', $excludeIds)->get();
+    
+        return response()->json([
+            'data' => [
+                'nonFriendUsers' => $nonFriendUsers,
+                // 'nonFriendKids' => $nonFriendKids
+            ]
+        ], 200);
+    }
+    
+    private function fetchFamilyMemberIds($id)
+    {
+        // Fetch family members' IDs including primary, secondary, and kids
+        $familyMemberIds = [];
+    
+        // Fetch primary user
+        $primaryUser = subscriberlogins::find($id);
+        if ($primaryUser) {
+            $familyMemberIds[] = $primaryUser->id;
+    
+            // Fetch secondary users
+            $secondaryUsers = subscriberlogins::where('MainSubscriberId', $id)->get();
+            foreach ($secondaryUsers as $secondaryUser) {
+                $familyMemberIds[] = $secondaryUser->id;
+            }
+    
+          
+        }
+    
+        return $familyMemberIds;
+    }
     
     
 
