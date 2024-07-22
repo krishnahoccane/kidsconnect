@@ -91,6 +91,7 @@ class CircleMemberController extends Controller
         ], 200);
     }
 
+    // fetching friendlist 
     public function getFriendList(Request $request, $id)
     {
         // Fetch the current user and their main subscriber ID
@@ -168,6 +169,7 @@ class CircleMemberController extends Controller
         }
     }
 
+    // Fetching Pending Request
     public function getReceivedPendingRequests(Request $request, $id)
     {
         $pendingRequests = CircleMember::where('receiverId', $id)->where('status', 3)->get();
@@ -199,6 +201,7 @@ class CircleMemberController extends Controller
         ], 200);
     }
     
+    // Fetching Add FriendList
     public function getNonFriendList(Request $request, $id)
     {
         // Fetch the current user and their main subscriber ID
