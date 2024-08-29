@@ -199,7 +199,6 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::post('logoutToken', [FcmtokenController::class, 'logoutToken']);
 
 
-
     // });
 
 

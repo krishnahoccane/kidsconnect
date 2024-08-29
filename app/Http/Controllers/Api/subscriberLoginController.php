@@ -168,82 +168,69 @@ class subscriberLoginController extends Controller
     {
         // Find the subscriber by ID
         $subscriber = SubscriberLogins::find($id);
-        $chatId = $request->input('chatId');
-
+    
         // If the subscriber with the given ID exists
         if ($subscriber) {
-            // If only chatId is provided, update only chatId
-            if ($request->has('chatId') && count($request->all()) == 1) {
-                $subscriber->update([
-                    'chatId' => $chatId,
-                ]);
+            // Check if the request has a profile image file
+            if ($request->hasFile('ProfileImage')) {
+                // Upload and save the profile image
+                $profileImage = $request->file('ProfileImage');
+                $path = 'uploads/profiles/';
+                $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
+                $profileImage->move($path, $fileName);
+                $profileImagePath = $path . $fileName;
             } else {
-                // Check if the request has a profile image file
-                if ($request->hasFile('ProfileImage')) {
-                    // Upload and save the profile image
-                    $profileImage = $request->file('ProfileImage');
-                    $path = 'uploads/profiles/';
-                    $fileName = time() . '_' . uniqid() . '.' . $profileImage->getClientOriginalExtension();
-                    $profileImage->move($path, $fileName);
-                    $profileImagePath = $path . $fileName;
-                } else {
-                    // If no profile image is provided, keep the existing profile image path
-                    $profileImagePath = $subscriber->ProfileImage;
-                }
-
-                // Update the subscriber's profile fields with the new values
-                $subscriber->update([
-                    'chatId' => $chatId,
-                    'FirstName' => $request->input('FirstName', $subscriber->FirstName),
-                    'LastName' => $request->input('LastName', $subscriber->LastName),
-                    'BirthYear' => $request->input('BirthYear', $subscriber->BirthYear),
-                    'Gender' => $request->input('Gender', $subscriber->Gender),
-                    'PhoneNumber' => $request->input('PhoneNumber', $subscriber->PhoneNumber),
-                    'Email' => $request->input('Email', $subscriber->Email),
-                    'password' => $subscriber->password, // Password update is skipped here
-                    'About' => $request->input('About', $subscriber->About),
-                    'Address' => $request->input('Address', $subscriber->Address),
-                    'City' => $request->input('City', $subscriber->City),
-                    'State' => $request->input('State', $subscriber->State),
-                    'Zipcode' => $request->input('Zipcode', $subscriber->Zipcode),
-                    'Country' => $request->input('Country', $subscriber->Country),
-                    'ProfileImage' => $profileImagePath,
-                    'Keywords' => $request->input('Keywords', $subscriber->Keywords),
-                    'LoginType' => "2",
-                    'RoleId' => $request->input('RoleId', $subscriber->RoleId),
-                    'MainSubscriberId' => $subscriber->MainSubscriberId,
-                ]);
+                // If no profile image is provided, keep the existing profile image path
+                $profileImagePath = $subscriber->ProfileImage;
             }
-
+    
+            // Update the subscriber's profile fields with the new values
+            $subscriber->update([
+                'FirstName' => $request->input('FirstName', $subscriber->FirstName),
+                'LastName' => $request->input('LastName', $subscriber->LastName),
+                'BirthYear' => $request->input('BirthYear', $subscriber->BirthYear),
+                'Gender' => $request->input('Gender', $subscriber->Gender),
+                'PhoneNumber' => $request->input('PhoneNumber', $subscriber->PhoneNumber),
+                'Email' => $request->input('Email', $subscriber->Email),
+                'password' => $subscriber->password, // Password update is skipped here
+                'About' => $request->input('About', $subscriber->About),
+                'Address' => $request->input('Address', $subscriber->Address),
+                'City' => $request->input('City', $subscriber->City),
+                'State' => $request->input('State', $subscriber->State),
+                'Zipcode' => $request->input('Zipcode', $subscriber->Zipcode),
+                'Country' => $request->input('Country', $subscriber->Country),
+                'ProfileImage' => $profileImagePath,
+                'Keywords' => $request->input('Keywords', $subscriber->Keywords),
+                'LoginType' => "2",
+                'RoleId' => $request->input('RoleId', $subscriber->RoleId),
+                'MainSubscriberId' => $subscriber->MainSubscriberId,
+            ]);
+    
             // Update registration codes
-            if ($subscriber) {
-                $entryRefType = 1;
-                $Refcode = $this->generateUniqueCode();
-                $entryInvType = 2;
-                $Invcode = $this->generateUniqueCode();
-                $RegfcodeEntry = RegCodes::firstOrCreate([
-                    'code_type_id' => $entryRefType,
-                    'code_number' => $Refcode,
+            $entryRefType = 1;
+            $Refcode = $this->generateUniqueCode();
+            $entryInvType = 2;
+            $Invcode = $this->generateUniqueCode();
+            $RegfcodeEntry = RegCodes::firstOrCreate([
+                'code_type_id' => $entryRefType,
+                'code_number' => $Refcode,
+                'user_id' => $id
+            ]);
+            if ($RegfcodeEntry) {
+                $InvcodeEntry = RegCodes::firstOrCreate([
+                    'code_type_id' => $entryInvType,
+                    'code_number' => $Invcode,
                     'user_id' => $id
                 ]);
-                if ($RegfcodeEntry) {
-                    $InvcodeEntry = RegCodes::firstOrCreate([
-                        'code_type_id' => $entryInvType,
-                        'code_number' => $Invcode,
-                        'user_id' => $id
-                    ]);
-                }
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Profile updated successfully',
-                    'data' => $subscriber,
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 404,
-                    'message' => 'Profile update unsuccessful.. Something went wrong'
-                ], 404);
             }
+    
+            // Return a successful response
+            return response()->json([
+                'status' => 200,
+                'message' => 'Profile updated successfully',
+                'data' => $subscriber
+                ],
+             200);
         } else {
             // Return an error response if the subscriber with the given ID was not found
             return response()->json([
