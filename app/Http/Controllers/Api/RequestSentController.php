@@ -146,6 +146,7 @@ class RequestSentController extends Controller
             $kidData->Request = $request;
             $kidData->RequestDetails = [
                 'id' =>$login->id,
+                'RequestId' =>$login->RequestId,
                 'RequestFromId' => $login->RequestFromId,
                 'RequestToId' => $login->RequestToId,
                 'ReceiverStatus' => $login->Receiverstatus,
