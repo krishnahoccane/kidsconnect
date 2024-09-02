@@ -21,5 +21,8 @@ class allpages extends Controller
     public function deleteaccount(){
         return view('sitepages/accountdeletion');
     }
+    public function contactus(){
+        return view('sitepages/contactus');
+    }
 
 }
