@@ -273,7 +273,9 @@ class subscriberLoginController extends Controller
         $kidQuery->where(function ($q) use ($searchTerm) {
             $q->where('PhoneNumber', 'like', '%' . $searchTerm . '%')
                 ->orWhere('Email', 'like', '%' . $searchTerm . '%')
-                ->orWhere('FirstName', 'like', '%' . $searchTerm . '%');
+                ->orWhere('FirstName', 'like', '%' . $searchTerm . '%')
+                ->orWhere('Keywords', 'like', '%' . $searchTerm . '%');
+                
         });
 
         // Execute the query for subscriber_kid

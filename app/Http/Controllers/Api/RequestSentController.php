@@ -325,4 +325,30 @@ public function updatestatus(Request $request, $id)
         }
     }
 
+    public function cancel($id)
+    {
+        // Find the RequestSentTo record by ID
+        $requestSentTo = RequestSentTo::find($id);
+    
+        if ($requestSentTo) {
+            // Find the associated request using RequestId
+            $request = RequestModel::find($requestSentTo->RequestId);
+    
+            // Delete the RequestSentTo record
+            $requestSentTo->delete();
+    
+            // If the associated request exists, delete it as well
+            if ($request) {
+                $request->delete();
+            }
+    
+            // Optionally, return success response or update the modal
+            return response()->json(['message' => 'Request and associated data deleted successfully.']);
+        } else {
+            // Handle case where the RequestSentTo is not found
+            return response()->json(['error' => 'RequestSentTo not found.'], 404);
+        }
+    }
+    
+
 }

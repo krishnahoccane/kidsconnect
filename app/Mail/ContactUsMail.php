@@ -31,6 +31,6 @@ class ContactUsMail extends Mailable
     public function build()
     {
         return $this->subject('New Contact Us Message')
-                    ->view('emails.contactus');
+                    ->view('mailsBody.contactus');
     }
 }

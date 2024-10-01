@@ -5,7 +5,6 @@
 
 
 <div class="row">
-
     <!-- Full Editor -->
     <div class="col-12">
         <div class="card">
@@ -27,6 +26,11 @@
                         </tbody>
                     </table>
                     <script>
+                   $(document).ready(function() {
+                        $('#datatable').DataTable();  // Initialize DataTables on the table, not tbody
+                    });
+
+
                         var url = "https://kidsconnect.glansadigital.com/api/adminUsers";
 
                         $.ajax({
@@ -114,7 +118,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-success">Approve</button>
-
             </div>
         </div>
     </div>

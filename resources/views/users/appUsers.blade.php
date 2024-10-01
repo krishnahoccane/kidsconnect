@@ -54,63 +54,60 @@
         }
     }
 
-    // subscribers Data
+    // Fetch subscribers data
     $.ajax({
-    url: "https://kidsconnect.glansadigital.com/api/subscriberlogins",
-    method: "GET",
-    dataType: "json",
-    success: function(response) {
-        // Check if the 'data' key exists in the response
-        if (response.data) {
-            // Loop through the data and create table rows
-            $.each(response.data, function(index, item) {
-                // Extract profile image URL
-                const profileImage = item.ProfileImage;
+        url: "https://kidsconnect.glansadigital.com/api/subscriberlogins",
+        method: "GET",
+        dataType: "json",
+        success: function(response) {
+            if (response.data) {
+                // Clear the current table body (if any)
+                $("#datatable-subscriberLogin").empty();
+                
+                // Loop through the data and create table rows
+                $.each(response.data, function(index, item) {
+                    const profileImage = item.ProfileImage;
 
-                // Parse dates
-                const createdAtDate = new Date(item.created_at);
-                const approvedAtDate = new Date(item.ApprovedOn);
+                    const createdAtDate = new Date(item.created_at);
+                    const fullName = item.FirstName + ' ' + item.LastName;
+                    const statusName = callingStatus(item.ProfileStatus);
+                    const roleName = callRoles(item.RoleId);
 
-                // Get other details
-                const profileStatus = item.ProfileStatus;
-                const roleName = callRoles(item.RoleId);
-                const fullName = item.FirstName + ' ' + item.LastName;
-                const statusName = callingStatus(profileStatus);
+                    const formattedDateOfCreation =
+                        `${createdAtDate.getFullYear()}-${(createdAtDate.getMonth() + 1).toString().padStart(2, "0")}-${createdAtDate.getDate().toString().padStart(2, "0")}`;
 
-                // Format the date components
-                const formattedDateOfCreation =
-                    `${createdAtDate.getFullYear()}-${(createdAtDate.getMonth() + 1).toString().padStart(2, "0")}-${createdAtDate.getDate().toString().padStart(2, "0")}`;
-                const formattedDateOfApprove =
-                    `${approvedAtDate.getFullYear()}-${(approvedAtDate.getMonth() + 1).toString().padStart(2, "0")}-${approvedAtDate.getDate().toString().padStart(2, "0")}`;
+                    const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${roleName}</td>
+                        <td>${fullName}</td>
+                        <td>${item.Email}</td>
+                        <td>${formattedDateOfCreation}</td>
+                        <td><img src="https://kidsconnect.glansadigital.com/${profileImage}" alt="Profile Image" class="rounded-circle" width="50" height="50"></td>
+                        <td>
+                            <a href="/userProfile/${item.id}"><button type="button" class="btn btn-primary">
+                                <span class="ti-xs ti ti-eye me-1"></span> View
+                            </button></a>
+                        </td>
+                    </tr>`;
 
-                // Create HTML for the table row
-                const row = `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td>${roleName}</td>
-                    <td>${fullName}</td>
-                    <td>${item.Email}</td>
-                    <td>${formattedDateOfCreation}</td>
-                    <td><img src="https://kidsconnect.glansadigital.com/${profileImage}" alt="Profile Image" class="rounded-circle" width="50" height="50"></td>
-                    <td>
-                        <a href="/userProfile/${item.id}"><button type="button" class="btn btn-primary">
-                            <span class="ti-xs ti ti-eye me-1"></span> View
-                        </button></a>
-                    </td>
-                </tr>`;
+                    // Append the row to the table body
+                    $("#datatable-subscriberLogin").append(row);
+                });
 
-                // Append the row to the table body
-                $("#datatable-subscriberLogin").append(row);
-            });
-        } else {
-            console.error('Error: Unable to find "data" key in the API response');
+                // Initialize DataTable after data has been appended
+                $('#datatable').DataTable({
+                    destroy: true // Add this to destroy any previous instance of DataTable
+                });
+            } else {
+                console.error('Error: Unable to find "data" key in the API response');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching data from the API:", error);
         }
-    },
-    error: function(xhr, status, error) {
-        console.error("Error fetching data from the API:", error);
-    },
-});
-
+    });
 </script>
+
 
 @include('./layouts/web.footer')

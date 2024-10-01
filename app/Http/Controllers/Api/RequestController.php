@@ -199,7 +199,6 @@ class RequestController extends Controller
                 'status' => 404,
                 'message' => 'Request not found'
             ], 404);
-
         }
 
         // Return the response with the request data
@@ -230,64 +229,192 @@ class RequestController extends Controller
         }
     }
 
-
-
-    public function update(Request $request, $id)
+    public function get(Request $request, $id)
 {
-    // Dump the request data to check if it is correct
-    // dd($request->all());
-
-    // Find the request by its ID
-    $existingRequest = RequestModel::find($id);
+    // Check if the $id is numeric (an integer)
+    if (is_numeric($id)) {
+        // Find the request by its numeric ID
+        $requestData = RequestModel::find($id);
+        // Find the corresponding entries in RequestSentTo by RequestId
+        $requestSentData = RequestSentTo::where('RequestId', $id)->get();
+    } else {
+        // If it's not numeric, assume it's a GoogleId
+        $requestData = RequestModel::where('GoogleId', $id)->first();
+        // Find the corresponding entries in RequestSentTo by GoogleId
+        $requestSentData = RequestSentTo::where('GoogleId', $id)->get();
+    }
 
     // Check if the request exists
-    if (!$existingRequest) {
+    if (!$requestData) {
         return response()->json([
             'status' => 404,
             'message' => 'Request not found'
         ], 404);
     }
 
-    // Update the request instance with the provided data
-    $existingRequest->update([
-        'SubscriberId' => $request->SubscriberId,
-        'SubscribersKidId' => $request->SubscribersKidId,
-        'EventName' => $request->EventName,
-        'EventType' => $request->EventType,
-        'EventFor' => $request->EventFor,
-        'EventStartDate' => $request->EventStartDate,
-        'EventEndDate' => $request->EventEndDate,
-        'EventStartTime' => $request->EventStartTime,
-        'EventEndTime' => $request->EventEndTime,
-        'Keywords' => $request->Keywords,
-        'RecordType' => $request->RecordType,
-        'LocationType' => $request->LocationType,
-        'EventLocation' => $request->EventLocation,
-        'EventInfo' => $request->EventInfo,
-        'PickupLocation' => $request->PickupLocation,
-        'DropLocation' => $request->DropLocation,
-        'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
-        'ActivityType' => $request->ActivityType,
-        'areGroupMemberVisible' => $request->areGroupMemberVisible,
-        'IsGroupChat' => $request->IsGroupChat,
-        'CreatedBy' => $request->SubscriberId,
-        'UpdatedBy' => $request->SubscriberId // Assuming this should be updated
-    ]);
+    // Return the response with the found data
+    return response()->json([
+        'status' => 200,
+        'message' => 'Request data retrieved successfully',
+        'requestData' => $requestData,
+        'requestSentData' => $requestSentData // This will be an array of objects
+    ], 200);
+}
 
-    // Return the response based on whether the request was successfully updated
-    if ($existingRequest) {
+    
+
+    public function update(Request $request, $id)
+{
+    // Start a database transaction to ensure both updates happen safely
+    DB::beginTransaction();
+
+    try {
+        // Check if the $id is numeric (an integer)
+        if (is_numeric( $id)) {
+            // Find the request by its numeric ID
+            $existingRequest = RequestModel::find($id);
+            // Find the corresponding entry in RequestSentTo by RequestId
+            $existingRequestSend = RequestSentTo::where('RequestId', $id)->first();
+        } else {
+            // If it's not numeric, assume it's a GoogleId
+            $existingRequest = RequestModel::where('GoogleId', $id)->first();
+            // Find the corresponding entry in RequestSentTo by GoogleId
+            $existingRequestSend = RequestSentTo::where('GoogleId', $id)->first();
+        }
+
+        // Check if the request exists
+        if (!$existingRequest) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Request not found'
+            ], 404);
+        }
+
+        // Update the request instance with the provided data
+        $existingRequest->update([
+            'SubscriberId' => $request->SubscriberId,
+            'SubscribersKidId' => $request->SubscribersKidId,
+            'EventName' => $request->EventName,
+            'EventType' => $request->EventType,
+            'EventFor' => $request->EventFor,
+            'EventStartDate' => $request->EventStartDate,
+            'EventEndDate' => $request->EventEndDate,
+            'EventStartTime' => $request->EventStartTime,
+            'EventEndTime' => $request->EventEndTime,
+            'Keywords' => $request->Keywords,
+            'RecordType' => $request->RecordType,
+            'LocationType' => $request->LocationType,
+            'EventLocation' => $request->EventLocation,
+            'EventInfo' => $request->EventInfo,
+            'PickupLocation' => $request->PickupLocation,
+            'DropLocation' => $request->DropLocation,
+            'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
+            'ActivityType' => $request->ActivityType,
+            'areGroupMemberVisible' => $request->areGroupMemberVisible,
+            'IsGroupChat' => $request->IsGroupChat,
+            'CreatedBy' => $request->SubscriberId,
+            'UpdatedBy' => $request->SubscriberId
+        ]);
+
+        // If there's a corresponding record in RequestSentTo, update it too
+        if ($existingRequestSend) {
+            $existingRequestSend->update([
+                'SubscriberId' => $request->SubscriberId,
+                'SubscribersKidId' => $request->SubscribersKidId,
+                'EventName' => $request->EventName,
+                'EventType' => $request->EventType,
+                'EventFor' => $request->EventFor,
+                'EventStartDate' => $request->EventStartDate,
+                'EventEndDate' => $request->EventEndDate,
+                'EventStartTime' => $request->EventStartTime,
+                'EventEndTime' => $request->EventEndTime,
+                'LocationType' => $request->LocationType,
+                'EventLocation' => $request->EventLocation,
+                'PickupLocation' => $request->PickupLocation,
+                'DropLocation' => $request->DropLocation,
+                'CreatedBy' => $request->SubscriberId,
+                'UpdatedBy' => $request->SubscriberId
+            ]);
+        }
+
+        // Commit the transaction if both updates were successful
+        DB::commit();
+
         return response()->json([
             'status' => 200,
-            'message' => 'Request updated successfully',
+            'message' => 'Request and associated record updated successfully',
             'data' => $existingRequest
         ], 200);
-    } else {
+
+    } catch (\Exception $e) {
+        // If any error occurs, rollback the transaction
+        DB::rollBack();
         return response()->json([
             'status' => 500,
-            'message' => 'Failed to update request'
+            'message' => 'Failed to update request',
+            'error' => $e->getMessage()
         ], 500);
     }
 }
+
+
+//     public function update(Request $request, $id)
+// {
+
+//     // Find the request by its ID
+//     $existingRequest = RequestModel::find($id);
+
+//     // Check if the request exists
+//     if (!$existingRequest) {
+//         return response()->json([
+//             'status' => 404,
+//             'message' => 'Request not found'
+//         ], 404);
+//     }
+
+//     // Update the request instance with the provided data
+//     $existingRequest->update([
+//         'SubscriberId' => $request->SubscriberId,
+//         'SubscribersKidId' => $request->SubscribersKidId,
+//         'EventName' => $request->EventName,
+//         'EventType' => $request->EventType,
+//         'EventFor' => $request->EventFor,
+//         'EventStartDate' => $request->EventStartDate,
+//         'EventEndDate' => $request->EventEndDate,
+//         'EventStartTime' => $request->EventStartTime,
+//         'EventEndTime' => $request->EventEndTime,
+//         'Keywords' => $request->Keywords,
+//         'RecordType' => $request->RecordType,
+//         'LocationType' => $request->LocationType,
+//         'EventLocation' => $request->EventLocation,
+//         'EventInfo' => $request->EventInfo,
+//         'PickupLocation' => $request->PickupLocation,
+//         'DropLocation' => $request->DropLocation,
+//         'PrimaryResponsibleId' => $request->PrimaryResponsibleId,
+//         'ActivityType' => $request->ActivityType,
+//         'areGroupMemberVisible' => $request->areGroupMemberVisible,
+//         'IsGroupChat' => $request->IsGroupChat,
+//         'CreatedBy' => $request->SubscriberId,
+//         'UpdatedBy' => $request->SubscriberId // Assuming this should be updated
+//     ]);
+
+//     // Return the response based on whether the request was successfully updated
+//     if ($existingRequest) {
+//         return response()->json([
+//             'status' => 200,
+//             'message' => 'Request updated successfully',
+//             'data' => $existingRequest
+//         ], 200);
+//     } else {
+//         return response()->json([
+//             'status' => 500,
+//             'message' => 'Failed to update request'
+//         ], 500);
+//     }
+// }
+
+
+
 
 
 
@@ -728,12 +855,22 @@ class RequestController extends Controller
                         $ReceiverData = subscribersKidModel::where('id', $event->RequestToId)
                             ->select('id', 'FirstName', 'ProfileImage')
                             ->first();
+                        $ReceiverSideStatus = RequestSentTo::where('RequestId', $eventData->id)
+                            ->where('RequestToId', $event->RequestToId)
+                            ->select('Receiverstatus')
+                            ->first();
+                
+                        // Extract Receiverstatus value
+                        $ReceiverSideStatusValue = $ReceiverSideStatus ? $ReceiverSideStatus->Receiverstatus : null;
+
 
                         return [
                             'SenderData' => $Senderdata,
                             'SenderDataSelected' => $SenderdataSelected,
                             'ReceiverData' => $ReceiverData,
-                            'ReceiveAcceptedData' => $ReceiveAcceptedData
+                            'ReceiveAcceptedData' => $ReceiveAcceptedData,
+                            'RecieversideStatus' => $ReceiverSideStatusValue,
+
                         ];
                     });
 
@@ -807,12 +944,22 @@ class RequestController extends Controller
                         $ReceiverData = subscribersKidModel::where('id', $event->RequestToId)
                             ->select('id', 'FirstName', 'ProfileImage')
                             ->first();
+                            
+                        $ReceiverSideStatus = RequestSentTo::where('RequestId', $eventData->id)
+                            ->where('RequestToId', $event->RequestToId)
+                            ->select('Receiverstatus')
+                            ->first();
+                
+                        // Extract Receiverstatus value
+                        $ReceiverSideStatusValue = $ReceiverSideStatus ? $ReceiverSideStatus->Receiverstatus : null;
 
                         return [
                             'SenderData' => $Senderdata,
                             'SenderDataSelected' => $SenderdataSelected,
                             'ReceiverData' => $ReceiverData,
-                            'ReceiveAcceptedData' => $ReceiveAcceptedData
+                            'ReceiveAcceptedData' => $ReceiveAcceptedData,
+                            'RecieversideStatus' => $ReceiverSideStatusValue,
+
                         ];
                     });
 
@@ -830,9 +977,6 @@ class RequestController extends Controller
                 'data' => $fetchingEventDetails
             ], 200);
         }
-
-
-
 
     }
 
@@ -927,6 +1071,61 @@ class RequestController extends Controller
         }
     }
 
+
+    public function cancel($id)
+{
+    // Start a database transaction to ensure both deletions happen safely
+    DB::beginTransaction();
+
+    try {
+        // Check if the $id is numeric (an integer)
+        if (is_numeric($id)) {
+            // Find the request by its numeric ID
+            $existingRequest = RequestModel::find($id);
+            // Find the corresponding entry in RequestSentTo by RequestId
+            $existingRequestSend = RequestSentTo::where('RequestId', $id)->first();
+        } else {
+            // If it's not numeric, assume it's a GoogleId
+            $existingRequest = RequestModel::where('GoogleId', $id)->first();
+            // Find the corresponding entry in RequestSentTo by GoogleId
+            $existingRequestSend = RequestSentTo::where('GoogleId', $id)->first();
+        }
+
+        // Check if the request exists
+        if (!$existingRequest) {
+            // If not found, rollback the transaction and return 404
+            DB::rollBack();
+            return response()->json([
+                'status' => 404,
+                'message' => 'Request not found'
+            ], 404);
+        }
+
+        // Delete the found request
+        $existingRequest->delete();
+
+        // If there's a corresponding record in RequestSentTo, delete it too
+        if ($existingRequestSend) {
+            $existingRequestSend->delete();
+        }
+
+        // Commit the transaction if both deletions were successful
+        DB::commit();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Request and associated record deleted successfully'
+        ], 200);
+    } catch (\Exception $e) {
+        // If any error occurs, rollback the transaction
+        DB::rollBack();
+        return response()->json([
+            'status' => 500,
+            'message' => 'Failed to delete request',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
 
 
 }

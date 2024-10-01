@@ -35,53 +35,53 @@ use App\Http\Controllers\Api\fcmtokenController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Api\circleMemberController;
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return $request->user();
+    });
 
-//Login Token generation API
-Route::post('login', [Authcontroller::class, 'login']);
+    //Login Token generation API
+    Route::post('login', [Authcontroller::class, 'login']);
 
-// Route to send OTP for password reset
-Route::post('password/reset/send-link', [ResetPassword::class, 'sendResetLinkEmail']);
-Route::get('/reset-password', [ResetPassword::class, 'showResetPasswordForm'])->name('reset.password.show');
-Route::put('/reset-password', [ResetPassword::class, 'updatePassword'])->name('reset.password.update');
+    // Route to send OTP for password reset
+    Route::post('password/reset/send-link', [ResetPassword::class, 'sendResetLinkEmail']);
+    Route::get('/reset-password', [ResetPassword::class, 'showResetPasswordForm'])->name('reset.password.show');
+    Route::put('/reset-password', [ResetPassword::class, 'updatePassword'])->name('reset.password.update');
 
-// For Roles
-Route::get('roles', [rolesController::class, 'index']);
-Route::get('roles/{id}', [rolesController::class, 'show']);
-Route::post('roles', [rolesController::class, 'create']);
-Route::put('roles/{id}/edit', [rolesController::class, 'update']);
-Route::delete('roles/{id}', [rolesController::class, 'delete']);
+    // For Roles
+    Route::get('roles', [rolesController::class, 'index']);
+    Route::get('roles/{id}', [rolesController::class, 'show']);
+    Route::post('roles', [rolesController::class, 'create']);
+    Route::put('roles/{id}/edit', [rolesController::class, 'update']);
+    Route::delete('roles/{id}', [rolesController::class, 'delete']);
 
-// FOr Subscribers
+    // FOr Subscribers
 
-//** For Admin side */
-Route::get('subscriber', [subscriberController::class, 'index']);// For Admin
-Route::post('subscriberloginsData', [subscriberLoginController::class, 'create']);
-Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
-Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
+    //** For Admin side */
+    Route::get('subscriber', [subscriberController::class, 'index']);// For Admin
+    Route::post('subscriberloginsData', [subscriberLoginController::class, 'create']);
+    Route::post('subscriberloginsCreateAccount/{id}', [subscriberLoginController::class, 'createAccounts']);
+    Route::put('/subscribers/{id}', [subscriberLoginController::class, 'update']);
 
-//For Devices catch
-Route::get('appDevices', [appDevicehangleController::class, 'show']);
-Route::post('appDevices', [appDevicehangleController::class, 'DeviceValidate']);
+    //For Devices catch
+    Route::get('appDevices', [appDevicehangleController::class, 'show']);
+    Route::post('appDevices', [appDevicehangleController::class, 'DeviceValidate']);
 
-// ** Fetching the Device ID's  **//
-Route::get('codetype', [CodeTypescontroller::class, 'index']);
-// ** Fetching the Device ID's  **//
+    // ** Fetching the Device ID's  **//
+    Route::get('codetype', [CodeTypescontroller::class, 'index']);
+    // ** Fetching the Device ID's  **//
 
-// For Reg_code Data
-Route::get('regcodedata/{id}', [RegCodeController::class, 'index']);
-Route::get('regcodedata/{id}/userid/{user_id}', [RegCodeController::class, 'show']);
-Route::post('verify', [RegCodeController::class, 'verify']);
-Route::get('verify/{entryId}/{sub_login}', [RegCodeController::class, 'verifyAndCreate'])->name('verifyAndCreate');
+    // For Reg_code Data
+    Route::get('regcodedata/{id}', [RegCodeController::class, 'index']);
+    Route::get('regcodedata/{id}/userid/{user_id}', [RegCodeController::class, 'show']);
+    Route::post('verify', [RegCodeController::class, 'verify']);
+    Route::get('verify/{entryId}/{sub_login}', [RegCodeController::class, 'verifyAndCreate'])->name('verifyAndCreate');
 
-//secondary person CRUD
-Route::get('addsecondary', [AddSecondary::class, 'index']);
-Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
+    //secondary person CRUD
+    Route::get('addsecondary', [AddSecondary::class, 'index']);
+    Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
 
-// Subscriber Authentication API
-// Route::middleware([AuthenticateApi::class])->group(function () {
+    // Subscriber Authentication API
+    // Route::middleware([AuthenticateApi::class])->group(function () {
     // Subscribers  ( Create, View, Update, Delete)
     Route::get('subscriberlogins', [SubscriberLoginController::class, 'index']);
     Route::get('maincreatedAccounts/{subscriberId?}', [subscriberLoginController::class, 'maincreatedaccount']);
@@ -128,6 +128,9 @@ Route::post('addsecondary/{primaryId}', [AddSecondary::class, 'addSecondary']);
     Route::put('requests/FavOrNot/{event_id}', [RequestController::class, 'FavOrNot']);
     Route::get('requests/subscriber/{id}', [RequestController::class,'getRequestList']);
     Route::delete('requests/{id}', [RequestController::class, 'destroy']);
+    Route::delete('requestcancel/{id}', [RequestController::class, 'cancel']);
+    Route::get('getrequest/{id}', [RequestController::class, 'get']);
+
 
     // Route::get('previousEvents/{subscriberId}', [RequestController::class, 'previousEvent']);
     // Route::get('activeEvent/{subscriberId}', [RequestController::class, 'ActiveEvent']);

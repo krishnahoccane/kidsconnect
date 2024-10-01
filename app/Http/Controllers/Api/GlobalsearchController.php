@@ -37,7 +37,9 @@ class GlobalsearchController extends Controller
 
         } elseif ($user === 'kid') {
             // Search in Subscriber_kid's Firstname column
-            $results = subscribersKidModel::where('FirstName', 'LIKE', '%' . $name . '%')->get();
+            $results = subscribersKidModel::where('FirstName', 'LIKE', '%' . $name . '%')
+            ->orWhere('Keywords', 'LIKE', '%' . $name . '%')
+            ->get();
             if (!$results->isEmpty()) {
                 return response()->json([
                     'status' => 200,
